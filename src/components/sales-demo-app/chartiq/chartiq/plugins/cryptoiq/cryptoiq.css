@@ -1,0 +1,277 @@
+/* --------------------------------------------------------- MARKET DEPTH --------------------------------------------------------- */
+body .cryptoiq-ui {
+  display: inherit; }
+
+.stx_marketdepth_chart {
+  border-right-style: solid;
+  /* target dot pattern */
+  border-top-style: solid;
+  /* mountain peak pattern */
+  color: inherit;
+  /* mid price color */
+  font: bold 28px Roboto, Helvetica, sans-serif;
+  /* mid price font */
+  opacity: 0.5;
+  /* mountain shading opacity */
+  width: 3px;
+  /* mountain peak width */ }
+
+.stx_marketdepth_chart.bid {
+  background-color: #8cc176;
+  /* base of mountain gradient*/
+  border-left-color: #8cc176;
+  /* top of mountain gradient */
+  border-top-color: #8cc176;
+  /* peak of mountain */
+  border-bottom-color: transparent;
+  /* border of volume bars */
+  border-right-color: #8cc176;
+  /* color of crosshair target dot */
+  border-right-width: 4px;
+  /* width of target dot */
+  border-top-right-radius: 3px;
+  /* radius of corner of target dot */
+  color: #8cc176;
+  /* fill of volume bars */ }
+
+.stx_marketdepth_chart.ask {
+  background-color: #b82c0c;
+  /* base of mountain gradient*/
+  border-left-color: #b82c0c;
+  /* top of mountain gradient */
+  border-top-color: #b82c0c;
+  /* peak of mountain */
+  border-bottom-color: transparent;
+  /* border of volume bars */
+  border-right-color: #b82c0c;
+  /* color of crosshair target dot */
+  border-right-width: 4px;
+  /* width of target dot */
+  border-top-right-radius: 0px;
+  /* radius of corner of target dot */
+  color: #b82c0c;
+  /* fill of volume bars */ }
+
+/* --------------------------------------------------------- ORDERBOOK --------------------------------------------------------- */
+cq-orderbook {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(255, 255, 255, 0.85);
+  padding: 0;
+  margin: 0;
+  display: none;
+  z-index: 35; }
+  .ciq-night cq-orderbook {
+    background-color: rgba(28, 42, 53, 0.7); }
+  cq-orderbook[cq-active] {
+    display: block; }
+  cq-orderbook cq-orderbook-table {
+    float: left;
+    width: 50%;
+    height: 100%;
+    box-sizing: border-box;
+    border-left: solid 1px rgba(28, 42, 53, 0.3); }
+    .ciq-night cq-orderbook cq-orderbook-table {
+      border-left: solid 1px rgba(255, 255, 255, 0.3); }
+    cq-orderbook cq-orderbook-table cq-item[cq-orderbook-header] {
+      cursor: default;
+      padding: inherit;
+      font-weight: bold;
+      background-color: rgba(239, 239, 239, 0.8);
+      color: #000; }
+      .ciq-night cq-orderbook cq-orderbook-table cq-item[cq-orderbook-header] {
+        background-color: rgba(0, 0, 0, 0.8);
+        color: #fff; }
+    cq-orderbook cq-orderbook-table:first-of-type {
+      border: none; }
+  cq-orderbook cq-orderbook-bids, cq-orderbook cq-orderbook-asks {
+    display: table;
+    width: 100%;
+    padding: 0;
+    margin: 0; }
+  cq-orderbook cq-orderbook-bids cq-item {
+    border-left-color: rgba(140, 193, 118, 0.5);
+    /* for linear-gradient method */ }
+    cq-orderbook cq-orderbook-bids cq-item div[col="price"] {
+      color: #8cc176;
+      font-weight: bold; }
+    cq-orderbook cq-orderbook-bids cq-item div[col="shading"] {
+      background-color: rgba(140, 193, 118, 0.5); }
+  cq-orderbook cq-orderbook-asks cq-item {
+    border-right-color: rgba(184, 44, 12, 0.5);
+    /* for linear-gradient method */ }
+    cq-orderbook cq-orderbook-asks cq-item div[col="price"] {
+      color: #b82c0c;
+      font-weight: bold; }
+    cq-orderbook cq-orderbook-asks cq-item div[col="shading"] {
+      background-color: rgba(184, 44, 12, 0.5); }
+  cq-orderbook cq-item {
+    cursor: pointer;
+    display: table;
+    font-size: 12px;
+    height: 15px;
+    line-height: 15px;
+    padding: 0;
+    width: 100%; }
+    cq-orderbook cq-item div {
+      display: table-cell;
+      border-bottom: solid 1px rgba(28, 42, 53, 0.3);
+      font-size: 10px;
+      padding-left: 2px;
+      padding-right: 2px; }
+      cq-orderbook cq-item div[col="shading"] {
+        border: none;
+        box-sizing: border-box;
+        position: absolute;
+        right: 0;
+        padding: 0;
+        height: inherit;
+        min-width: 1px; }
+      cq-orderbook cq-item div:not([col="shading"]):last-of-type {
+        width: auto; }
+      .ciq-night cq-orderbook cq-item div {
+        border-bottom: solid 1px rgba(255, 255, 255, 0.3); }
+    cq-orderbook cq-item:hover, cq-orderbook cq-item[cq-focused] {
+      background-color: #efefef !important; }
+      .ciq-night cq-orderbook cq-item:hover, .ciq-night cq-orderbook cq-item[cq-focused] {
+        background-color: #333 !important;
+        color: #fff; }
+  cq-orderbook cq-orderbook-table[reverse] .ps-scrollbar-y-rail {
+    /* scrollbar on left */
+    left: 0px; }
+    cq-orderbook cq-orderbook-table[reverse] .ps-scrollbar-y-rail .ps-scrollbar-y {
+      left: 2px; }
+  cq-orderbook cq-orderbook-table[reverse] cq-item div {
+    text-align: right; }
+    cq-orderbook cq-orderbook-table[reverse] cq-item div[col="shading"] {
+      left: 0; }
+  cq-orderbook cq-close {
+    height: 16px;
+    width: 16px;
+    z-index: 1; }
+    cq-orderbook cq-close:after {
+      background-position-y: -30px; }
+      .ciq-night cq-orderbook cq-close:after {
+        background-position-y: -55px; }
+  .break-md cq-orderbook cq-item div[col="cum_size"],
+  .break-md cq-orderbook cq-item div[col="cum_amount"],
+  .break-sm cq-orderbook cq-item div[col="cum_size"],
+  .break-sm cq-orderbook cq-item div[col="cum_amount"] {
+    display: none; }
+
+.cq-orderbook-toggle {
+  border: solid 1px black;
+  border-radius: 3px;
+  background-image: url(ciq-orderbook.svg);
+  background-position-x: 1px;
+  -ms-background-position-x: 0px;
+  background-repeat: no-repeat;
+  background-color: #f8f8f8;
+  opacity: 0.7;
+  height: 20px;
+  width: 22px;
+  position: absolute;
+  bottom: 10px;
+  right: 20px;
+  z-index: 20; }
+  .ciq-night .cq-orderbook-toggle {
+    border: solid 1px white;
+    background-image: url(ciq-orderbook-white.svg);
+    background-color: #151f28; }
+  .cq-orderbook-toggle cq-tooltip {
+    width: 50px;
+    left: -11px; }
+  .cq-orderbook-toggle:hover, .cq-orderbook-toggle:active {
+    opacity: 1; }
+
+/* --------------------------------------------------------- TRADE HISTORY --------------------------------------------------------- */
+cq-tradehistory {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(255, 255, 255, 0.85);
+  padding: 0;
+  margin: 0;
+  display: none;
+  z-index: 35; }
+  .ciq-night cq-tradehistory {
+    background-color: rgba(28, 42, 53, 0.7); }
+  cq-tradehistory[cq-active] {
+    display: block; }
+  cq-tradehistory cq-tradehistory-table {
+    float: left;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    border-left: solid 1px rgba(28, 42, 53, 0.3); }
+    .ciq-night cq-tradehistory cq-tradehistory-table {
+      border-left: solid 1px rgba(255, 255, 255, 0.3); }
+    cq-tradehistory cq-tradehistory-table cq-item[cq-tradehistory-header] {
+      padding: inherit;
+      font-weight: bold;
+      background-color: rgba(239, 239, 239, 0.8);
+      color: #000; }
+      .ciq-night cq-tradehistory cq-tradehistory-table cq-item[cq-tradehistory-header] {
+        background-color: rgba(0, 0, 0, 0.8);
+        color: #fff; }
+    cq-tradehistory cq-tradehistory-table:first-of-type {
+      border: none; }
+  cq-tradehistory cq-item {
+    cursor: default;
+    display: table;
+    font-size: 12px;
+    height: 15px;
+    line-height: 15px;
+    padding: 0;
+    width: 100%; }
+    cq-tradehistory cq-item div {
+      display: table-cell;
+      border-bottom: solid 1px rgba(28, 42, 53, 0.3);
+      font-size: 10px;
+      padding-left: 2px;
+      padding-right: 2px; }
+      .ciq-night cq-tradehistory cq-item div {
+        border-bottom: solid 1px rgba(255, 255, 255, 0.3); }
+    cq-tradehistory cq-item:hover, cq-tradehistory cq-item[cq-focused] {
+      background-color: #efefef !important; }
+      .ciq-night cq-tradehistory cq-item:hover, .ciq-night cq-tradehistory cq-item[cq-focused] {
+        background-color: #333 !important;
+        color: #fff; }
+  cq-tradehistory cq-tradehistory-body {
+    display: table;
+    width: 100%;
+    padding: 0;
+    margin: 0; }
+    cq-tradehistory cq-tradehistory-body cq-item div[col="price"] {
+      font-weight: bold; }
+    cq-tradehistory cq-tradehistory-body cq-item[dir='up']:not([corrected]) {
+      animation: uptrade 3s linear -1s; }
+    cq-tradehistory cq-tradehistory-body cq-item[dir='up'] div[col="price"] {
+      color: #8cc176; }
+    cq-tradehistory cq-tradehistory-body cq-item[dir='down']:not([corrected]) {
+      animation: downtrade 3s linear -1s; }
+    cq-tradehistory cq-tradehistory-body cq-item[dir='down'] div[col="price"] {
+      color: #b82c0c; }
+    cq-tradehistory cq-tradehistory-body cq-item[dir='']:not([corrected]) {
+      animation: eventrade 3s linear -1s; }
+    cq-tradehistory cq-tradehistory-body cq-item[dir=''] div[col="price"] {
+      color: #7c7c7c; }
+
+@keyframes uptrade {
+  from {
+    background-color: #8cc176; } }
+
+@keyframes downtrade {
+  from {
+    background-color: #b82c0c; } }
+
+@keyframes eventrade {
+  from {
+    background-color: #7c7c7c; } }
+
+/*# sourceMappingURL=cryptoiq.css.map */

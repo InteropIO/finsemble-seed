@@ -1,0 +1,70 @@
+<!-- Reduced functionality template used in the Chart Grid example -->
+<cq-ui-manager></cq-ui-manager>
+
+<div class="ciq-nav">
+	<cq-menu class="ciq-search">
+		<cq-lookup cq-keystroke-claim cq-keystroke-default cq-uppercase>
+			<cq-lookup-input cq-no-close>
+				<input type="text" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="none" name="symbol" placeholder="">
+				<cq-lookup-icon></cq-lookup-icon>
+			</cq-lookup-input>
+			<cq-lookup-results>
+				<cq-lookup-filters cq-no-close>
+					<cq-filter class="true">ALL</cq-filter>
+					<cq-filter>STOCKS</cq-filter>
+					<cq-filter>FX</cq-filter>
+					<cq-filter>INDEXES</cq-filter>
+					<cq-filter>FUNDS</cq-filter>
+					<cq-filter>FUTURES</cq-filter>
+				</cq-lookup-filters>
+				<cq-scroll></cq-scroll>
+			</cq-lookup-results>
+		</cq-lookup>
+	</cq-menu>
+</div>
+
+<div class="ciq-chart-area">
+	<div class="ciq-chart">
+
+
+		<div class="chartContainer">
+
+			<stx-hu-tooltip>
+				<stx-hu-tooltip-field field="DT">
+					<stx-hu-tooltip-field-name>Date/Time</stx-hu-tooltip-field-name>
+					<stx-hu-tooltip-field-value></stx-hu-tooltip-field-value>
+				</stx-hu-tooltip-field>
+				<stx-hu-tooltip-field field="Close">
+					<stx-hu-tooltip-field-name></stx-hu-tooltip-field-name>
+					<stx-hu-tooltip-field-value></stx-hu-tooltip-field-value>
+				</stx-hu-tooltip-field>
+			</stx-hu-tooltip>
+
+			<cq-chart-title cq-marker cq-browser-tab>
+				<cq-symbol></cq-symbol>
+				<cq-chart-price>
+					<cq-current-price cq-animate></cq-current-price>
+					<cq-change>
+						<div class="ico"></div>
+						<cq-todays-change></cq-todays-change> (
+						<cq-todays-change-pct></cq-todays-change-pct>)
+					</cq-change>
+				</cq-chart-price>
+			</cq-chart-title>
+
+
+			<cq-loader></cq-loader>
+
+		</div>
+		<!-- End Chart Container -->
+	</div>
+	<!-- End Chart Box -->
+</div>
+<!-- End Chart Area -->
+
+
+<div class="ciq-footer">
+
+</div>
+
+<!-- End Footer -->

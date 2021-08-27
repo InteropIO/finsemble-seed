@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html style="overflow-y: none">
+	<head>
+		<meta
+			name="viewport"
+			content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1"
+		/>
+		<!-- for high pixel devices -->
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="css/stx-chart.css"
+			media="screen"
+		/>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="css/chartiq.css"
+			media="screen"
+		/>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="css/normalize.css"
+			media="screen"
+		/>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="css/page-defaults.css"
+			media="screen"
+		/>
+		<style>
+			.max {
+				display: flex;
+				height: calc(100%);
+			}
+			.chartContainer {
+				height: 100% !important;
+				width: 100% !important;
+			}
+		</style>
+	</head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+	<body class="ciq-night max" style="overflow-y: none">
+		<div
+			class="chartContainer"
+			style="width: 800px; height: 460px; position: relative"
+		></div>
+
+		<script type="module" crossorigin="use-credentials">
+			import "./js/advanced.js";
+			import "./js/addOns.js";
+			import { CIQ } from "./js/components.js";
+			import "./plugins/activetrader/cryptoiq.js";
+			import "./examples/feeds/L2_simulator.js";
+
+			import getDefaultConfig from "./js/defaultConfiguration.js";
+			import PerfectScrollbar from "./js/thirdparty/perfect-scrollbar.esm.js";
+			import quotefeed from "./examples/feeds/quoteFeedSimulator.js";
+			import "./examples/feeds/quoteFeedXignite.js";
+			import "./examples/feeds/symbolLookupChartIQ.js";
+
+			import "./examples/markets/marketDefinitionsSample.js";
+			import "./examples/markets/marketSymbologySample.js";
+
+			const stxx = new CIQ.ChartEngine({
+				container: document.querySelector(".chartContainer"),
+			});
+
+			// variable scoping for integration
+			window.context = {
+				stxx,
+				CIQ,
+			};
+		</script>
+	</body>
+</html>

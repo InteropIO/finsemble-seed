@@ -1,0 +1,32 @@
+.ciq-chart-area {
+  padding: 0;
+  top: 0;
+  bottom: 0; 
+}
+
+cq-dialog#simulation-warning {
+  font-size: 18px;
+  text-align: center;
+}
+cq-dialog#simulation-warning strong {
+  font-size: 20px;
+}
+cq-dialog#simulation-warning .ciq-btn {
+  height: auto;
+  margin-top: 1.5em;
+  padding: 15px 50px;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.break-sm cq-comparison[cq-show], .break-sm .ciq-comparison[cq-show] {
+	display: block; 
+}
+    
+cq-comparison, .ciq-comparison { 
+	margin: 20px 0 0 10px;
+}
+
+.break-sm .stxMenuActive cq-lookup {
+    width: 200px;
+}

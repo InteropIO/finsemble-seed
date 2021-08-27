@@ -16,6 +16,13 @@
 		}
 	],
 	"finsemble": {
+		"applicationRoot": "../../build",
+		"documentRoot": "../../",
+		"configRoot": "../../configs",
+		"moduleRoot": "../../build/finsemble",
+		"servicesRoot": "../../build/finsemble/services",
+		"notificationURL": "$applicationRoot/components/notification/notification.html",
+		"configSchemaURL": "$moduleRoot/configs/schemas/finsemble.schema.json",
 		"systemTrayIcon": "../../assets/img/Finsemble_SystemTray_Icon.png",
 		"waitForUpdate": false,
 		"bootConfig": {
@@ -50,7 +57,10 @@
 		"custom": {
 			"//": "Customer macros definitions must go here (e.g. 'myApplicationRoot' so it can be referenced elsewhere as '$myApplicationRoot'), along with other custom config at this level."
 		},
-		"importConfig": ["../../configs/application/config.json"]
+		"importConfig": ["$configRoot/application/config.json"],
+		"trustedPreloads": [
+			"$applicationRoot/components/sales-demo-app/chartiq/chartiq.js"
+		]
 	},
 	"finsemble-electron-adapter": {
 		"useDOMBasedMovement": true,

@@ -1,0 +1,244 @@
+body .termstructure-ui {
+	display: inherit;
+}
+
+.ciq-datepicker-container {
+	padding: 0px;
+}
+
+cq-menu.ciq-datepicker-toggle {
+	width: 100%;
+	cursor: pointer;
+	display: block;
+	float: left;
+	margin-top: 9px;
+	margin: 9px 18px 0 7px;
+	position: relative;
+}
+
+html:not([ciq-last-interaction="touch"]) .ciq-night cq-menu.ciq-datepicker-toggle:hover > span,
+.ciq-night cq-menu.ciq-datepicker-toggle:active > span,
+html:not([ciq-last-interaction="touch"]) .break-sm .ciq-night .ciq-menu.collapse:hover > span,
+.break-sm .ciq-night .ciq-menu.collapse:active > span {
+	border: solid 1px #273949;
+}
+
+html:not([ciq-last-interaction="touch"]) cq-menu.ciq-datepicker-toggle:hover > *,
+cq-menu.ciq-datepicker-toggle:active > * {
+	border: solid 1px #e4e4e4;
+	opacity: 1;
+}
+
+.ciq-datepicker-icon {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	display: block;
+	height: 27px;
+	border: solid 1px transparent;
+	opacity: 0.85;
+	transition: opacity 0.2s 0s;
+	background-image: url(img/ciq-date-picker-day.svg);
+	background-repeat: no-repeat;
+	background-position: center;
+	margin-right: 18px;
+}
+
+.ciq-night .ciq-datepicker-icon {
+	background-image: url(img/ciq-date-picker-night.svg);
+}
+
+/* same as .ciq-menu::after */
+.ciq-datepicker-icon::after {
+	content: "";
+	position: absolute;
+	right: 10px;
+	top: 19px;
+	display: block;
+	width: 5px;
+	height: 5px;
+	border-right: solid thin #959595;
+	border-bottom: solid thin #959595;
+	-webkit-transform: rotate(45deg) scale(1);
+	-moz-transform: rotate(45deg) scale(1);
+	-ms-transform: rotate(45deg) scale(1);
+	-o-transform: rotate(45deg) scale(1);
+	transform: rotate(45deg) scale(1);
+}
+
+.ciq-datepicker-tooltip {
+	width: 56px;
+}
+
+cq-datepicker {
+	position: absolute;
+	top: 39px;
+	left: 0px;
+	height: 100px;
+	width: 100px;
+	z-index: 100;
+	display: none;
+}
+
+.stxMenuActive cq-datepicker {
+	display: block;
+}
+
+.ciq-menu > .ciq-datafield-span {
+	padding: 0 12px 0 0;
+	position: relative;
+	font-weight: 400;
+}
+
+/* same as cq-chart-title minus display: block */
+cq-chart-title-date {
+	font-family: "Roboto", sans-serif;
+	display: inline-block;
+	line-height: 13px;
+	font-size: 11px;
+	margin-left: 5px;
+	font-weight: 500;
+	color: #666;
+	vertical-align: text-bottom;
+	display: block;
+}
+
+.ciq-night cq-chart-title-date {
+	color: #8e959a;
+}
+
+cq-chart-title-date.ciq-chart-title-time {
+	visibility: hidden;
+}
+
+@keyframes price-change {
+	0% {
+		opacity: 0%;
+		display: block;
+		transform: scale(3) translate(-2%);
+	}
+	50% {
+		opacity: 100%;
+		display: block;
+		transform: scale(4) translate(1%);
+	}
+	100% {
+		opacity: 0%;
+		display: none;
+		transform: scale(3) translate(-2%);
+	}
+}
+
+.ciq-termstructure-price-change-container {
+	position: absolute;
+}
+
+.ciq-termstructure-price-change {
+	position: relative;
+	content: "";
+	height: 12px;
+	width: 12px;
+	top: -10px;
+	left: -1px;
+	background-color: inherit;
+	animation: 3000ms price-change;
+	animation-fill-mode: forwards;
+}
+
+.ciq-termstructure-price-up {
+	background-image: url(../../css/img/stx-sprite-ui.svg);
+	background-position: -633px -31px;
+}
+
+.ciq-termstructure-price-down {
+	background-image: url(../../css/img/stx-sprite-ui.svg);
+	background-position: -683px -31px;
+}
+
+/* For curve edit context menu. Rules adopted from context styling in core. */
+cq-dialog[cq-curve-context] {
+	padding: 0px 0px;
+	min-width: auto;
+}
+
+cq-curve-context div {
+	padding: 0px 20px;
+	cursor: pointer;
+	clear: both;
+	line-height: 27px;
+	color: #666;
+}
+
+cq-curve-context div {
+	white-space: nowrap;
+}
+
+html:not([ciq-last-interaction="touch"]) cq-curve-context div:hover {
+	background: #efefef;
+	color: #000;
+}
+
+/* show shading */
+cq-chart-title,
+.ciq-night cq-chart-title {
+	background: transparent;
+}
+
+/* full path to force higher specificity without !important */
+.ciq-dropdowns > cq-menu:nth-last-of-type(-n + 2) cq-menu-dropdown.ciq-value-dropdown {
+	left: 0;
+	right: auto;
+}
+
+.mSticky[cq-sticky-type="termStructurePoint"] {
+	background-color: transparent;
+	color: #92989e;
+	border: 0px;
+	font-size: 12px;
+	font-weight: normal;
+}
+
+cq-historical-comparison-dialog cq-item {
+	margin: 5px 0;
+}
+
+cq-historical-comparison-dialog cq-datepicker {
+	position: static;
+	height: auto;
+	width: auto;
+	margin: 25px 0;
+	display: none;
+	justify-content: center; /* display will get set to flex later */
+}
+
+cq-historical-comparison-dialog cq-datepicker .comparison-datepicker .ui-datepicker {
+	border: none;
+}
+
+cq-historical-comparison-dialog hr {
+	margin-right: 17px;
+	margin-left: 19px;
+	margin-top: 12px;
+}
+
+.ciq-dialog-color-option {
+	padding: 11px 7px 2px 0;
+	margin-left: 21px;
+	margin-right: 10px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.ciq-comparison-curve-menu cq-menu-dropdown {
+	top: 14px;
+	left: 28px;
+}
+
+cq-curve-comparison-key cq-comparison-label {
+	width: 165px !important;
+}
+
+body  .break-sm .sidenav-toggle {
+	display: none;
+}

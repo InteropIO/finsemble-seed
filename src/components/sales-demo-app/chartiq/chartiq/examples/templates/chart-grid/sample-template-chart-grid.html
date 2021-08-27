@@ -1,0 +1,347 @@
+<!doctype html>
+<!--
+This is a fully functional example showing how to load multiple charts simultaneously in a grid
+pattern.
+
+This template requires the Technical Analysis package. If you are using a different package, some
+features may not work.
+
+Customize this sample template as needed to meet your use case and to fit the screen size of your
+supported devices.
+
+This template leverages the cq-instant-chart web component, which renders an entire advanced chart
+template with a single tag. The template also creates the custom UI that controls the entire chart
+grid.
+​
+The charts are synchronized using the linker module, chart-linker.js, which is located in the
+examples/templates/chart-grid folder along with chart-grid.js and chart-grid.css, which control and
+style the chart grid user interface.
+-->
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1" />
+	<link rel="stylesheet" type="text/css" href="css/normalize.css" media="screen" />
+	<link rel="stylesheet" type="text/css" href="css/page-defaults.css" media="screen" />
+	<link rel="stylesheet" type="text/css" href="css/stx-chart.css" media="screen" />
+	<link rel="stylesheet" type="text/css" href="css/chartiq.css" media="screen" />
+	<link rel="stylesheet" type="text/css" href="examples/templates/chart-grid/chart-grid.css" media="screen" />
+</head>
+
+<body id="chart-grid" cq-context class="ciq-night">
+	<cq-ui-manager></cq-ui-manager>
+	<cq-color-picker>
+		<cq-colors></cq-colors>
+		<cq-overrides>
+			<template>
+				<div class="ciq-btn"></div>
+			</template>
+		</cq-overrides>
+	</cq-color-picker>
+	<div class="header">
+		<div class="ciq-nav">
+			<div class="icon-toggles ciq-toggles">
+				<cq-toggle class="ciq-CH" cq-member="crosshair"><span></span><cq-tooltip>Crosshair</cq-tooltip></cq-toggle>
+			</div>
+			<div class="ciq-menu-section">
+				<div class="ciq-dropdowns">
+					<cq-menu class="ciq-menu ciq-grid">
+						<span><cq-clickable>Grid</cq-clickable></span>
+						<cq-menu-dropdown>
+							<cq-grid-size-picker maxrows="5" maxcols="5"></cq-grid-size-picker>
+						</cq-menu-dropdown>
+					</cq-menu>
+					<cq-menu class="ciq-menu ciq-period">
+						<span><cq-clickable stxbind="Layout.periodicity">1D</cq-clickable></span>
+						<cq-menu-dropdown>
+							<cq-item stxtap="Linker.UIHelperProxy('Layout','setPeriodicity',1,1,'day')">1 D</cq-item>
+							<cq-item stxtap="Linker.UIHelperProxy('Layout','setPeriodicity',1,1,'week')">1 W</cq-item>
+							<cq-item stxtap="Linker.UIHelperProxy('Layout','setPeriodicity',1,1,'month')">1 Mo</cq-item>
+							<cq-separator></cq-separator>
+							<cq-item stxtap="Linker.UIHelperProxy('Layout','setPeriodicity',1,1,'minute')">1 Min</cq-item>
+							<cq-item stxtap="Linker.UIHelperProxy('Layout','setPeriodicity',1,5,'minute')">5 Min</cq-item>
+							<cq-item stxtap="Linker.UIHelperProxy('Layout','setPeriodicity',1,10,'minute')">10 Min</cq-item>
+							<cq-item stxtap="Linker.UIHelperProxy('Layout','setPeriodicity',3,5,'minute')">15 Min</cq-item>
+							<cq-item stxtap="Linker.UIHelperProxy('Layout','setPeriodicity',1,30,'minute')">30 Min</cq-item>
+							<cq-item stxtap="Linker.UIHelperProxy('Layout','setPeriodicity',2,30,'minute')">1 Hour</cq-item>
+							<cq-item stxtap="Linker.UIHelperProxy('Layout','setPeriodicity',8,30,'minute')">4 Hour</cq-item>
+							<cq-separator></cq-separator>
+							<cq-item stxtap="Linker.UIHelperProxy('Layout','setPeriodicity',1,1,'second')">1 Sec</cq-item>
+							<cq-item stxtap="Linker.UIHelperProxy('Layout','setPeriodicity',1,10,'second')">10 Sec</cq-item>
+							<cq-item stxtap="Linker.UIHelperProxy('Layout','setPeriodicity',1,30,'second')">30 Sec</cq-item>
+							<cq-separator></cq-separator>
+							<cq-item stxtap="Linker.UIHelperProxy('Layout','setPeriodicity',1,250,'millisecond')">250 MSec</cq-item>
+						</cq-menu-dropdown>
+					</cq-menu>
+					<cq-menu class="ciq-menu ciq-display collapse">
+						<span>Display</span>
+						<cq-menu-dropdown>
+							<cq-heading>Chart Style</cq-heading>
+							<cq-item stxsetget="Linker.UIHelperProxy('Layout','ChartType','candle')">Candle<span class="ciq-radio"><span></span></span>
+							</cq-item>
+							<cq-item stxsetget="Linker.UIHelperProxy('Layout','ChartType','bar')">Bar<span class="ciq-radio"><span></span></span>
+							</cq-item>
+							<cq-item stxsetget="Linker.UIHelperProxy('Layout','ChartType','colored_bar')">Colored Bar<span class="ciq-radio"><span></span></span>
+							</cq-item>
+							<cq-item stxsetget="Linker.UIHelperProxy('Layout','ChartType','line')">Line<span class="ciq-radio"><span></span></span>
+							</cq-item>
+							<cq-item stxsetget="Linker.UIHelperProxy('Layout','ChartType','vertex_line')">Vertex Line<span class="ciq-radio"><span></span></span>
+							</cq-item>
+							<cq-item stxsetget="Linker.UIHelperProxy('Layout','ChartType','step')">Step<span class="ciq-radio"><span></span></span>
+							</cq-item>
+							<cq-item stxsetget="Linker.UIHelperProxy('Layout','ChartType','mountain')">Mountain<span class="ciq-radio"><span></span></span>
+							</cq-item>
+							<cq-item stxsetget="Linker.UIHelperProxy('Layout','ChartType','baseline_delta')">Baseline<span class="ciq-radio"><span></span></span>
+							</cq-item>
+							<cq-item stxsetget="Linker.UIHelperProxy('Layout','ChartType','hollow_candle')">Hollow Candle<span class="ciq-radio"><span></span></span>
+							</cq-item>
+							<cq-item stxsetget="Linker.UIHelperProxy('Layout','ChartType','colored_hlc')">Colored HLC Bar<span class="ciq-radio"><span></span></span>
+							</cq-item>
+							<cq-item stxsetget="Linker.UIHelperProxy('Layout','ChartType','scatterplot')">Scatterplot<span class="ciq-radio"><span></span></span>
+							</cq-item>
+							<cq-item stxsetget="Linker.UIHelperProxy('Layout','ChartType','histogram')">Histogram<span class="ciq-radio"><span></span></span>
+							</cq-item>
+							<cq-item>
+								<div stxsetget="Linker.UIHelperProxy('Layout','ChartType','heikinashi')">Heikin Ashi<span class="ciq-radio"><span></span></span>
+								</div>
+							</cq-item>
+						</cq-menu-dropdown>
+					</cq-menu>
+					<cq-menu class="ciq-menu ciq-studies collapse">
+						<span>Studies</span>
+						<cq-menu-dropdown cq-no-scroll>
+							<cq-study-legend cq-no-close>
+								<cq-section-dynamic>
+									<cq-heading>Current Studies</cq-heading>
+									<cq-study-legend-content>
+										<template cq-study-legend>
+											<cq-item>
+												<cq-label class="click-to-edit"></cq-label>
+												<div class="ciq-icon ciq-close"></div>
+											</cq-item>
+										</template>
+									</cq-study-legend-content>
+									<cq-placeholder>
+										<div stxtap="Linker.UIHelperProxy('Layout','clearStudies')" class="ciq-btn sm">Clear All</div>
+									</cq-placeholder>
+								</cq-section-dynamic>
+							</cq-study-legend>
+							<cq-scroll>
+								<cq-studies>
+									<cq-studies-content>
+											<template>
+												<cq-item>
+													<cq-label></cq-label>
+												</cq-item>
+											</template>
+									</cq-studies-content>
+								</cq-studies>
+							</cq-scroll>
+						</cq-menu-dropdown>
+					</cq-menu>
+					<cq-menu class="ciq-menu ciq-preferences collapse">
+						<span></span>
+						<cq-menu-dropdown>
+							<cq-heading>Chart Preferences</cq-heading>
+							<cq-item stxsetget="Linker.UIHelperProxy('Layout','ExtendedHours')">Extended Hours<span class="ciq-checkbox ciq-active"><span></span></span>
+							</cq-item>
+							<cq-separator></cq-separator>
+							<cq-heading>Y-Axis Preferences</cq-heading>
+							<cq-item stxsetget="Linker.UIHelperProxy('Layout','ChartScale','log')">Log Scale<span class="ciq-checkbox ciq-active"><span></span></span>
+							</cq-item>
+							<cq-item stxsetget="Linker.UIHelperProxy('Layout','FlippedChart')">Invert<span class="ciq-checkbox ciq-active"><span></span></span>
+							</cq-item>
+							<cq-separator></cq-separator>
+							<cq-heading>Locale</cq-heading>
+								<cq-item stxsetget="Layout.Language()"><cq-flag></cq-flag><cq-language-name>Change Language</cq-language-name></cq-item>
+							<cq-separator></cq-separator>
+							<cq-heading>Themes</cq-heading>
+							<cq-item stxtap="Theme.changeTheme('ciq-day')">Day</cq-item>
+							<cq-item stxtap="Theme.changeTheme('ciq-night')">Night</cq-item>
+							<cq-themes style="display:none;">
+								<cq-themes-builtin cq-no-close>
+									<template>
+										<cq-item stxtap="Theme.changeTheme(this)"></cq-item>
+									</template>
+								</cq-themes-builtin>
+								<cq-themes-custom cq-no-close>
+									<template>
+										<cq-theme-custom>
+											<cq-item>
+												<cq-label></cq-label>
+												<cq-close></cq-close>
+											</cq-item>
+										</cq-theme-custom>
+									</template>
+								</cq-themes-custom>
+								<cq-separator cq-partial></cq-separator>
+								<cq-item stxtap="newTheme()"><cq-plus></cq-plus>New Theme</cq-item>
+							</cq-themes>
+						</cq-menu-dropdown>
+					</cq-menu>
+				</div> <!-- ciq-dropdowns -->
+			</div> <!-- ciq-menu-section -->
+			<cq-menu class="ciq-search">
+				<cq-lookup cq-keystroke-claim cq-keystroke-default cq-uppercase>
+					<cq-lookup-input cq-no-close>
+						<input id="symbol" type="text" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="none" name="symbol" placeholder="Enter Symbol">
+						<cq-lookup-icon></cq-lookup-icon>
+					</cq-lookup-input>
+					<cq-lookup-results>
+							<cq-lookup-filters cq-no-close>
+									<cq-filter class="true" style="float:left;">RESULTS</cq-filter>
+								</cq-lookup-filters>
+						<cq-scroll></cq-scroll>
+					</cq-lookup-results>
+				</cq-lookup>
+			</cq-menu>
+		</div> <!-- ciq-nav -->
+		<div class="chartContainer"></div>
+	</div> <!-- header -->
+	<div class="chart-grid">
+		<!-- id on instant-chart components are required for saving & restoring layout -->
+	</div>
+	<cq-dialog>
+		<cq-aggregation-dialog>
+			<h4 class="title"></h4>
+			<div stxtap="hide()" class="ciq-icon ciq-close"></div>
+			<div style="text-align:center;margin-top:10px;">
+				<div class="ciqkagi">
+					<i>Enter value and hit "Enter"</i>
+					<p>
+					<input name="kagi" stxtap="Linker.UIHelperProxy('Layout','setAggregationEdit','kagi')">
+					</p>
+				</div>
+				<div class="ciqrenko">
+					<i>Enter value and hit "Enter"</i>
+					<p>
+					<input name="renko" stxtap="Linker.UIHelperProxy('Layout','setAggregationEdit','renko')">
+					</p>
+				</div>
+				<div class="ciqlinebreak">
+					<i>Enter value and hit "Enter"</i>
+					<p>
+					<input name="priceLines" stxtap="Linker.UIHelperProxy('Layout','setAggregationEdit','priceLines')">
+					</p>
+				</div>
+				<div class="ciqrangebars">
+					<i>Enter value and hit "Enter"</i>
+					<p>
+					<input name="range" stxtap="Linker.UIHelperProxy('Layout','setAggregationEdit','rangebars')">
+					</p>
+				</div>
+				<div class="ciqpandf">
+					<i>Enter box size and hit "Enter"</i>
+					<p>
+					<input name="box" stxtap="Linker.UIHelperProxy('Layout','setAggregationEdit','pandf.box')">
+					</p>
+					<p>
+					<i>Enter reversal and hit "Enter"</i>
+					</p>
+					<p>
+					<input name="reversal" stxtap="Linker.UIHelperProxy('Layout','setAggregationEdit','pandf.reversal')">
+					</p>
+				</div>
+				<p>or</p>
+				<div class="ciq-btn" stxtap="Linker.UIHelperProxy('Layout','setAggregationEdit','auto')">Auto Select</div>
+			</div>
+		</cq-aggregation-dialog>
+	</cq-dialog>
+
+	<cq-dialog>
+		<cq-timezone-dialog>
+			<h4 class="title">Choose Timezone</h4>
+			<cq-close></cq-close>
+
+			<p>To set your timezone use the location button below, or scroll through the following list...</p>
+			<p class="currentUserTimeZone"></p>
+			<div class="detect">
+			<div class="ciq-btn" stxtap="removeTimezone()">Use My Current Location</div>
+			</div>
+			<div class="timezoneDialogWrapper" style="max-height:360px; overflow: auto;">
+						<ul>
+							<li class="timezoneTemplate" style="display:none;cursor:pointer;"></li>
+						</ul>
+					</div>
+			<div class="instruct">(Scroll for more options)</div>
+		</cq-timezone-dialog>
+	</cq-dialog>
+
+	<cq-dialog>
+		<cq-study-context>
+			<div stxtap="StudyEdit.edit()">Edit Settings...</div>
+			<div stxtap="StudyEdit.remove()">Delete Study</div>
+		</cq-study-context>
+	</cq-dialog>
+
+	<cq-dialog>
+		<cq-study-dialog cq-study-axis cq-study-panel="alias">
+			<h4 class="title">Study</h4>
+			<cq-scroll cq-no-maximize>
+				<cq-study-inputs>
+					<template cq-study-input>
+						<cq-study-input>
+							<div class="ciq-heading"></div>
+							<div class="stx-data">
+								<template cq-menu>
+									<cq-menu class="ciq-select">
+										<cq-selected></cq-selected>
+										<cq-menu-dropdown cq-lift></cq-menu-dropdown>
+									</cq-menu>
+								</template>
+							</div>
+						</cq-study-input>
+						<hr>
+					</template>
+				</cq-study-inputs>
+				<cq-study-outputs>
+					<template cq-study-output>
+						<cq-study-output>
+							<div class="ciq-heading"></div>
+							<cq-swatch cq-overrides="auto"></cq-swatch>
+						</cq-study-output>
+						<hr>
+					</template>
+				</cq-study-outputs>
+				<cq-study-parameters>
+					<template cq-study-parameters>
+						<cq-study-parameter>
+							<div class="ciq-heading"></div>
+							<div class="stx-data"><cq-swatch cq-overrides="auto"></cq-swatch>
+								<template cq-menu>
+									<cq-menu class="ciq-select">
+										<cq-selected></cq-selected>
+										<cq-menu-dropdown cq-lift></cq-menu-dropdown>
+									</cq-menu>
+								</template>
+							</div>
+						</cq-study-parameter>
+						<hr>
+					</template>
+				</cq-study-parameters>
+			</cq-scroll>
+			<div class="ciq-dialog-cntrls">
+				<div class="ciq-btn" stxtap="close()">Done</div>
+			</div>
+		</cq-study-dialog>
+	</cq-dialog>
+
+	<cq-dialog>
+		<cq-language-dialog>
+			<h4 class="title">Choose language</h4>
+			<cq-close></cq-close>
+			<cq-languages>
+				<template><div><cq-flag></cq-flag><cq-language-name></cq-language-name></div></template>
+			</cq-languages>
+		</cq-language-dialog>
+	</cq-dialog>
+
+<script src="js/thirdparty/custom-elements.min.js"></script> <!-- Legacy Edge support for webcomponents -->
+<script src="js/advanced.js" type="module" crossorigin="use-credentials"></script>
+<script src="js/addOns.js" type="module" crossorigin="use-credentials"></script>
+<script src="js/components.js" type="module" crossorigin="use-credentials"></script>
+
+<script src="examples/templates/chart-grid/chart-grid.js" type="module" crossorigin="use-credentials"></script>
+
+</body>
+</html>

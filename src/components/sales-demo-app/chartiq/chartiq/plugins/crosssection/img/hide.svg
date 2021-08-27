@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="12px" height="7px" viewBox="0 0 12 7" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Combined Shape</title>
+    <g id="Yield-Curve-/-Term-Structure" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Hide-Curve" transform="translate(-6.000000, -10.000000)" fill="#D8D8D8">
+            <path d="M12,10 C14.209139,10 16.209139,11.1666667 18,13.5 C16.209139,15.8333333 14.209139,17 12,17 C9.790861,17 7.790861,15.8333333 6,13.5 C7.790861,11.1666667 9.790861,10 12,10 Z M12,11.5 C10.8954305,11.5 10,12.3954305 10,13.5 C10,14.6045695 10.8954305,15.5 12,15.5 C13.1045695,15.5 14,14.6045695 14,13.5 C14,12.3954305 13.1045695,11.5 12,11.5 Z" id="Combined-Shape"></path>
+        </g>
+    </g>
+</svg>

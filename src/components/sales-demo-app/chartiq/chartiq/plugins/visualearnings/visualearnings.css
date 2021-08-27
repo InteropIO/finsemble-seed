@@ -1,0 +1,55 @@
+.stx-visualearnings {	
+  width: 60px;
+  height: 40px;
+}
+
+.stx-visualearnings > span {
+	margin-top: 6px;
+	background: url(estimize.png) no-repeat;
+	background-size: 27px 27px;
+	background-position: 0px 0px;
+	width: 27px;
+  height: 27px;
+  display: block;
+}
+
+.estimize_label {
+	font-size: 14px;
+	font-family: Arial, Helvetica, sans-serif;
+	color: #000;
+	background-color: #FFF;
+	border-color: #000;
+}
+
+.estimize_estimize{color:#1F98C0;}
+.estimize_wallstreet{color:#646C70;}
+
+.estimize_data_font,
+.estimize_legend {
+	font-size:12px;
+	font-family:Arial, Helvetica, sans-serif;
+}
+
+.estimize_small_font,
+.estimize_small_legend {
+	font-size:10px;
+	font-family:Arial, Helvetica, sans-serif;
+}
+
+.estimize_legend,
+.estimize_small_legend {
+	font-weight: bold;
+	color:transparent;
+}
+
+.estimize_miss {
+	color:#b82c0c;
+}
+
+.estimize_beat {
+	color:#8cc176;
+}
+.estimize_shading {
+	color:transparent;
+	opacity:.1;
+}

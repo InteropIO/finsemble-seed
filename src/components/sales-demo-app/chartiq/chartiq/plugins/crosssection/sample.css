@@ -1,0 +1,36 @@
+/*
+
+This file contains sample term structure styling options. They are not required. 
+
+*/
+
+.stx_shading_1MO,
+.stx_shading_2MO,
+.stx_shading_3MO,
+.stx_shading_4MO,
+.stx_shading_5MO,
+.stx_shading_6MO,
+.stx_shading_8MO,
+.stx_shading_9MO {
+	background-color: rgba(162, 199, 255, 0.3);
+}
+
+.stx_shading_1YR,
+.stx_shading_2YR,
+.stx_shading_3YR,
+.stx_shading_4YR,
+.stx_shading_5YR,
+.stx_shading_7YR,
+.stx_shading_ST {
+	background-color: rgba(95, 159, 255, 0.3);
+}
+
+.stx_shading_10YR,
+.stx_shading_15YR,
+.stx_shading_20YR,
+.stx_shading_30YR,
+.stx_shading_40YR,
+.stx_shading_MT,
+.stx_shading_LT {
+	background-color: rgba(20, 97, 212, 0.3);
+}

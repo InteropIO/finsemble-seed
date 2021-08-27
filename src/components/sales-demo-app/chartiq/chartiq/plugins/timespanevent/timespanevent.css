@@ -1,0 +1,52 @@
+*[timespaneventpanel-active] .timespanevent-ui {
+  display: inherit; }
+
+/* --------------------------------------------------------- Markers --------------------------------------------------------- */
+.stx-marker.trade .stx-visual {
+  background: #C950d7;
+  width: 5px;
+  height: 5px; }
+
+.stx-performance-marker.stx-marker-expand h4 {
+  display: block; }
+
+/* --------------------------------------------------------- Tooltip --------------------------------------------------------- */
+cq-tse-tooltip {
+  position: absolute;
+  left: -50000px;
+  z-index: 4;
+  white-space: nowrap;
+  border-radius: 1px;
+  border: solid 1px #e4e4e4;
+  background-color: #398dff;
+  color: white;
+  height: 12px;
+  font-size: 10px;
+  text-align: center;
+  fill: #f8f8f8;
+  opacity: 1;
+  padding: 2px 4px;
+  pointer-events: none; }
+
+.stx_notification_tray div.event-zoom .icon {
+  background: url(back-arrow.svg) center center no-repeat;
+  padding-right: 10px;
+  background-size: contain; }
+
+.ciq-lce-descripton {
+  background: rgba(255, 255, 255, 0.85);
+  max-width: 200px;
+  max-height: 200px;
+  padding: 10px;
+  opacity: 1;
+  color: #000;
+  display: block;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  overflow: auto;
+  position: absolute;
+  z-index: 10;
+  text-align: center; }
+  .ciq-lce-descripton h4 {
+    margin: 0; }
+
+/*# sourceMappingURL=timespanevent.css.map */

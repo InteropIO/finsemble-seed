@@ -1,0 +1,18 @@
+study 'Custom MA'
+
+field = input('Field', 'field')
+period = input('Period', 20)
+
+sum = (length) ->
+	total = 0
+	while length
+		value = dataset(field, -(--length))
+		return null if not value?
+		total += value
+	total
+
+total = sum period
+
+if total?
+	average = total / period
+	plot average

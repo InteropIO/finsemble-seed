@@ -1,0 +1,234 @@
+body#chart-grid {
+  min-height: calc(100%-50px);
+}
+
+#chart-grid .header{
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin-top: 0;
+  width: 100%;
+}
+
+#chart-grid .chart-grid{
+  position: relative;
+  top: 45px;
+  height:calc(100% - 45px);
+}
+
+#chart-grid cq-instant-chart {
+  display: block;
+  float:left;
+  height: 20vh;
+  width: calc(50% - 5px);
+  position: relative;
+  margin: 2.5px;
+}
+
+#chart-grid cq-instant-chart cq-context{
+  overflow: hidden; /* hide the abstract marker template which is just offset to the left */
+}
+
+#chart-grid cq-instant-chart.active{
+  border: solid 5px #398dff;
+  box-shadow: 0 0 3px 0 rgba(255,255,255,0.25);
+  margin: -2.5px;
+}
+
+#chart-grid cq-instant-chart.active cq-context{
+  box-shadow: 0 0 1px 0 rgba(255,255,255,0.5);
+}
+
+#chart-grid cq-grid-size-picker{
+  display: block;
+}
+
+#chart-grid .ciq-toggles {
+  float: right;
+}
+
+#chart-grid cq-menu .ciq-btn, 
+#chart-grid cq-menu .annotationCancel, 
+#chart-grid cq-menu .annotationSave{
+  width: 100%;
+  text-align: center;
+}
+
+#chart-grid input {
+  padding:2px 5px;
+}
+
+#chart-grid .ciq-grid cq-menu-dropdown{
+  width: auto;
+  padding: 5px;
+}
+
+#chart-grid .ciq-chart-area {
+  padding: 0;
+  top: 0;
+  bottom:0;
+}
+
+#chart-grid cq-instant-chart .chartSize {
+	display: none;
+}
+
+#chart-grid cq-instant-chart cq-comparison[cq-show] {
+	display: none;
+}
+
+#chart-grid cq-instant-chart .ciq-nav,
+#chart-grid cq-instant-chart .ciq-footer {
+	display: none;
+}
+
+/*
+  Night theme
+*/
+
+#chart-grid.ciq-night cq-menu-dropdown,
+#chart-grid.ciq-night cq-dialog,
+#chart-grid.ciq-night cq-lookup-results {
+  background: #151f28;
+  color: white;
+}
+
+#chart-grid.ciq-night cq-separator {
+  border-top: solid 1px #000;
+  border-bottom: solid 1px rgba(255,255,255,0.25);
+}
+
+html:not([ciq-last-interaction='touch']) #chart-grid.ciq-night cq-item:hover, 
+html[ciq-last-interaction='touch'] #chart-grid.ciq-night cq-item:active, 
+#chart-grid.ciq-nightcq-item[cq-focused]{
+  background-color: #2c4354;
+  color: #fff;
+}
+
+#chart-grid.ciq-night .ciq-edit {
+  background-position: -300px -48px;
+}
+
+#chart-grid.ciq-night cq-study-legend cq-section-dynamic{
+  background: transparent;
+  border-top: none;
+  border-bottom: solid 1px rgba(255,255,255,0.25);
+}
+
+#chart-grid.ciq-night .ciq-btn, 
+#chart-grid.ciq-night .annotationCancel, 
+#chart-grid.ciq-night .annotationSave{
+  background-color: #2c4354;
+  color: #fff;
+  border: solid 1px #fff;
+}
+
+#chart-grid.ciq-night cq-dialog h4{
+  color: #fff;
+}
+
+#chart-grid.ciq-night .ciq-icon.ciq-close:after, #chart-grid.ciq-night cq-close:after {
+  background-position: -250px -48px;
+}
+
+#chart-grid.ciq-night cq-lookup-results cq-item span:nth-of-type(1),
+#chart-grid.ciq-night cq-lookup-results cq-item span:nth-of-type(3){
+  color: inherit;
+}
+
+#chart-grid.ciq-night cq-dialog cq-language-name:hover {
+  background-color: #2c4354;
+}
+
+#chart-grid.ciq-night .ciq-grid cq-grid-size-picker{
+  --grid-size-border-color: #2c4354;
+  --grid-size-background-color: #151f28;
+  --grid-size-border-hl-color: #398dff;
+  --grid-size-background-hl-color: #2c4354;
+}
+
+/* Fix css breakpoint bleed from instant chart */
+
+#chart-grid .header .ciq-menu{
+  width: initial;
+  margin: auto;
+  padding: 0 10px;
+  position: relative;
+  border: none;
+}
+
+#chart-grid .header .ciq-menu:not(.ciq-preferences) > span{
+  color: inherit;
+  font-size: inherit;
+  font-family: inherit;
+  line-height: inherit;
+  padding: 0 12px 0 0;
+  width: auto;
+  height: auto;
+  display: inline-block;
+  border: none;
+}
+
+
+#chart-grid .header .ciq-menu:after{
+  content: "";
+  position: absolute;
+  right: 10px;
+  top: 19px;
+  display: block;
+  width: 5px;
+  height: 5px;
+  border-right: solid thin #959595;
+  border-bottom: solid thin #959595;
+  -webkit-transform: rotate(45deg) scale(1);
+  -moz-transform: rotate(45deg) scale(1);
+  -ms-transform: rotate(45deg) scale(1);
+  -o-transform: rotate(45deg) scale(1);
+  transform: rotate(45deg) scale(1);
+}
+
+#chart-grid .header .ciq-menu > span:after{
+  display: none;
+}
+
+#chart-grid .header .ciq-menu:after, #chart-grid .header .ciq-menu:after {
+  
+  border-right: solid thin #8a8f94;
+  border-bottom: solid thin #8a8f94;
+}
+
+#chart-grid .ciq-menu cq-menu-dropdown {
+  margin: 0;
+}
+
+#chart-grid .ciq-period cq-menu-dropdown {
+  width: 100px;
+}
+
+#chart-grid .ciq-grid cq-menu-dropdown {
+  right: auto;
+}
+
+#chart-grid cq-lookup {
+  width: 120px;
+}
+
+#chart-grid .stxMenuActive cq-lookup {
+  width: 481px;
+}
+
+#chart-grid cq-lookup-filters {
+  height: 45px;
+}
+
+#chart-grid .ciq-menu-section{
+  position: static;
+}
+
+#chart-grid .sidenav{
+  display: block;
+  top: auto;
+  position: relative;
+  height: auto;
+  float: right;
+}

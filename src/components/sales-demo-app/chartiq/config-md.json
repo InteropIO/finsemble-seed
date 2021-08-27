@@ -1,0 +1,86 @@
+{
+	"components": {
+		"MD Chart": {
+			"window": {
+				"url": "$applicationRoot/components/chartiq/chartiq/technical-analysis-chart.html",
+				"width": "50%",
+				"height": "50%",
+				"options": {
+					"securityPolicy": "trusted",
+					"minWidth": 75
+				},
+				"affinity": "charts"
+			},
+			"component": {
+				"mode": "premium",
+				"preload": "$applicationRoot/components/chartiq/chartiq-md.js"
+			},
+			"foreign": {
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Toolbar": {
+						"iconURL": "$applicationRoot/assets/img/IQ-icon.png"
+					},
+					"Window Manager": {
+						"title": "ChartIQ MarketData",
+						"FSBLHeader": true,
+						"showLinker": true,
+						"persistWindowState": true,
+						"zoomDefault": 1
+					}
+				}
+			}
+		},
+		"MD Chart FDC3": {
+			"window": {
+				"url": "$applicationRoot/components/chartiq/chartiq/technical-analysis-chart.html",
+				"width": "50%",
+				"height": "50%",
+				"options": {
+					"securityPolicy": "trusted",
+					"minWidth": 75
+				},
+				"affinity": "charts"
+			},
+			"component": {
+				"mode": "fdc3",
+				"preload": [
+					"$applicationRoot/preloads/FDC3Client.js",
+					"$applicationRoot/components/chartiq/chartiq-md.js"
+				]
+			},
+			"foreign": {
+				"services": {
+					"fdc3": {
+						"intents": [
+							{
+								"name": "ViewChart",
+								"displayName": "ViewChart",
+								"contexts": [
+									"fdc3.instrument"
+								]
+							}
+						]
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Toolbar": {
+						"iconURL": "$applicationRoot/assets/img/IQ-icon.png"
+					},
+					"Window Manager": {
+						"title": "ChartIQ MarketData FDC3",
+						"FSBLHeader": true,
+						"showLinker": true,
+						"persistWindowState": true,
+						"zoomDefault": 1
+					}
+				}
+			}
+		}
+	}
+}

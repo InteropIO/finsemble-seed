@@ -1,0 +1,51 @@
+{
+	"comment": "AG-Grid Blotter AppD component config",
+	"$schema": "../../../../core/configs/schemas/fileBasedSchemas/appdConfigFile.schema.json",
+	"appd": {
+		"AG-Grid Blotter": {
+			"appId": "AG-Grid Blotter",
+			"name": "AG-Grid Blotter",
+			"description": "Organize data with FDC3 compliant blotters built on AG Grid",
+			"manifest": {
+				"window": {
+					"url": "$applicationRoot/components/sales-demo-app/ag-grid/index.html",
+					"width": 1000,
+					"height": 600
+				},
+				"foreign": {
+					"components": {
+						"App Launcher": {
+							"launchableByUser": true
+						},
+						"Toolbar": {
+							"iconURL": "$applicationRoot/components/sales-demo-app/ag-grid/ag-grid-logo.png"
+						},
+						"Window Manager": {
+							"FSBLHeader": true,
+							"persistWindowState": true
+						}
+					}
+				},
+				"interop": {
+					"selectConnect": [
+						{
+							"contextType": "fdc3.instrument",
+							"cc": "#Workspace"
+						}
+					]
+				}
+			},
+			"version": "1.0.0",
+			"tooltip": "AG Grid FDC3 compatible blotter",
+			"tags": ["grid", "ag-grid", "blotter", "fdc3"],
+			"contactEmail": "info@cosaic.io",
+			"supportEmail": "support@finsemble.com",
+			"publisher": "Cosaic",
+			"icons": [
+				{
+					"url": "$applicationRoot/sales-demo-app/components/ag-grid/ag-grid-logo.png"
+				}
+			]
+		}
+	}
+}

@@ -1,0 +1,483 @@
+*[crosssection-active] .crosssection-ui {
+	display: inherit;
+}
+
+.ciq-datepicker-container {
+	width: 38px;
+	padding: 0px;
+	margin-right: 9px;
+}
+
+.ciq-datepicker-container span {
+	width: inherit;
+}
+
+cq-menu.ciq-datepicker-toggle {
+	width: 100%;
+	cursor: pointer;
+	display: block;
+	float: left;
+	margin-top: 9px;
+	margin: 9px 18px 0 7px;
+	position: relative;
+}
+
+html:not([ciq-last-interaction="touch"]) .ciq-night cq-menu.ciq-datepicker-toggle:hover > span,
+.ciq-night cq-menu.ciq-datepicker-toggle:active > span,
+html:not([ciq-last-interaction="touch"]) .break-sm .ciq-night .ciq-menu.collapse:hover > span,
+.break-sm .ciq-night .ciq-menu.collapse:active > span {
+	border: solid 1px #273949;
+}
+
+html:not([ciq-last-interaction="touch"]) cq-menu.ciq-datepicker-toggle:hover > *,
+cq-menu.ciq-datepicker-toggle:active > * {
+	border: solid 1px #e4e4e4;
+	opacity: 1;
+}
+
+.ciq-datepicker-icon {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	display: block;
+	height: 27px;
+	border: solid 1px transparent;
+	opacity: 0.85;
+	transition: opacity 0.2s 0s;
+	background-image: url(img/ciq-date-picker-day.svg);
+	background-repeat: no-repeat;
+	background-position: 4px 2px;
+	margin-right: 24px;
+}
+
+.ciq-night .ciq-datepicker-icon {
+	background-image: url(img/ciq-date-picker-night.svg);
+}
+
+/* same as .ciq-menu::after */
+.ciq-datepicker-icon::after {
+	content: "";
+	position: absolute;
+	right: 5px;
+	top: 13px;
+	display: block;
+	width: 5px;
+	height: 5px;
+	border-right: solid thin #959595;
+	border-bottom: solid thin #959595;
+	-webkit-transform: rotate(45deg) scale(1);
+	-moz-transform: rotate(45deg) scale(1);
+	-ms-transform: rotate(45deg) scale(1);
+	-o-transform: rotate(45deg) scale(1);
+	transform: rotate(45deg) scale(1);
+}
+
+.ciq-datepicker-tooltip {
+	width: 56px;
+}
+
+cq-datepicker {
+	position: absolute;
+	top: 34px;
+	left: 0px;
+	height: 100px;
+	width: 100px;
+	z-index: 100;
+	display: none;
+}
+
+.stxMenuActive cq-datepicker {
+	display: block;
+}
+
+.ciq-menu > .ciq-menu-field,
+.ciq-menu > .ciq-datafield-span {
+	padding: 0 12px 0 0;
+	position: relative;
+	font-weight: 400;
+	white-space: nowrap;
+}
+
+.ciq-dropdowns > .ciq-menu-label {
+	background-color: #efefef;
+	float: left;
+	padding: 0 5px;
+	text-align: center;
+}
+
+.ciq-night .ciq-dropdowns > .ciq-menu-label {
+	background-color: #666;
+}
+
+/* same as cq-chart-title minus display: block */
+cq-chart-title-date {
+	font-family: "Roboto", sans-serif;
+	display: inline-block;
+	line-height: 13px;
+	font-size: 11px;
+	margin-left: 5px;
+	font-weight: 500;
+	color: #666;
+	vertical-align: text-bottom;
+	display: block;
+}
+
+.ciq-night cq-chart-title-date {
+	color: #8e959a;
+}
+
+cq-chart-title-date.ciq-chart-title-time {
+	visibility: hidden;
+}
+
+cq-chart-title-date.ciq-chart-title-hist-price {
+	color: #000;
+}
+
+.ciq-night cq-chart-title-date.ciq-chart-title-hist-price {
+	color: #fff;
+}
+
+@keyframes price-change {
+	0% {
+		opacity: 0%;
+		display: block;
+		transform: scale(3) translate(-2%);
+	}
+	50% {
+		opacity: 100%;
+		display: block;
+		transform: scale(4) translate(1%);
+	}
+	100% {
+		opacity: 0%;
+		display: none;
+		transform: scale(3) translate(-2%);
+	}
+}
+
+.ciq-crosssection-price-change-container {
+	position: absolute;
+}
+
+.ciq-crosssection-price-change {
+	position: relative;
+	content: "";
+	height: 12px;
+	width: 12px;
+	top: -10px;
+	left: -1px;
+	background-color: inherit;
+	animation: 3000ms price-change;
+	animation-fill-mode: forwards;
+}
+
+.ciq-crosssection-price-up {
+	background-image: url(../../css/img/stx-sprite-ui.svg);
+	background-position: -633px -31px;
+}
+
+.ciq-crosssection-price-down {
+	background-image: url(../../css/img/stx-sprite-ui.svg);
+	background-position: -683px -31px;
+}
+
+/* For curve edit context menu. Rules adopted from context styling in core. */
+cq-dialog[cq-curve-context] {
+	padding: 0px 0px;
+	min-width: auto;
+}
+
+cq-curve-context div {
+	white-space: nowrap;
+}
+
+html:not([ciq-last-interaction="touch"]) cq-curve-context div:hover {
+	background: #efefef;
+	color: #000;
+}
+
+/* show shading */
+cq-chart-title,
+.ciq-night cq-chart-title {
+	background: transparent;
+}
+
+/* full path to force higher specificity without !important */
+.ciq-dropdowns > cq-menu:nth-last-of-type(-n + 2) cq-menu-dropdown.ciq-value-dropdown {
+	left: 0;
+	right: auto;
+}
+
+.mSticky[cq-sticky-type="crossSectionPoint"] {
+	background-color: transparent;
+	color: #92989e;
+	border: 0px;
+	font-size: 12px;
+	font-weight: normal;
+}
+
+cq-historical-comparison-dialog cq-item {
+	margin: 5px 0;
+}
+
+cq-historical-comparison-dialog cq-datepicker {
+	position: static;
+	height: auto;
+	width: auto;
+	margin: 25px 0;
+	display: none;
+	justify-content: center; /* display will get set to flex later */
+}
+
+cq-historical-comparison-dialog cq-datepicker .comparison-datepicker .ui-datepicker {
+	border: none;
+}
+
+cq-historical-comparison-dialog hr {
+	margin-right: 17px;
+	margin-left: 19px;
+	margin-top: 12px;
+}
+
+.ciq-dialog-color-option {
+	padding: 11px 7px 2px 0;
+	margin-left: 21px;
+	margin-right: 10px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.ciq-comparison-curve-menu cq-menu-dropdown {
+	top: 14px;
+	left: 28px;
+}
+
+cq-curve-comparison-key cq-comparison-label {
+	width: 165px !important;
+}
+
+cq-menu.ciq-search {
+	width: 150px;
+}
+
+cq-lookup {
+	width: 140px;
+}
+
+cq-menu.toggle-options {
+	display: none;
+}
+
+*[crosssection-hud-active] cq-menu.toggle-options {
+	display: inherit;
+}
+
+cq-menu.ciq-filter cq-menu-dropdown {
+	width: 300px;
+}
+
+cq-menu.ciq-filter cq-menu-dropdown cq-double-slider .ciq-double-slider-range {
+	top: 10px;
+	right: 15px;
+	width: 45%;
+	background: transparent;
+}
+
+body  .break-sm .sidenav-toggle {
+	display: none;
+}
+
+/* info element */
+cq-hud-crosssection {
+	color: #666;
+	background: rgba(255,255,255,0.6);
+}
+
+cq-hud-crosssection strong {
+	display: block;
+	margin-bottom: 2px;
+}
+
+.ciq-night cq-hud-crosssection strong {
+	color: #8BD0FF;
+}
+
+cq-hud-crosssection td {
+	font-family: "Roboto Condensed", sans-serif;
+	padding: 1px 10px 1px 0
+}
+
+cq-hud-crosssection .ciq-info-field td:first-child {
+	text-align: right;
+	padding-right: 12px;
+}
+
+cq-hud-crosssection .ciq-curve-field td:nth-child(2),
+cq-hud-crosssection .ciq-info-field td:nth-child(2)  {
+	font-weight: 400;
+	text-align: right;
+}
+
+.ciq-night cq-hud-crosssection .ciq-curve-field td:nth-child(2),
+.ciq-night cq-hud-crosssection .ciq-info-field td:nth-child(2)  {
+	color: #8BD0FF;
+}
+
+cq-hud-crosssection .ciq-curve-field td:first-child > div {
+	width: 12px;
+	height: 12px;
+	display: inline-block;
+	margin-right: 4px;
+}
+
+.ciq-night cq-hud-crosssection {
+	background: rgba(28,42,53,0.6);
+	color: #ccc;
+}
+
+.crosssection-ui cq-toggle {
+	margin-left: -10px;
+}
+
+/* TIMELINE DATE SELECTOR STYLES */
+cq-timeline-controls {
+	position: relative;
+}
+
+cq-timeline-controls,
+cq-curve-controls {
+	height: 35px;
+	display: block;
+	padding: 0 10px;
+}
+
+cq-timeline-controls .ciq-dropdowns {
+	line-height: 30px;
+	margin-top: 0;
+}
+
+cq-timeline-controls .ciq-dropdowns .ciq-menu {
+	line-height: 24px;
+	height: 24px;
+	margin: 3px;
+	border-radius: 10px;
+}
+
+cq-timeline-controls .ciq-menu:hover {
+	background-color: #f8f8f8;
+}
+
+.ciq-night cq-timeline-controls .ciq-menu:hover {
+	background-color: #2c4455;
+}
+
+cq-timeline-controls cq-menu-dropdown {
+	width: min-content;
+	left: 50% !important;
+	transform: translate(-50%, 0);
+}
+
+cq-timeline-controls .ciq-menu::after {
+	top: 10px;
+	right: 12px;
+	width: 3px;
+	height: 3px;
+}
+
+cq-timeline-controls cq-item {
+	padding: 0 10px;
+}
+
+.ciq-dropdown-divider {
+	float: left;
+	font-weight: 400;
+	color: #575757;
+}
+
+.ciq-night .ciq-dropdown-divider {
+	color: #c0c2c5;
+}
+
+cq-curve-controls {
+	display: flex;
+	align-items: center;
+}
+
+.ciq-curve-control {
+	padding: 5px 10px;
+	margin: 0 10px;
+}
+
+.ciq-curve-control span {
+	display: inline-block;
+	margin-right: 5px;
+	pointer-events: none;
+}
+
+.ciq-curve-controls-show span,
+.ciq-curve-controls-hide span,
+.ciq-curve-controls-unlock span,
+.ciq-curve-controls-lock span {
+	height: 10px;
+	width: 10px;
+	background-size: 100% 100%;
+}
+
+.ciq-curve-controls-add span,
+.ciq-curve-controls-remove span {
+	height: 12px;
+	width: 12px;
+}
+
+.ciq-curve-controls-add span {
+	background-image: url(../../css/img/stx-sprite-ui.svg);
+	background-position: -531px -31px;
+}
+
+.ciq-curve-controls-remove span {
+	background-image: url(../../css/img/stx-sprite-ui.svg);
+	background-position: -531px -57px;
+}
+
+.ciq-curve-controls-show span {
+	background-image: url(img/show.svg);
+}
+
+.ciq-curve-controls-hide span {
+	background-image: url(img/hide.svg);
+}
+
+.ciq-curve-controls-unlock span {
+	background-image: url(img/unlock.svg);
+}
+
+.ciq-curve-controls-lock span {
+	background-image: url(img/lock.svg);
+}
+
+.ciq-curve-control:hover {
+	cursor: pointer;
+	background-color: #f8f8f8;
+	border-radius: 10px;
+}
+
+.ciq-night .ciq-curve-control:hover {
+	background-color: #2c4455;
+}
+
+.ciq-timeline-container {
+	margin-top: 5px;
+}
+
+.ciq-timeline-container .ciq-chart {
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+}
+
+*[crosssection-active] .ciq-chart-area {
+	display: flex;
+	flex-direction: column;
+}

@@ -1,0 +1,59 @@
+body,
+*[cq-context],
+cq-context{
+	&:not(.full-screen){
+		.full-screen-show{
+			display:none;
+		}
+		// This is necessary to override body not having the full-screen class when a cq-context element is present
+		& *[cq-context].full-screen,
+		& cq-context.full-screen{
+			.full-screen-show{
+				display:block;
+			}
+		}
+	}
+	&.full-screen{
+		.full-screen-hide{
+			display: none;
+		}
+
+		.ciq-chart-area{
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			padding: 0;
+		}
+
+		cq-chart-title,
+		cq-comparison,
+		cq-study-legend{
+			float:left;
+			clear:left;
+		}
+
+		cq-comparison-label{
+			cq-marker-label{
+				max-width: 85px;
+				display: inline-block;
+				overflow: hidden;
+				line-height: 1em;
+				height: 1em;
+				position: absolute;
+				margin-top: 8px;
+				transition: all 500ms;
+			}
+
+			&:hover cq-marker-label{
+				max-width: 300px;
+				background: #21323f;
+				z-index: 9999;
+			}
+		}
+
+		.break-sm & cq-drawing-palette .tool-group {
+			height: calc(100% - 105px);
+		}
+	}
+}

@@ -1,0 +1,5 @@
+module.exports = {
+    symbolList:["AAL","AAPL","ADM","AXP","AZN","BA","BHP","BP","CAT","CCL","CSCO","CVX","DIS","DOW","GS","GSK","HD","HL","IAG","IBM","INTC","JD","JNJ","JPM","KO","MCD","MMM","MRK","MRO","MSFT","NG","NKE","PFE","PG","PRU","RIO","TRV","TSLA","UNH","UTX","V","VZ","WBA","WMT","XOM"],
+    securitiesList:["American Airlines Group Inc","Apple","Archer Daniels Midland Co.","American Express","Astrazeneca plc","Boeing","BHP Group Limited","BP plc","Caterpillar","Carnival Corp","Cisco","Chevron","Disney","Dow Chemical","Goldman Sachs","Glaxosmithkline plc","Home Depot","Hecla Mining Co.","Iamgold Corp.","IBM","Intel Johnson & Johnson","JD.com Inc","JPMorgan Chase","McDonalds","Coca-Cola","Merck","3M","Microsoft","Marathon Oil Corporation","Pfizer","Novagold Resources Inc.","Procter & Gamble","Travelers Companies Inc","United Technologies","Prudential Financial Inc.","Rio Tinto plc","UnitedHealth","Tesla","Visa","Verizon","Walgreen","Wal-Mart","Walgreens Boots Alliance Inc","Walmart Inc","Exxon Mobil"],
+    portfolios: ['Aggressive','Defensive','Income','Speculative','Hybrid']
+}

@@ -1,0 +1,363 @@
+*[technicalinsights-active] .technicalinsights-ui {
+	display: inherit;
+}
+
+.stx-technicalinsights span {
+	background: url(img/logo.png) no-repeat;
+	background-size: 27px 27px;
+	background-position: 0px 0px;
+}
+
+cq-technicalinsights {
+	display: block;
+	margin: 0px 15px 0px 15px;
+}
+
+cq-technicalinsights[disabled] {
+	display: none;
+}
+
+cq-technicalinsights-details {
+	display: block;
+	background-color: #f8f8f8;
+	border: 1px;
+	border-color: red;
+}
+
+.ciq-night cq-technicalinsights-details {
+	display: block;
+	background-color: #151f28;
+	border: 1px;
+	border-color: red;
+}
+
+.ciq-night cq-technicalinsights-right .ciq-technicalinsights-srbars {
+	color: black;
+}
+
+cq-technicalinsights-details[open] > cq-technicalinsights-summary:before {
+	transform: rotate(-90deg);
+}
+
+cq-technicalinsights-details > * {
+	height: 0px;
+	overflow: hidden;
+}
+
+cq-technicalinsights-details[open] > * {
+	height: auto;
+}
+
+cq-technicalinsights-details > cq-technicalinsights-summary {
+	display: block;
+	margin-bottom: 0px;
+	height: auto;
+	overflow: visible;
+	margin-left: 10px;
+	margin-top: 10px;
+	min-height: 100px;
+}
+
+cq-technicalinsights-details > cq-technicalinsights-summary:focus {
+	outline: none;
+}
+
+cq-technicalinsights-left {
+	display: inline-block;
+}
+
+cq-technicalinsights-middle {
+	margin-left: 10px;
+	float: center;
+	vertical-align: top;
+	display: inline-block;
+	text-align: center;
+}
+
+cq-technicalinsights-right {
+	margin-left: 10px;
+	float: center;
+	vertical-align: top;
+	display: inline-block;
+	text-align: center;
+}
+
+cq-technicalinsights-icon-chart,
+cq-technicalinsights-symbol,
+cq-technicalinsights-story,
+cq-technicalinsights-alt-story {
+	display: inline-block;
+}
+
+cq-technicalinsights-symbol {
+	font-size: 14px;
+	margin-right: 10px;
+	font-weight: 600;
+}
+
+cq-technicalinsights-story {
+	font-size: 14px;
+	margin-left: 10px;
+	margin-right: 10px;
+	font-weight: 500;
+}
+
+cq-technicalinsights-story.bullish {
+	color: #b7ff11;
+}
+
+.ciq-day cq-technicalinsights-story.bullish {
+	color: #30aa0b;
+}
+
+cq-technicalinsights-story.bearish {
+	color: #ff7474;
+}
+
+.ciq-day cq-technicalinsights-story.bearish {
+	color: #ff2f22;
+}
+
+cq-technicalinsights-section {
+	display: inline-block;
+	margin-right: 20px;
+	vertical-align: top;
+	/*	height: 200px;*/
+	/*	max-width: 255px;*/
+}
+
+cq-technicalinsights-method {
+	display: inline-block;
+	width: 255px;
+}
+
+cq-technicalinsights-brand {
+	display: inline-block;
+	position: relative;
+	top: 2px;
+	/* this plus the width of the details icon is the same width as "cq-technicalinsights-method" */
+	width: 539px;
+}
+
+cq-technicalinsights-number {
+	color: #ffffff;
+	font-weight: 500;
+}
+
+.ciq-day cq-technicalinsights-number {
+	color: #000000;
+}
+
+cq-technicalinsights-title {
+	display: block;
+	color: #61d9ff;
+	text-transform: uppercase;
+	font-size: 1.03em;
+	font-family: Veranda, Arial;
+	font-weight: normal;
+}
+
+.ciq-day cq-technicalinsights-title {
+	color: #008bb7;
+}
+
+cq-technicalinsights-details p {
+	color: #e2e2e2;
+	margin-top: 5px;
+	margin-bottom: 7px;
+}
+
+.ciq-day cq-technicalinsights-details p {
+	color: #777777;
+}
+
+cq-technicalinsights-indicator-toggle {
+	color: #777777;
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+cq-technicalinsights-event-hover-element {
+	position: absolute;
+	display: block;
+	text-align: center;
+	left: 0px;
+	bottom: -1000px; /* done to avoid "blinking" at the top of the chart */
+	/* translate the whole element down to line up perfectly with the line labels */
+	-ms-transform: translateY(1.5px);
+	-webkit-transform: translateY(1.5px);
+	transform: translateY(1.5px);
+	box-shadow: 0 10px 50px 0 rgba(51, 51, 51, 0.3);
+	font-weight: bold;
+	background: #ffffff;
+	padding: 2px;
+}
+
+.ciq-night cq-technicalinsights-event-hover-element {
+	background: #151f28;
+}
+
+cq-technicalinsights-support-hover-element {
+	position: absolute;
+	display: block;
+	text-align: center;
+	left: 0px;
+	bottom: -1000px; /* done to avoid "blinking" at the top of the chart */
+	/* translate the whole element down to line up perfectly with the line labels */
+	-ms-transform: translateY(1.5px);
+	-webkit-transform: translateY(1.5px);
+	transform: translateY(1.5px);
+	border: 1px solid #339933;
+	font-weight: bold;
+	background: #339933;
+	color: #ffffff;
+	margin-left: 10px;
+	padding: 10px 10px 10px 10px;
+}
+
+.ciq-night cq-technicalinsights-support-hover-element {
+	background: #151f28;
+}
+
+cq-technicalinsights-resistance-hover-element {
+	position: absolute;
+	display: block;
+	text-align: center;
+	left: 0px;
+	bottom: -1000px; /* done to avoid "blinking" at the top of the chart */
+	/* translate the whole element down to line up perfectly with the line labels */
+	-ms-transform: translateY(1.5px);
+	-webkit-transform: translateY(1.5px);
+	transform: translateY(1.5px);
+	border: 1px solid #3d9dcd;
+	font-weight: bold;
+	background: #3d9dcd;
+	color: #ffffff;
+	margin-left: 10px;
+	padding: 10px 10px 10px 10px;
+}
+
+.ciq-night cq-technicalinsights-resistance-hover-element {
+	background: #151f28;
+}
+
+/* Education Area	(popup)*/
+cq-technicalinsights-education {
+	/* marker positioning */
+	margin-top: 10px; /* add space on top of marker */
+	display: block;
+	width: 350px;
+	/* marker attributes */
+	padding: 10px 5px 3px 10px;
+	text-align: left;
+	box-shadow: 0 10px 50px 0 rgba(51, 51, 51, 0.3);
+	border: solid 1px #ecf0f2;
+	background: #ffffff;
+	/* font */
+	font-weight: bold;
+	font-size: 16pt; /* Education Title Size */
+	overflow: auto;
+}
+
+.ciq-night cq-technicalinsights-education {
+	background: #151f28;
+}
+
+/* Education Area - Main Text (popup)*/
+cq-technicalinsights-education p {
+	font-weight: normal;
+	font-size: 11pt;
+	width: 100%;
+	color: black;
+}
+
+.ciq-night cq-technicalinsights-education p {
+	color: white;
+}
+
+cq-technicalinsights-education-source {
+	font-weight: normal;
+	font-family: Courier New, Courier, monospace;
+	font-size: 10pt;
+	color: #909090;
+	float: right;
+}
+
+cq-technicalinsights-education-title {
+	margin-left: 10px;
+	font-weight: bold;
+}
+
+cq-technicalinsights-sr-title {
+	margin-left: 10px;
+	font-weight: bold;
+}
+
+/* CSS for SLIDER */
+/* The switch - the box around the slider */
+.ciq-technicalinsights-switch {
+	position: relative;
+	display: inline-block;
+	width: 25px;
+	height: 15px;
+}
+
+/* Hide default HTML checkbox */
+.ciq-technicalinsights-switch input {
+	display: none;
+}
+
+/* The slider */
+.ciq-technicalinsights-tciqslider {
+	position: absolute;
+	cursor: pointer;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: #ccc;
+	-webkit-transition: 0.4s;
+	transition: 0.4s;
+}
+
+.ciq-technicalinsights-tciqslider:before {
+	position: absolute;
+	content: "";
+	height: 13px;
+	width: 13px;
+	left: 1px;
+	bottom: 1px;
+	background-color: white;
+	-webkit-transition: 0.4s;
+	transition: 0.4s;
+}
+
+input:checked + .ciq-technicalinsights-tciqslider {
+	background-color: #2196f3;
+}
+
+input:focus + .ciq-technicalinsights-tciqslider {
+	box-shadow: 0 0 1px #2196f3;
+}
+
+input:checked + .ciq-technicalinsights-tciqslider:before {
+	/* how far swtich travels across */
+	-webkit-transform: translateX(10px);
+	-ms-transform: translateX(10px);
+	transform: translateX(10px);
+}
+
+/* Rounded sliders */
+.ciq-technicalinsights-tciqslider.ciq-technicalinsights-round {
+	border-radius: 24px; /* roundness of slider container */
+}
+
+.ciq-technicalinsights-tciqslider.ciq-technicalinsights-round:before {
+	border-radius: 50%; /*roundness of switch*/
+}
+
+.ciq-technicalinsights-srbars {
+	height: 20px;
+}
+
+/* END SLIDER */

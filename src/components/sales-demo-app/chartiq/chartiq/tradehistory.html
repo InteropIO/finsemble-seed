@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<!--
+	This is the Active Trader template. It is intended mainly for larger screens and may not
+	always render optimally on small devices.
+	
+	This template requires the Technical Analysis package. If you are using a different package, some
+	features may not work.
+	
+	Customize this template as needed to meet your use case and to fit the screen size of your supported
+	devices.
+	
+	Manually move this file to the library root directory before using, or modify all paths accordingly.
+	-->
+<html>
+
+<head>
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+	<link rel="stylesheet" type="text/css" href="css/normalize.css" media="screen">
+	<link rel="stylesheet" type="text/css" href="css/page-defaults.css" media="screen">
+	<link rel="stylesheet" type="text/css" href="css/stx-chart.css" media="screen">
+	<link rel="stylesheet" type="text/css" href="css/chartiq.css" media="screen">
+	<link rel="stylesheet" type="text/css" href="plugins/tfc/tfc.css" media="screen">
+
+	<title>ChartIQ Charting Library Demo</title>
+
+	<style>
+		cq-scroll {
+			overflow-y: hidden !important;
+		}
+	</style>
+</head>
+
+
+<body>
+	<cq-context class="ciq-night">
+		<cq-ui-manager></cq-ui-manager>
+		<div class="chartContainer" style="width:100%;position:relative;">
+			<cq-tradehistory cq-active>
+				<cq-tradehistory-table>
+					<cq-scroll cq-no-claim>
+						<cq-tradehistory-body maxrows="500"></cq-tradehistory-body>
+					</cq-scroll>
+				</cq-tradehistory-table>
+				<template>
+					<cq-item>
+						<div col="time">Time</div>
+						<div col="qty">Qty</div>
+						<div col="price">Price</div>
+						<div col="amount">Amount</div>
+					</cq-item>
+				</template>
+			</cq-tradehistory>
+		</div>
+	</cq-context>
+
+
+
+	<script type="module" crossorigin="use-credentials">
+		// This inline script acts as the entry point, without creating a separate external file.
+
+		import "./js/advanced.js";
+		import "./js/addOns.js";
+		import { CIQ } from "./js/components.js";
+		import PerfectScrollbar from "./js/thirdparty/perfect-scrollbar.esm.js";
+		import "./examples/feeds/L2_simulator.js";
+		import "./plugins/activetrader/cryptoiq.js";
+
+		// Create the chart...
+		localStorage['CIQ.Themes.prototype.current'] = JSON.stringify({ 'theme': 'ciq-night' });
+
+		var stxx = new CIQ.ChartEngine({ container: document.querySelector(".chartContainer") });
+		const context = new CIQ.UI.Context(stxx, document.querySelector("cq-context,[cq-context]"));
+		window.CIQ = CIQ; window.stxx = stxx
+		if (!stxx.chart.symbol) stxx.chart.symbol = "^EURCAD";
+		
+		window.context = {
+			stxx,
+			CIQ,
+		};
+
+		// Simulate L2 data
+		// In your implementation, you must instead load L2 data
+		// using https://documentation.chartiq.com/CIQ.ChartEngine.html#updateCurrentMarketData
+		CIQ.simulateL2({ stx: stxx, onInterval: 1000, onTrade: true });
+
+			//...then add whatever code you wish!</script>
+
+
+</body>
+
+</html>

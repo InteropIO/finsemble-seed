@@ -1,0 +1,15 @@
+study 'Custom Bollinger Bands', overlay: true
+
+field = input('Field', 'field')
+period = input('Period', 20)
+
+median = ma(field, period)
+range = stddev(field, period)
+top = median + range
+bottom = median - range
+
+ptop = plot top
+pmed = plot median
+pbot = plot bottom
+
+fill(ptop, pbot, color: pmed)

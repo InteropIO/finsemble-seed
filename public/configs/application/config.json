@@ -130,13 +130,15 @@
 	"globalHotkeys": {},
 	"//": "this importConfig contains components that are necessary to start Finsemble. All other components are loaded dynamically. See server/auth/test.json",
 	"importConfig": [
-		"$configRoot/application/appd.json",
 		"$configRoot/application/UIComponents.json",
 		"$configRoot/application/components.json",
 		"$configRoot/application/workspaces.json",
 		"$configRoot/application/services.json",
 		"$configRoot/application/securityPolicies.json",
-		"$configRoot/application/dashbarConfig.json"
+		"$configRoot/application/dashbarConfig.json",
+		"$configRoot/application/appd.json",
+		"$applicationRoot/components/sales-demo-app/ag-grid/appd.json",
+		"$applicationRoot/components/sales-demo-app/chartiq/appd.json"
 	],
 	"toolbarMenus": {}
 }

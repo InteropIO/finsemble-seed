@@ -1,0 +1,120 @@
+/* -------- ScriptIQ UI -------- */
+*[scriptiq-active] .scriptiq-ui {
+  display: inherit; }
+
+cq-scriptiq-editor {
+  position: absolute;
+  bottom: 45px;
+  height: 21%;
+  min-height: 118px;
+  left: 0px;
+  right: 28px;
+  display: none;
+  border-right: solid 1px;
+  border-right-color: rgba(0, 0, 0, 0.1);
+  padding: 0;
+  margin: 0; }
+  cq-scriptiq-editor[cq-active] {
+    display: block; }
+  cq-scriptiq-editor .stx-ico-handle.stx-grab {
+    height: 4px;
+    z-index: 0; }
+
+.scriptiq-toolbar {
+  border-color: rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 5px 0px 0px;
+  height: 30px; }
+  .scriptiq-toolbar .stx-btn.stx-ico {
+    position: absolute;
+    top: 4px;
+    right: -5px; }
+
+.scriptiq-textarea {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 35px;
+  bottom: 24px;
+  font-size: 12px;
+  font-family: Arial, Helvetica, sans-serif;
+  outline: none;
+  resize: none;
+  overflow: hidden;
+  padding-bottom: 5px;
+  background-color: #fff;
+  border-color: #fff;
+  color: #000; }
+  .scriptiq-textarea textarea {
+    background-color: #fff;
+    border-color: #fff;
+    color: #000;
+    height: 100%;
+    width: 100%;
+    resize: none; }
+
+.scriptiq-status {
+  position: absolute;
+  height: 22px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  font-size: 12px;
+  font-family: Arial, Helvetica, sans-serif;
+  outline: none;
+  resize: none;
+  overflow: hidden;
+  background-color: #fff;
+  border-color: #fff;
+  color: #000; }
+  .scriptiq-status input {
+    border: solid 1px rgba(0, 0, 0, 0.05);
+    border-left-color: transparent;
+    background-color: #fff;
+    color: #000;
+    height: 16px;
+    width: 100%; }
+
+.ciq-night cq-scriptiq-editor {
+  border-right-color: rgba(255, 255, 255, 0.05); }
+
+.ciq-night .scriptiq-toolbar {
+  border-color: rgba(255, 255, 255, 0.05);
+  background-color: rgba(54, 63, 68, 0.3); }
+  .ciq-night .scriptiq-toolbar .stx-btn.stx-ico .stx-ico-close {
+    background-position: -250px -50px; }
+
+.ciq-night .scriptiq-textarea {
+  background-color: #151f28;
+  border-color: #151f28;
+  color: #fff; }
+  .ciq-night .scriptiq-textarea textarea {
+    background-color: #151f28;
+    border-color: #151f28;
+    color: #fff; }
+
+.ciq-night .scriptiq-status {
+  background-color: #151f28;
+  border-color: #151f28;
+  color: #fff; }
+  .ciq-night .scriptiq-status input {
+    border: solid 1px rgba(54, 63, 68, 0.3);
+    background-color: #151f28;
+    color: #fff; }
+
+/* -------- ScriptIQ Menu -------- */
+cq-scriptiq-menu cq-scriptiq-content {
+  display: block; }
+  cq-scriptiq-menu cq-scriptiq-content div {
+    max-height: 27px; }
+    cq-scriptiq-menu cq-scriptiq-content div .ciq-icon.ciq-close {
+      bottom: 1px; }
+  cq-scriptiq-menu cq-scriptiq-content cq-label {
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 110px;
+    float: left; }
+
+/*# sourceMappingURL=scriptiqEditor.css.map */

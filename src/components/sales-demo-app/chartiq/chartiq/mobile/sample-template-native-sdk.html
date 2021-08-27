@@ -1,0 +1,190 @@
+<!DOCTYPE html><!--
+This file is intended to be used with the iOS and Android GitHub sample projects. Do not load the
+file directly as a web page.
+
+The file is a simple HTML application that can be put into a mobile WebView to interface with
+ChartIQ's JavaScript bridge library, nativeSdkBridge.js (in the mobile/js folder).
+
+To use this template, move or copy it to the root folder of your library.
+--><html><head>
+<meta charset="utf-8">
+<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+<link rel="stylesheet" type="text/css" href="css/normalize.css" media="screen">
+<link rel="stylesheet" type="text/css" href="css/page-defaults.css" media="screen">
+<link rel="stylesheet" type="text/css" href="css/stx-chart.css" media="screen">
+<link rel="stylesheet" type="text/css" href="css/chartiq.css" media="screen">
+<link rel="stylesheet" type="text/css" href="mobile/css/ciq-mobile.css" media="screen">
+
+</head>
+<body>
+<cq-context>
+<div class="ciq-chart-area">
+	<div class="ciq-chart">
+		<div class="chartContainer">
+			<cq-loader></cq-loader>
+				<cq-measure><span class="mMeasure" style="display:none;"></span></cq-measure>
+			<cq-undo></cq-undo>
+			<cq-redo></cq-redo>
+			<cq-comparison cq-marker="">
+				<cq-menu class="cq-comparison-new">
+					<cq-comparison-add-label>
+						<cq-comparison-plus></cq-comparison-plus><span>Compare</span><span>...</span>
+					</cq-comparison-add-label>
+					<cq-comparison-add>
+						<cq-comparison-lookup-frame>
+							<cq-lookup>
+								<cq-lookup-input cq-no-close="">
+									<input type="text" cq-focus="" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="none" placeholder="Enter Symbol">
+								</cq-lookup-input>
+							</cq-lookup>
+						</cq-comparison-lookup-frame>
+						<cq-swatch cq-no-close=""></cq-swatch>
+						<span><cq-accept-btn class="stx-btn">ADD</cq-accept-btn></span>
+					</cq-comparison-add>
+				</cq-menu>
+				<cq-comparison-key>
+					<template cq-comparison-item="">
+						<cq-comparison-item>
+							<cq-comparison-swatch></cq-comparison-swatch>
+							<cq-comparison-label>AAPL</cq-comparison-label>
+							<!-- cq-comparison-price displays the current price with color animation -->
+							<cq-comparison-price cq-animate=""></cq-comparison-price>
+							<!-- cq-comparison-tick-price displays the price for the active crosshair item -->
+							<!-- <cq-comparison-tick-price></cq-comparison-tick-price>	-->
+							<cq-comparison-loader></cq-comparison-loader>
+							<div class="stx-btn-ico ciq-close"></div>
+						</cq-comparison-item>
+					</template>
+				</cq-comparison-key>
+			</cq-comparison>
+		</div>
+		<!-- End Chart Container -->
+	</div>
+	<!-- End Chart Box -->
+</div>
+<cq-dialog id="simulation-warning">
+	<strong>Displayed data is simulated.</strong>
+	<br><br>
+	DO NOT use this data as the basis for any trades or financial decisions.
+	<div class="ciq-btn" stxtap="close()">Close</div>
+</cq-dialog></cq-context>
+<script src="mobile/thirdparty/hammer.js"></script>
+<script type="module" crossorigin="use-credentials">
+// This inline script acts as the entry point, without creating a separate external file.
+import "./js/advanced.js";
+import { CIQ } from "./js/components.js";
+import "./js/addOns.js";
+
+/* Template-specific imports */
+import getDefaultConfig from "./js/defaultConfiguration.js";
+import PerfectScrollbar from "./js/thirdparty/perfect-scrollbar.esm.js";
+import "./examples/markets/marketDefinitionsSample.js";
+import "./examples/markets/marketSymbologySample.js";
+import "./examples/translations/translationSample.js";
+import "./mobile/js/nativeSdkAccessibility.js";
+// Create and customize default configuration
+
+// This variable triggers display of the simulated data disclaimer necessary when
+// using data from the ChartIQ data simulator. Set to false when displaying your
+// production data.
+const displayDataDisclaimer = true;
+
+CIQ.MobileBridge.determineOs();
+const quoteFeedNativeBridge = {
+	fetch: function (parameters, cb) {
+		function completion(cb) {
+			return function (err, results) {
+				if (err) {
+					cb({ error: err });
+				} else {
+					cb(results);
+				}
+			};
+		}
+		// This should call the native ios or android interface.
+		// For sample app, instantiate an interface that connects to the simulator.
+		// Call the completion closure with a completionHandler (or other mechanism).
+		// Make sure this is done asynchronously so the UI doesn't hang.
+		// Completion assumes the results are in correct JSON format.
+		CIQ.MobileBridge.nativeQuoteFeed(parameters, cb);
+	},
+	fetchInitialData: function (
+		symbol,
+		suggestedStartDate,
+		suggestedEndDate,
+		params,
+		cb
+	) {
+		const parameters = {
+			func: "pullInitialData",
+			symbol: symbol,
+			period: params.period,
+			timeUnit: params.interval,
+			start: suggestedStartDate,
+			end: suggestedEndDate
+		};
+		this.fetch(parameters, cb);
+	},
+	fetchUpdateData: function (symbol, startDate, params, cb) {
+		const parameters = {
+			func: "pullUpdate",
+			symbol: symbol,
+			period: params.period,
+			timeUnit: params.interval,
+			start: startDate
+		};
+		this.fetch(parameters, cb);
+	},
+	fetchPaginationData: function (
+		symbol,
+		suggestedStartDate,
+		endDate,
+		params,
+		cb
+	) {
+		const parameters = {
+			func: "pullPagination",
+			symbol: symbol,
+			period: params.period,
+			timeUnit: params.interval,
+			start: suggestedStartDate,
+			end: endDate
+		};
+		this.fetch(parameters, cb);
+	}
+};
+
+// NOTE: if you are using a push mechanism for your data, comment out or remove the setQuoteFeedInBridge function call and
+// quotefeed field in the config object below. Then set the dataMethod to 'push' in the native client side code.
+CIQ.MobileBridge.setQuoteFeedInBridge(quoteFeedNativeBridge);
+const config = getDefaultConfig({
+	scrollStyle: PerfectScrollbar,
+	quoteFeed: quoteFeedNativeBridge
+});
+
+// NOTE: if you want to change the quotefeed refreshInterval you can run the following and set the refreshInterval to any interval in seconds.
+// Object.assign(config.quoteFeeds[0].behavior, { refreshInterval: 5 });
+// If you want to modify anything in the config directly please do so in chartiq/js/defaultConfiguration.js
+Object.assign(config.enabledAddOns, { fullScreen: false, rangeSlider: false });
+
+// Create the chart...
+		let stxx = config.createChart();
+
+		// set some settings for the mobile template
+		if (stxx) {
+			stxx.callbackListeners.drawingEdit = []; // turn off edit mode for drawing mSticky
+			stxx.callbackListeners.studyOverlayEdit = []; // turn off edit mode for study mSticky
+			stxx.callbackListeners.studyPanelEdit = []; // turn off edit mode for study panel
+			stxx.extendedHours.set(false); // default state so it doesn't mess with the native toggle option
+			stxx.minimumZoomTicks = 5; // default zoom ticks doesn't allow seconds to appear on the x-axis when in portrait mode
+			CIQ.MobileBridge.setChartEngineInBridge(stxx); // set the chart engine instance for the nativeSdkBridge scripts
+			CIQ.MobileBridge.setChartAvailable(true); // lets the mobile bridge know that the chart is finished loading
+
+			if (displayDataDisclaimer) {
+				let simWarnDialog = document.getElementById("simulation-warning");
+				simWarnDialog.open();
+			}
+		}
+		//...then add whatever code you wish!</script>
+
+</body></html>
