@@ -136,9 +136,9 @@
 		"$configRoot/application/services.json",
 		"$configRoot/application/securityPolicies.json",
 		"$configRoot/application/dashbarConfig.json",
-		"$configRoot/application/appd.json",
 		"$applicationRoot/components/sales-demo-app/ag-grid/appd.json",
-		"$applicationRoot/components/sales-demo-app/chartiq/appd.json"
+		"$applicationRoot/components/sales-demo-app/chartiq/appd.json",
+		"$applicationRoot/components/sales-demo-app/chartiq/active-trader/appd.json"
 	],
 	"toolbarMenus": {}
 }

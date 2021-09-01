@@ -1,0 +1,180 @@
+{
+	"comment": "Active Trader AppD component configs",
+	"$schema": "../../../../core/configs/schemas/fileBasedSchemas/appdConfigFile.schema.json",
+	"appd": {
+		"Orderbook": {
+			"name": "Orderbook",
+			"appId": "Orderbook",
+			"description": "Visualize market data in the leading FDC3 compliant technical chart.",
+			"manifest": {
+				"window": {
+					"url": "$applicationRoot/components/sales-demo-app/chartiq/chartiq/orderBook.html",
+					"width": 800,
+                	"height": 602,
+					"options": {
+						"minWidth": 75
+					}
+				},
+				"foreign": {
+					"components": {
+						"App Launcher": {
+							"launchableByUser": true
+						},
+						"Toolbar": {
+							"iconClass": "ff-chart-advanced"
+						},
+						"Window Manager": {
+							"FSBLHeader": true,
+							"persistWindowState": true
+						}
+					}
+				},
+				"component":{
+					"preload": [
+						"$applicationRoot/components/sales-demo-app/chartiq/active-trader/active-trader-orderbook.js"
+					]
+				}
+			},
+			"version": "1.0.0",
+			"tooltip": "Orderbook",
+			"images": [
+				{
+					"url": "https://i.imgur.com/10C3LdH.png",
+					"tooltip": "Orderbook"
+				}
+			],
+			"tags": ["market data", "visualization", "fdc3"],
+			"contactEmail": "info@cosaic.io",
+			"supportEmail": "support@finsemble.com",
+			"publisher": "Cosaic",
+			"icons": [
+				{
+					"url": "https://i.imgur.com/mpBdiHd.png"
+				}
+			],
+			"intents": [
+				{
+					"name": "ViewChart",
+					"displayName": "View Chart",
+					"contexts": ["fdc3.instrument"]
+				}
+			]
+		},
+		"Market Depth": {
+			"name": "Market Depth",
+			"appId": "Market Depth",
+			"description": "Visualize market data in the leading FDC3 compliant technical chart.",
+			"manifest": {
+				"window": {
+					"url": "$applicationRoot/components/sales-demo-app/chartiq/chartiq/marketWatch.html",
+					"width": 800,
+                	"height": 602,
+					"options": {
+						"minWidth": 75
+					}
+				},
+				"foreign": {
+					"components": {
+						"App Launcher": {
+							"launchableByUser": true
+						},
+						"Toolbar": {
+							"iconClass": "ff-chart-advanced"
+						},
+						"Window Manager": {
+							"FSBLHeader": true,
+							"persistWindowState": true
+						}
+					}
+				},
+				"component":{
+					"preload": [
+						"$applicationRoot/components/sales-demo-app/chartiq/active-trader/active-trader-marketdepth.js"
+					]
+				}
+			},
+			"version": "1.0.0",
+			"tooltip": "Market Depth",
+			"images": [
+				{
+					"url": "https://i.imgur.com/10C3LdH.png",
+					"tooltip": "Market Depth"
+				}
+			],
+			"tags": ["market data", "visualization", "fdc3"],
+			"contactEmail": "info@cosaic.io",
+			"supportEmail": "support@finsemble.com",
+			"publisher": "Cosaic",
+			"icons": [
+				{
+					"url": "https://i.imgur.com/mpBdiHd.png"
+				}
+			],
+			"intents": [
+				{
+					"name": "ViewChart",
+					"displayName": "View Chart",
+					"contexts": ["fdc3.instrument"]
+				}
+			]
+		},
+		"Trade History": {
+			"name": "Trade History",
+			"appId": "Trade History",
+			"description": "Visualize market data in the leading FDC3 compliant technical chart.",
+			"manifest": {
+				"window": {
+					"url": "$applicationRoot/components/sales-demo-app/chartiq/chartiq/tradehistory.html",
+					"width": 800,
+                	"height": 602,
+					"options": {
+						"minWidth": 75
+					}
+				},
+				"foreign": {
+					"components": {
+						"App Launcher": {
+							"launchableByUser": true
+						},
+						"Toolbar": {
+							"iconClass": "ff-chart-advanced"
+						},
+						"Window Manager": {
+							"FSBLHeader": true,
+							"persistWindowState": true
+						}
+					}
+				},
+				"component":{
+					"preload": [
+						"$applicationRoot/components/sales-demo-app/chartiq/active-trader/active-trader-tradehistory.js"
+					]
+				}
+			},
+			"version": "1.0.0",
+			"tooltip": "Trade History",
+			"images": [
+				{
+					"url": "https://i.imgur.com/10C3LdH.png",
+					"tooltip": "Trade History"
+				}
+			],
+			"tags": ["market data", "visualization", "fdc3"],
+			"contactEmail": "info@cosaic.io",
+			"supportEmail": "support@finsemble.com",
+			"publisher": "Cosaic",
+			"icons": [
+				{
+					"url": "https://i.imgur.com/mpBdiHd.png"
+				}
+			],
+			"intents": [
+				{
+					"name": "ViewChart",
+					"displayName": "View Chart",
+					"contexts": ["fdc3.instrument"]
+				}
+			]
+		}
+	}
+}

@@ -58,9 +58,7 @@
 			"//": "Customer macros definitions must go here (e.g. 'myApplicationRoot' so it can be referenced elsewhere as '$myApplicationRoot'), along with other custom config at this level."
 		},
 		"importConfig": ["$configRoot/application/config.json"],
-		"trustedPreloads": [
-			"$applicationRoot/components/sales-demo-app/chartiq/chartiq.js"
-		]
+		"trustedPreloads": []
 	},
 	"finsemble-electron-adapter": {
 		"useDOMBasedMovement": true,

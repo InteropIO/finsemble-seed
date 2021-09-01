@@ -33,18 +33,6 @@
 					"preload": [
 						"$applicationRoot/components/sales-demo-app/chartiq/chartiq.js"
 					]
-				},
-				"interop": {
-					"selectConnect": [
-						{
-							"contextType": "layout",
-							"fwd": "#Workspace"
-						},
-						{
-							"contextType": "fdc3.instrument",
-							"cc": "#Workspace"
-						}
-					]
 				}
 			},
 			"version": "1.0.0",
