@@ -3,7 +3,7 @@
  * Copyright 2017 - 2020 by ChartIQ, Inc.
  * All rights reserved.
  */
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { FinsembleProvider } from "@finsemble/finsemble-ui/react/components/FinsembleProvider";
 import {

@@ -120,8 +120,6 @@
 			"promptUserOnDirtyWorkspace": true
 		}
 	},
-	"//systemTrayIcon": "System Tray icons must be defined in config.json, so that the icon will actually appear in the system tray. Note that this file will overwrite ./manifest-local.json",
-	"systemTrayIcon": "$applicationRoot/../assets/img/Finsemble_SystemTray_Icon.png",
 	"systemTrayComponent": "SystemTrayComponent",
 	"Window Manager": {
 		"alwaysOnTopIcon": false,

@@ -5,10 +5,15 @@ const registrationHandler = () => {
 	if (registrationComplete) {
 		// save username to prevent having to register again.
 		localStorage.setItem("username", "default");
+	} else {
+		// Registration hasn't completed, or the page hasn't fully rendered. Check again to make sure page has had a
+		// chance to render.
+		setTimeout(registrationHandler, 500);
 	}
 
-	let username = localStorage.getItem("username");
 	fin.desktop.System.getEnvironmentVariable("EVAL_FORM", (env) => {
+		// check whether the username has already been set
+		let username = localStorage.getItem("username");
 		if (username || env !== "yes") {
 			// If user has already registered, or not in evaluation mode (yarn start), don't show registration form
 			username = username ? username : "default";
@@ -22,8 +27,15 @@ const registrationHandler = () => {
 			// Hiding splash screen because it can sometimes obscure the registration form.
 			FSBL.System.hideSplashScreen();
 
-			// Show registration form for user to register.
-			finsembleWindow.show();
+			// Check whether form is already showing to prevent flicker
+			finsembleWindow.isShowing((err, isShowing) => {
+				if (err) return console.error(err);
+
+				if (!isShowing) {
+					// Show registration form for user to register.
+					finsembleWindow.show();
+				}
+			});
 		}
 	});
 };
@@ -32,11 +44,8 @@ const registrationHandler = () => {
 setTimeout(() => {
 	// Add registration handler to submit button. Need to add this to trigger another registration check after submit
 	const buttons = document.getElementsByTagName("button");
-	if (buttons.length == 1) {
-		buttons[0].onclick = () => {
-			// Wait briefly for page to render before checking the registration
-			setTimeout(registrationHandler, 500);
-		};
+	if (buttons.length === 1) {
+		buttons[0].onclick = registrationHandler;
 	}
 
 	// Add close button
