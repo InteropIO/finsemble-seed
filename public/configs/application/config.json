@@ -138,7 +138,10 @@
 		"$configRoot/application/dashbarConfig.json",
 		"$applicationRoot/components/sales-demo-app/ag-grid/appd.json",
 		"$applicationRoot/components/sales-demo-app/chartiq/appd.json",
-		"$applicationRoot/components/sales-demo-app/chartiq/active-trader/appd.json"
+		"$applicationRoot/components/sales-demo-app/chartiq/active-trader/appd.json",
+		"$applicationRoot/components/sales-demo-app/news/appd.json",
+		"$applicationRoot/components/sales-demo-app/company/appd.json",
+		"$applicationRoot/components/sales-demo-app/financials/appd.json"
 	],
 	"toolbarMenus": {}
 }
