@@ -1,0 +1,14 @@
+{
+  "applications": [
+    {
+      "type": "sandbox",
+      "id": "finsembleAppId",
+      "name": "Finsemble",
+      "description": "Finsemble White Labeled Application",
+      "publisher": "Cosaic",
+      "url": "https://salesdemo.finsemble.com/assets/finsemble-symphony/controller.html",
+      "icon": "https://salesdemo.finsemble.com/assets/finsemble-symphony/img/icon.png",
+      "domain": "salesdemo.finsemble.com"
+    }
+  ]
+}

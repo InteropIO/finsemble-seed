@@ -1,0 +1,14 @@
+{
+  "applications": [
+    {
+      "type": "sandbox",
+      "id": "finsembleLocalAppId",
+      "name": "Finsemble LOCAL",
+      "description": "Finsemble White Labeled Application",
+      "publisher": "ChartIQ",
+      "url": "https://localhost.chartiq.com:3375/assets/finsemble-symphony/controller.html",
+      "icon": "https://localhost.chartiq.com:3375/assets/finsemble-symphony/img/icon.png",
+      "domain": "localhost.chartiq.com"
+    }
+  ]
+}
