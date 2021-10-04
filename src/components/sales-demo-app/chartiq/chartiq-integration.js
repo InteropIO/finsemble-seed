@@ -13,7 +13,7 @@ module.exports = (stx) => {
 	const FINSEMBLE_SYMPHONY_CHARTIQ_APP_NAME_CONFIG_PATH = 'finsemble.custom.symphony.chartiqApp.name'
 
 	let symphonyChartIQAppId = ''
-	let symphonyChartIQAppName = '' 
+	let symphonyChartIQAppName = ''
 
 	//state variable to prevent resharing of symbol received from linker
 	let supressSymbolPublish = null;
@@ -22,8 +22,8 @@ module.exports = (stx) => {
 	const addIntentListener = () => {
 		if (window.fdc3) {
 			fdc3.addIntentListener('ViewChart', (context) => {
-				const { type } = context; 
-				if(type === "fdc3.instrument"){
+				const { type } = context;
+				if (type === "fdc3.instrument") {
 					const symbol = context.id.ticker;
 					if (stx.chart.symbol !== symbol) {
 						const state = {
@@ -31,7 +31,7 @@ module.exports = (stx) => {
 						};
 						supressSymbolPublish = symbol;
 						updateFromState(state);
-					}				
+					}
 				}
 			});
 		}
@@ -87,17 +87,17 @@ module.exports = (stx) => {
 
 		const params = {
 			fields: [{
-					field: "symbol",
-					value: symbol
-				},
-				{
-					field: "layout",
-					value: layout
-				},
-				{
-					field: "drawings",
-					value: drawingsStr
-				}
+				field: "symbol",
+				value: symbol
+			},
+			{
+				field: "layout",
+				value: layout
+			},
+			{
+				field: "drawings",
+				value: drawingsStr
+			}
 			]
 		}
 
@@ -129,19 +129,19 @@ module.exports = (stx) => {
 				},
 				() => {
 					document.title = state.symbol;
-	
+
 					if (state.layout) {
 						stx.importLayout(state.layout);
 					}
-	
+
 					if (state.drawings) {
 						stx.importDrawings(state.drawings);
 					}
-	
+
 					// Force study to redraw. For more information see:
 					// https://documentation.chartiq.com/WebComponents.cq-study-legend.html#main
 					document.querySelector("cq-study-legend").begin()
-	
+
 					// Show on restore state, if hidden until state is ready
 					FSBL.Clients.WindowClient.getCurrentWindow().show();
 				});
@@ -168,9 +168,9 @@ module.exports = (stx) => {
 				state.drawings = spawnData.chart.drawings;
 				supressSymbolPublish = spawnData.chart.symbol;
 			}
-		} 
-		
-		if (Object.keys(state).length > 0){
+		}
+
+		if (Object.keys(state).length > 0) {
 			updateFromState(state);
 		}
 	};
@@ -210,23 +210,23 @@ module.exports = (stx) => {
 		stx.addEventListener("drawing", saveState);
 
 		// Disable localStorage read/write by chart by replacing functions with no ops.
-		CIQ.localStorageGetItem = () => {};
-		CIQ.localStorageSetItem = () => {};
+		CIQ.localStorageGetItem = () => { };
+		CIQ.localStorageSetItem = () => { };
 	};
 
 	const shareChart = (e) => {
-		let toggleTarget = {
-			componentType: 'SymphonyAdvanceShare',
-		}
-		let toggleParams = {
-			addToWorkspace: false,
-			spawnIfNotFound: true,
-			position: "relative",
-			left: "center",
-			top: "center"
-		}
+		// let toggleTarget = {
+		// 	componentType: 'SymphonyAdvanceShare',
+		// }
+		// let toggleParams = {
+		// 	addToWorkspace: false,
+		// 	spawnIfNotFound: true,
+		// 	position: "relative",
+		// 	left: "center",
+		// 	top: "center"
+		// }
 
-		FSBL.Clients.LauncherClient.toggleWindowOnClick(e.e.target, toggleTarget, toggleParams)
+		// FSBL.Clients.LauncherClient.toggleWindowOnClick(e.e.target, toggleTarget, toggleParams)
 
 		// For later chart sharing enhancement
 		let symbol = stx.chart.symbol
@@ -235,43 +235,49 @@ module.exports = (stx) => {
 		let preferences = stxx.exportPreferences();
 		let chartTitle = symbol.toUpperCase() + " Chart"
 
-		let transmitParams = {
-			shareContent: {
-				title: chartTitle,
-				subTitle: "Share a " + symbol + ' chart',
-				summary: "Chart Type: " + layout.chartType,
-				articleId: JSON.stringify({
-					itemType: "AdvancedChart",
-					widgetId: "chart",
-					data: {
-						layout: {
-							symbols: [{
-								symbol: symbol,
-							}, ],
-						},
-					},
-				}),
-				author: "ChartIQ",
-				publisher: "ChartIQ",
-				appId: symphonyChartIQAppId, 
-				appName: symphonyChartIQAppName,
-				thumbnailUrl: "https://symphony.chartiq.com/ChartIQ/Symphony/img/CIQ_Mark_64x64.png",
-				appIconUrl: "https://symphony.chartiq.com/ChartIQ/Symphony/img/CIQ_Mark_64x64.png",
-				chart: {
-					symbol: symbol,
-					layout: layout,
-					drawings: drawings,
-					preferences: preferences,
-					chartTitle: chartTitle
-				}
-			},
-			shareMsg: "Share a " + symbol + ' chart'
-		};
-		FSBL.Clients.RouterClient.transmit('ShareToSymphony', transmitParams)
+
+		//FSBL.Clients.RouterClient.transmit('ShareToSymphony', transmitParams)
+		if (window.fdc3) {
+			fetch(`https://nsjkz1yzul.execute-api.us-east-1.amazonaws.com/production/save`, {
+				method: "POST",
+				body: JSON.stringify({ layout, drawings, preferences, chartTitle }),
+
+				mode: "cors",
+				headers: {
+					"Content-Type": "application/json",
+				},
+			})
+				.then((res) => res.json())
+				.then((json) => {
+					let transmitParams = {
+						shareContent: {
+							title: chartTitle,
+							subTitle: "Share a " + symbol + ' chart',
+							summary: "Chart Type: " + layout.chartType,
+							articleId: json.body,
+							author: "ChartIQ",
+							publisher: "ChartIQ",
+							appId: symphonyChartIQAppId,
+							appName: symphonyChartIQAppName,
+							thumbnailUrl: "https://symphony.chartiq.com/ChartIQ/Symphony/img/CIQ_Mark_64x64.png",
+							appIconUrl: "https://symphony.chartiq.com/ChartIQ/Symphony/img/CIQ_Mark_64x64.png",
+							// chart: {
+							// 	symbol: symbol,
+							// 	layout: layout,
+							// 	drawings: drawings,
+							// 	preferences: preferences,
+							// 	chartTitle: chartTitle
+							// }
+						}
+					};
+
+					fdc3.raiseIntent("ShareToSymphony", { type: "fdc3.symphonyContent", message: "Share a " + symbol + ' chart', shareChart: transmitParams })
+				});
+		}
 	}
 
 	const modifyShareButton = () => {
-		FSBL.Clients.ConfigClient.getValues([FINSEMBLE_SYMPHONY_CHARTIQ_APP_ID_CONFIG_PATH, FINSEMBLE_SYMPHONY_CHARTIQ_APP_NAME_CONFIG_PATH],(err, configRes)=>{
+		FSBL.Clients.ConfigClient.getValues([FINSEMBLE_SYMPHONY_CHARTIQ_APP_ID_CONFIG_PATH, FINSEMBLE_SYMPHONY_CHARTIQ_APP_NAME_CONFIG_PATH], (err, configRes) => {
 			symphonyChartIQAppId = configRes[FINSEMBLE_SYMPHONY_CHARTIQ_APP_ID_CONFIG_PATH]
 			symphonyChartIQAppName = configRes[FINSEMBLE_SYMPHONY_CHARTIQ_APP_NAME_CONFIG_PATH]
 		})

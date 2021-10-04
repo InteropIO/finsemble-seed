@@ -55,7 +55,15 @@
 			}
 		},
 		"custom": {
-			"//": "Customer macros definitions must go here (e.g. 'myApplicationRoot' so it can be referenced elsewhere as '$myApplicationRoot'), along with other custom config at this level."
+			"//": "Customer macros definitions must go here (e.g. 'myApplicationRoot' so it can be referenced elsewhere as '$myApplicationRoot'), along with other custom config at this level.",
+			"symphony":{
+				"appTokenRoot": "https://salesdemo.finsemble.com/symphonyIntegration",
+				"defaultUsername": "finjsdemo",
+				"chartiqApp":{
+					"id": "ChartIQApp",
+					"name": "ChartIQ"
+				}
+			}
 		},
 		"importConfig": ["$configRoot/application/config.json"],
 		"trustedPreloads": []

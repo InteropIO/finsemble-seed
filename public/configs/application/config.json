@@ -2,12 +2,7 @@
 	"comment": "Top-level application config for development, adding on top of the core config",
 	"$schema": "../../../node_modules/@finsemble/finsemble-core/configs/schemas/fileBasedSchemas/applicationConfigFile.schema.json",
 	"accessibleLinker": true,
-	"authentication": {
-		"startup": {
-			"adapter": "PASSWORD",
-			"component": "Registration"
-		}
-	},
+	"authentication": {},
 	"servicesConfig": {
 		"distributedStore": {
 			"initialStores": [
@@ -139,7 +134,9 @@
 		"$applicationRoot/components/sales-demo-app/chartiq/active-trader/appd.json",
 		"$applicationRoot/components/sales-demo-app/news/appd.json",
 		"$applicationRoot/components/sales-demo-app/company/appd.json",
-		"$applicationRoot/components/sales-demo-app/financials/appd.json"
+		"$applicationRoot/components/sales-demo-app/financials/appd.json",
+		"$applicationRoot/components/sales-demo-app/shareToSymphony/appd.json",
+		"$applicationRoot/services/Symphony/config.json"
 	],
 	"toolbarMenus": {}
 }
