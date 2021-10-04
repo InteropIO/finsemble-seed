@@ -11,20 +11,27 @@ var appControllerName = appId + ':controller'
 var appService = SYMPHONY.services.register(appControllerName);
 
 // Initiate fpe-router
-const finsembleRouter = FpeRouter.router;
-const LauncherClient = FpeRouter.LauncherClient;
-const launcherClient = new LauncherClient(finsembleRouter);
-console.log("Finsemble Router Ready:", finsembleRouter);
+// const finsembleRouter = FpeRouter.router;
+// const LauncherClient = FpeRouter.LauncherClient;
+// const launcherClient = new LauncherClient(finsembleRouter);
+// console.log("Finsemble Router Ready:", finsembleRouter);
+FSBL.start({
+  appName: "SymphonyExtension",
+  digitalSigningKey: "SymphonyExtension",
+  windowName: "SymphonyExtension",
+  routerAddress: "http://127.0.0.1:4765"
+});
+FSBL.start();
 
 let connectedToBBG = false;
-finsembleRouter.addPubSubResponder("SymphonyServiceConnectedToBloomberg", { "connected": false }, null, (err,response) => {
+finsembleRouter.addPubSubResponder("SymphonyServiceConnectedToBloomberg", { "connected": false }, null, (err, response) => {
   if (err) {
     console.error("Error when creating the Bloomberg connection state PubSub, it may already exist", err);
   } else {
     console.log("Created Bloomberg connection state PubSub");
   }
-  
-  finsembleRouter.subscribe("SymphonyServiceConnectedToBloomberg", function(err, notify) {
+
+  finsembleRouter.subscribe("SymphonyServiceConnectedToBloomberg", function (err, notify) {
     if (!err) {
       connectedToBBG = notify.data.connected;
       console.log("Updated Bloomberg connection state: " + connectedToBBG);
@@ -41,8 +48,8 @@ const xmlize = (html) => {
 
 SYMPHONY.remote.hello().then((data) => {
   axios.post('/symphonyIntegration/extensionAuth', {
-      pod: data.pod
-    })
+    pod: data.pod
+  })
     .then((response) => {
       let appId = response.data.appId
       let appToken = response.data.appToken
@@ -126,24 +133,24 @@ SYMPHONY.remote.hello().then((data) => {
                         console.warn("The default action ran");
                         return {};
                     }
-                    case 'com.symphony.finsemble.test':
-                      switch (data.choice) {
-                        case "Transmit":
-                          return test_transmit(data.entityData);
-                        case "Publish":
-                          return test_publish(data.entityData);
-                        case "Query":
-                          return test_query(data.entityData);
-                        case "Spawn":
-                          return test_spawn(data.entityData);
-                        case "Protocol":
-                          return test_protocol(data.entityData);
-                        default:
-                          console.warn("The default action ran");
-                          return {};
-                      }
+                  case 'com.symphony.finsemble.test':
+                    switch (data.choice) {
+                      case "Transmit":
+                        return test_transmit(data.entityData);
+                      case "Publish":
+                        return test_publish(data.entityData);
+                      case "Query":
+                        return test_query(data.entityData);
+                      case "Spawn":
+                        return test_spawn(data.entityData);
+                      case "Protocol":
+                        return test_protocol(data.entityData);
                       default:
-                        return;
+                        console.warn("The default action ran");
+                        return {};
+                    }
+                  default:
+                    return;
                 }
               }
             },
@@ -156,12 +163,12 @@ SYMPHONY.remote.hello().then((data) => {
               if (id === 'finsemble-nav') {
                 modulesService.show(
                   'finsembleLocalApp', {
-                    title: 'Finsemble Application'
-                  },
+                  title: 'Finsemble Application'
+                },
                   appControllerName,
                   appPath, {
-                    'canFloat': true
-                  }
+                  'canFloat': true
+                }
                 )
               }
             }
@@ -182,7 +189,7 @@ const getRFQTemplate = (entityData) => {
   if (connectedToBBG) {
     options = ['News', 'Chart', 'Order', 'DES', 'Launchpad'];
   }
-  
+
   let dataOptions = options
     .map(option => `<action class="button" id="${option}"/>`)
     .join('');
@@ -246,34 +253,52 @@ const getRFQTemplate = (entityData) => {
 }
 
 const rfq_news = (data) => {
-  let params = {
-    target: 'News',
-    action: 'spawn',
-    data: {
-      symbol: data.rfq.symbol
+  // let params = {
+  //   target: 'News',
+  //   action: 'spawn',
+  //   data: {
+  //     symbol: data.rfq.symbol
+  //   }
+  // }
+  //finsembleRouter.transmit("SymphonyRfqTransmit", params, {});
+  fdc3.raiseIntent("ViewNews", {
+    "type": "fdc3.instrument",
+    "name": data.rfq.symbol,
+    "id": {
+      "ticker": data.rfq.symbol
     }
-  }
-  finsembleRouter.transmit("SymphonyRfqTransmit", params, {});
+  });
 }
 
 const rfq_chart = (data) => {
-  let params = {
-    target: 'Advanced Chart',
-    action: 'spawn',
-    data: {
-      symbol: data.rfq.symbol
+  // let params = {
+  //   target: 'Advanced Chart',
+  //   action: 'spawn',
+  //   data: {
+  //     symbol: data.rfq.symbol
+  //   }
+  // }
+  // finsembleRouter.transmit("SymphonyRfqTransmit", params, {});
+  fdc3.raiseIntent("ViewChart", {
+    "type": "fdc3.instrument",
+    "name": data.rfq.symbol,
+    "id": {
+      "ticker": data.rfq.symbol
     }
-  }
-  finsembleRouter.transmit("SymphonyRfqTransmit", params, {});
+  });
 }
 
 const rfq_order = (data) => {
-  let params = {
-    target: 'Order Management',
-    action: 'createOrder',
-    data: data.rfq
-  }
-  finsembleRouter.transmit("SymphonyRfqTransmit", params, {});
+  // let params = {
+  //   target: 'Order Management',
+  //   action: 'createOrder',
+  //   data: data.rfq
+  // }
+  // finsembleRouter.transmit("SymphonyRfqTransmit", params, {});
+  fdc3.raiseIntent("AddOrder", {
+    "type": "fdc3.order",
+    "order": data.rfq
+  });
 }
 
 const rfq_DES = (data) => {
@@ -356,10 +381,10 @@ const test_spawn = (data) => {
     data: {
       testData: data
     }
-  }, (err,response) => { 
+  }, (err, response) => {
     if (err) {
       console.error("error when spawning SymphonyTester", err);
-    } else { 
+    } else {
       console.log("spawned SymphonyTester");
     }
   });
