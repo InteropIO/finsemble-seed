@@ -111,6 +111,46 @@
 					"url": "https://assets.finsemble.com/components/ag-grid/ag-grid-logo.png"
 				}
 			]
+		},
+		"FDC3 workbench": {
+			"appId": "FDC3 workbench",
+			"name": "FDC3 workbench",
+			"description": "Development and test tool for FDC3 desktop agents and apps",
+			"manifest": {
+				"window": {
+					"url": "https://assets.finsemble.com/components/fdc3-workbench/index.html",
+					"width": 800,
+					"height": 750,
+					"options": {
+						"minWidth": 75
+					}
+				},
+				"foreign": {
+					"components": {
+						"App Launcher": { "launchableByUser": true },
+						"Toolbar": { "iconURL": "https://assets.finsemble.com/components/fdc3-workbench/fdc3-icon-256.png" },
+						"Window Manager": { "FSBLHeader": true, "persistWindowState": true }
+					}
+				},
+				"interop": {}
+			},
+			"version": "1.0.0",
+			"tooltip": "FDC3 Workbench",
+			"images": [
+				{
+					"url": "https://assets.finsemble.com/components/fdc3-workbench/fdc3-icon-256.png",
+					"tooltip": "FDC3 logo"
+				}
+			],
+			"tags": ["fdc3", "interop", "interoperabilty", "developer tool"],
+			"contactEmail": "info@cosaic.io",
+			"supportEmail": "support@finsemble.com",
+			"publisher": "Cosaic",
+			"icons": [
+				{
+					"url": "https://assets.finsemble.com/components/fdc3-workbench/fdc3-icon-256.png"
+				}
+			]
 		}
 	}
 }
