@@ -18,10 +18,11 @@ import "@finsemble/finsemble-ui/react/assets/css/dialogs.css";
 import "@finsemble/finsemble-ui/react/assets/css/authentication.css";
 import "../../../public/assets/css/theme.css";
 
-const bringToFront = () => FSBL.Clients.WindowClient.bringWindowToFront();
 export const Authentication = () => {
 	// Make sure this dialog shows on top of the splash screen
-	useEffect(bringToFront, []);
+	useEffect(() => {
+		FSBL.Clients.WindowClient.bringToFront();
+	}, []);
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [payload, setPayload] = useState<{
