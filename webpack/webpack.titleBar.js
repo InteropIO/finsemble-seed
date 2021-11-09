@@ -14,5 +14,10 @@ const entries = {
 
 let webpackConfig = generateDefaultConfig("titlebar");
 webpackConfig.entry = entries;
+// Without this line WP5 gives an error "automatic publicpath is not supported in this browser" when
+// trying to preload windowTitleBar.js into a window.open. This is because we're using require() within
+// windowTitleBarLoader, to dynamically load the WidowTitleBar.tsx. Without an accurate publicPath, any
+// random url won't know where to require that file.
+webpackConfig.output.publicPath = "../../assets/file-loader";
 
 module.exports = webpackConfig;

@@ -9,8 +9,8 @@
 	"splashScreenTimeout": 3000,
 	"appAssets": [
 		{
-			"src": "https://assets.finsemble.com/assimilation/assimilation_5.1.0.0.zip",
-			"version": "5.1.0.0",
+			"src": "https://assets.finsemble.com/assimilation/assimilation_6.3.0.0.zip",
+			"version": "6.3.0.0",
 			"alias": "assimilation",
 			"target": "AssimilationMain.exe"
 		}

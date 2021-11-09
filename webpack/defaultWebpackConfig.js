@@ -1,7 +1,9 @@
 const path = require("path");
 const CaseSensitivePathsPlugin = require("case-sensitive-paths-webpack-plugin");
 const { DefinePlugin } = require("webpack");
-// Uncomment this line to check the size of bundles
+// Uncomment the webpack-bundle-analyzer here and add to the plugins below
+// in order to show size and composition of bundles
+// see https://github.com/webpack-contrib/webpack-bundle-analyzer
 //const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 
 const env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
@@ -50,7 +52,8 @@ const IMAGE_AND_FONT_RULE = {
 			name: "[name].[ext]",
 			outputPath: "/assets/file-loader/",
 			publicPath: "../../assets/file-loader",
-			postTransformPublicPath: (p) => `__webpack_public_path__ + ${p}`,
+			// This interferes with url() in @font-face. Only use when necessary
+			//postTransformPublicPath: (p) => `__webpack_public_path__ + ${p}`,
 		},
 	},
 };
@@ -130,9 +133,9 @@ let plugins = [
 	new CaseSensitivePathsPlugin(),
 ];
 
-/**
- * Uncomment this plugin if you want to analyze bundle size. Separate tabs should open in chrome browser for each webpack script.
- */
+// Uncomment the webpack-bundle-analyzer here and in the require above
+// in order to show size and composition of bundles
+// see https://github.com/webpack-contrib/webpack-bundle-analyzer
 //plugins.push(new BundleAnalyzerPlugin({ analyzerMode: "static" }));
 
 /**
@@ -145,7 +148,10 @@ let plugins = [
  */
 const aliases = {
 	"@babel/runtime": path.resolve("./node_modules/@babel/runtime"),
+	"@finsemble/finsemble-core": path.resolve("./node_modules/@finsemble/finsemble-core"),
 	async: path.resolve("./node_modules/async"),
+	"date-fns": path.resolve("./node_modules/date-fns"),
+	lodash: path.resolve("./node_modules/lodash"),
 	react: path.resolve("./node_modules/react"),
 	"react-dom": path.resolve("./node_modules/react-dom"),
 };
@@ -181,9 +187,6 @@ const generateDefaultConfig = (name) => {
 		output: {
 			filename: "[name].js",
 			path: path.resolve(__dirname, "../public/build/"),
-			// Without this line WP5 gives an error "automatic publicpath is not supported in this browser" when
-			// trying to preload windowTitleBar.js into a window.open. It's not clear why the publicPath from file-loader isn't enough.
-			publicPath: "../../assets/file-loader",
 		},
 		resolve: {
 			alias: aliases,

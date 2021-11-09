@@ -12,6 +12,7 @@
 	const treeKill = require("tree-kill");
 	let FEA;
 	// Internal Cosaic development: exports doesn't exist when running yarn clean
+
 	try {
 		FEA = require("@finsemble/finsemble-electron-adapter/exports");
 	} catch (e) {
@@ -19,7 +20,6 @@
 	}
 	const FEA_PATH = path.resolve("./node_modules/@finsemble/finsemble-electron-adapter");
 	const FEAPackager = FEA ? FEA.packager : undefined;
-	console.log(`FEAPackager ${FEAPackager}`);
 	const startupConfig = require("./public/configs/other/server-environment-startup");
 	const { envOrArg, runWebpackAndCallback, logToTerminal, runWebpackInParallel } = require("./webpack/buildHelpers");
 	const INSTALLER_CERT_PASS = "INSTALLER_CERTIFICATE_PASSPHRASE";

@@ -56,7 +56,11 @@
 			"groups": {},
 			"windows": [
 				{
-					"componentType": "smartDesktopDesigner"
+					"componentType": "smartDesktopDesigner",
+					"top": "center",
+					"left": "center",
+					"width": 900,
+					"height": 700
 				}
 			]
 		}
