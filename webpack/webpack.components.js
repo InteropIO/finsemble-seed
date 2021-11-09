@@ -148,8 +148,6 @@ function collapseBuiltInFiles() {
 /**
  * Creates the copy-webpack-plugin config.
  * We use this to copy all assets from component folders over to dist.
- *
- * TODO, define a way for a component's webpack entry to specify whether it does or doesn't need to have assets copied
  */
 function createCopyWebpackConfig() {
 	// Copy configs and finsemble library

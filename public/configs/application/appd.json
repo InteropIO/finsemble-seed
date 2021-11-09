@@ -118,7 +118,7 @@
 			"description": "Development and test tool for FDC3 desktop agents and apps",
 			"manifest": {
 				"window": {
-					"url": "https://assets.finsemble.com/components/fdc3-workbench/index.html",
+					"url": "http://fdc3.finos.org/toolbox/fdc3-workbench",
 					"width": 800,
 					"height": 750,
 					"options": {
@@ -128,7 +128,7 @@
 				"foreign": {
 					"components": {
 						"App Launcher": { "launchableByUser": true },
-						"Toolbar": { "iconURL": "https://assets.finsemble.com/components/fdc3-workbench/fdc3-icon-256.png" },
+						"Toolbar": { "iconURL": "http://fdc3.finos.org/toolbox/fdc3-workbench/fdc3-icon-256.png" },
 						"Window Manager": { "FSBLHeader": true, "persistWindowState": true }
 					}
 				},
@@ -138,7 +138,7 @@
 			"tooltip": "FDC3 Workbench",
 			"images": [
 				{
-					"url": "https://assets.finsemble.com/components/fdc3-workbench/fdc3-icon-256.png",
+					"url": "http://fdc3.finos.org/toolbox/fdc3-workbench/fdc3-icon-256.png",
 					"tooltip": "FDC3 logo"
 				}
 			],
@@ -148,7 +148,7 @@
 			"publisher": "Cosaic",
 			"icons": [
 				{
-					"url": "https://assets.finsemble.com/components/fdc3-workbench/fdc3-icon-256.png"
+					"url": "http://fdc3.finos.org/toolbox/fdc3-workbench/fdc3-icon-256.png"
 				}
 			]
 		}
