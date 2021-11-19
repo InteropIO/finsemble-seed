@@ -1,6 +1,6 @@
 {
 	"comment": "AppD component config",
-	"$schema": "../../../../core/configs/schemas/fileBasedSchemas/appdConfigFile.schema.json",
+	"$schema": "../../../node_modules/@finsemble/finsemble-core/configs/schemas/fileBasedSchemas/appdConfigFile.schema.json",
 	"appd": {
 		"ChartIQ Example App": {
 			"name": "ChartIQ Example App",
