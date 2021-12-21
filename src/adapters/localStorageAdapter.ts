@@ -1,3 +1,4 @@
+import { IBaseStorage, StorageKeyTopic } from "@finsemble/finsemble-core/types/services/storage/adapters/types";
 /**
  * This file is a copy of the default localStorage adapter, the default storage model used by finsemble-seed.
  * It's provided as an example. Feel free to modify, add to, or erase parts of it.
@@ -13,7 +14,15 @@ const { Logger } = require("@finsemble/finsemble-core").Clients;
 // Because calls to this storage adapter will likely come from many different windows, we will log successes and failures in the central logger.
 Logger.start();
 
-const LocalStorageAdapter = function (uuid) {
+const LocalStorageAdapter = function (
+	this: IBaseStorage & {
+		db: Record<string, any>;
+		queue: any[];
+		releaseQueue: Function;
+		getUserPreface: () => string;
+	},
+	uuid: string
+) {
 	BaseStorage.call(this, arguments);
 
 	Logger.system.log("LocalStorageAdapter init");
@@ -49,11 +58,12 @@ const LocalStorageAdapter = function (uuid) {
 	 * @param {string} params.key The key whose value is being set.
 	 * @param {function} cb Callback to be invoked upon completion.
 	 */
-	this.get = function (params, cb) {
+	this.get = function (params: StorageKeyTopic, cb: Function) {
 		let combinedKey = this.getCombinedKey(this, params);
 		Logger.system.debug("LocalStorageAdapter.get, params: ", params);
 		console.debug("LocalStorageAdapter.get, params: ", params);
 		try {
+			// @ts-ignore
 			let data = JSON.parse(localStorage.getItem(combinedKey));
 			Logger.system.debug(`LocalStorageAdapter.get for key=${combinedKey} data=`, data);
 			console.debug(`LocalStorageAdapter.get for key=${combinedKey} data=`, data);
@@ -83,12 +93,12 @@ const LocalStorageAdapter = function (uuid) {
 	 * @param {*} params An object that must include the topic and keyPrefix of the desired keys.
 	 * @param {*} cb An optional callback that will be passed any errors that occurred and the found keys.
 	 */
-	this.keys = function (params, cb) {
+	this.keys = function (params: StorageKeyTopic, cb: Function) {
 		let errMessage;
 		if (!params) {
 			errMessage = "You must pass params to localStorageAdapter.keys";
 		} else {
-			const missingArgs = params && ["topic", "keyPrefix"].filter((k) => !params[k]);
+			const missingArgs = params && ["topic", "keyPrefix"].filter((k) => !(params as Record<string, any>)[k]);
 			if (missingArgs.length) {
 				errMessage = `Missing parameters to localStorageAdapter.keys: ${missingArgs.join(", ")}`;
 			}
@@ -106,7 +116,7 @@ const LocalStorageAdapter = function (uuid) {
 		const keyPreface = this.getKeyPreface(this, params);
 		try {
 			for (let i = 0, len = localStorage.length; i < len; ++i) {
-				const oneKey = localStorage.key(i);
+				const oneKey: string = localStorage.key(i) || "";
 
 				// If key is for this topic then save it
 				if (oneKey.startsWith(keyPreface)) {
@@ -133,7 +143,7 @@ const LocalStorageAdapter = function (uuid) {
 	 * @param {string} params.key The key whose value is being deleted.
 	 * @param {function} cb Callback to be invoked upon completion.
 	 */
-	this.delete = function (params, cb) {
+	this.delete = function (params: StorageKeyTopic, cb: Function) {
 		let combinedKey = this.getCombinedKey(this, params);
 
 		Logger.system.debug(`LocalStorageAdapter.delete for key=${combinedKey}`);
@@ -154,7 +164,7 @@ const LocalStorageAdapter = function (uuid) {
 	/**
 	 * This method should be used very, very judiciously. It's essentially a method designed to wipe the database for a particular user.
 	 */
-	this.clearCache = function (params, cb) {
+	this.clearCache = function (params: StorageKeyTopic, cb: Function) {
 		/** DH 6/9/2020 - This code was broken with references to undefined variables, so I infer
 		 * this is a dead code path and can probably .
 		 */
@@ -162,14 +172,15 @@ const LocalStorageAdapter = function (uuid) {
 		console.debug(`LocalStorageAdapter.clearCache`);
 
 		try {
-			let arr = []; // Array to hold the keys
+			let arr: string[] = []; // Array to hold the keys
 			// Iterate over localStorage and insert data related to the user into an array.
 			for (let i = 0; i < localStorage.length; i++) {
 				//console.log("localStorage.key(i):::", localStorage.key(i).substring(0, (this.baseName + ":" + this.userName).length));
 				if (
-					localStorage.key(i).substring(0, `${this.baseName}:${this.userName}`.length) ===
+					localStorage.key(i)?.substring(0, `${this.baseName}:${this.userName}`.length) ===
 					`${this.baseName}:${this.userName}`
 				) {
+					// @ts-ignore
 					arr.push(localStorage.key(i));
 				}
 			}
@@ -195,7 +206,7 @@ const LocalStorageAdapter = function (uuid) {
 	 * Wipes the storage container.
 	 * @param {function} cb
 	 */
-	this.empty = function (cb) {
+	this.empty = function (cb: Function) {
 		Logger.system.log("LocalStorageAdapter.empty");
 		console.log("LocalStorageAdapter.empty");
 
@@ -213,6 +224,6 @@ const LocalStorageAdapter = function (uuid) {
 	};
 };
 
-LocalStorageAdapter.prototype = new BaseStorage();
-new LocalStorageAdapter("LocalStorageAdapter");
-module.exports = LocalStorageAdapter; //Allows us to get access to the uninitialized object
+LocalStorageAdapter.prototype = Object.create(BaseStorage.prototype);
+new (LocalStorageAdapter as any)("LocalStorageAdapter");
+export const adapter = LocalStorageAdapter; //Allows us to get access to the uninitialized object
