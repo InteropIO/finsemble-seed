@@ -1,9 +1,16 @@
+import { IBaseStorage, StorageKeyTopic } from "@finsemble/finsemble-core/types/services/storage/adapters/types";
+import { StandardError } from "@finsemble/finsemble-core/types/types";
+
 /**
  * This file is a copy of the default IndexedDBAdapter adapter, the default storage model used by finsemble-seed.
  * It's provided as an example. Feel free to modify, add to, or erase parts of it.
  *
  * Core Finsemble calls are written with key-value pair databases in mind. If you want to use a different database type, you will need to translate the key/value pairs passed in from finsemble so that you can successfully retrieve them at a later time.
  */
+
+interface FinsembleEventResult extends EventTarget {
+	result: Record<string, any>;
+}
 
 /**
  * We have a baseStorage model that provides some methods, such as `getCombinedKey`, which will return a nice key to save our value under. Example: `Finsemble:defaultUser:finsemble:activeWorkspace`. That key would hold the value of our activeWorkspace.
@@ -36,7 +43,7 @@ let initialized = false;
  *
  * @param prefix The string by which to filter the primary keys.
  */
-IDBKeyRange.forPrefix = (prefix) => {
+(IDBKeyRange as any).forPrefix = (prefix: string) => {
 	/**
 	 * Determines the string that would sort immediately after all strings with the specified prefix and hence can be
 	 * used as the upper bound for an IDBKeyRange to retrieve all keys with a specified prefix (where the lower bound is
@@ -44,7 +51,7 @@ IDBKeyRange.forPrefix = (prefix) => {
 	 *
 	 * @param key
 	 */
-	const successor = (key) => {
+	const successor = (key: string) => {
 		let len = key.length;
 		while (len > 0) {
 			const head = key.substring(0, len - 1);
@@ -80,7 +87,15 @@ IDBKeyRange.forPrefix = (prefix) => {
  * save our value under. Example: `Finsemble:defaultUser:finsemble:activeWorkspace`. That key would hold the value of
  * our activeWorkspace.
  */
-const IndexedDBAdapter = function (uuid) {
+const IndexedDBAdapter = function (
+	this: IBaseStorage & {
+		db: Record<string, any>;
+		queue: any[];
+		releaseQueue: Function;
+		getUserPreface: () => string;
+	},
+	uuid: string
+) {
 	// #region Initializes a new instance of the IndexedDBAdapter.
 	BaseStorage.call(this, arguments);
 
@@ -105,7 +120,7 @@ const IndexedDBAdapter = function (uuid) {
 	// Create the object store if necessary
 	request.onupgradeneeded = (event) => {
 		// Save the IDBDatabase interface
-		this.db = event.target.result;
+		this.db = (event?.target as FinsembleEventResult).result;
 
 		// Create an objectStore for this database
 		const objectStore = this.db.createObjectStore("fsbl", { keyPath: "key" });
@@ -123,7 +138,7 @@ const IndexedDBAdapter = function (uuid) {
 		Logger.system.log("IndexedDBAdapter initialized successfully");
 		console.log("IndexedDBAdapter initialized successfully");
 
-		this.db = event.target.result;
+		this.db = (event?.target as FinsembleEventResult).result;
 		this.releaseQueue();
 	};
 
@@ -142,7 +157,7 @@ const IndexedDBAdapter = function (uuid) {
 	 * @param {string} params.keyPrefix The key prefix (optional).
 	 * @private
 	 */
-	this.getKeyPreface = (params) => {
+	this.getKeyPreface = (self: IBaseStorage, params: StorageKeyTopic) => {
 		const keyPrefix = "keyPrefix" in params ? params.keyPrefix : "";
 		return `${this.getUserPreface()}:${params.topic}:${keyPrefix}`;
 	};
@@ -164,7 +179,7 @@ const IndexedDBAdapter = function (uuid) {
 
 		while (this.queue.length) {
 			const action = this.queue.shift();
-			this[action.method].apply(this, action.args);
+			(this as any)[action.method].apply(this, action.args);
 		}
 	};
 	// #region Interface Methods
@@ -172,7 +187,7 @@ const IndexedDBAdapter = function (uuid) {
 	 * This method should be used very, very judiciously. It's essentially a method designed to wipe the database for a
 	 * particular user.
 	 */
-	this.clearCache = (params, cb) => {
+	this.clearCache = (params: StorageKeyTopic, cb: Function) => {
 		if (!initialized) {
 			Logger.system.debug("queuing", "clearCache", [params, cb]);
 			console.debug("queuing", "clearCache", [params, cb]);
@@ -180,23 +195,23 @@ const IndexedDBAdapter = function (uuid) {
 			return;
 		}
 
-		const userPreface = this.getUserPreface(this);
+		const userPreface = this.getUserPreface();
 
 		Logger.system.log(`IndexedDBAdapter.clearCache for userPreface=${userPreface}`);
 		console.log(`IndexedDBAdapter.clearCache for userPreface=${userPreface}`);
 
-		const keyRange = IDBKeyRange.forPrefix(userPreface);
+		const keyRange = (IDBKeyRange as any).forPrefix(userPreface);
 		const objectStore = this.db.transaction(["fsbl"], "readwrite").objectStore("fsbl");
-		const request = objectStore.delete(keyRange);
+		const _request = objectStore.delete(keyRange);
 
-		request.onsuccess = () => {
+		_request.onsuccess = () => {
 			Logger.system.log(`IndexedDBAdapter.clearCache Success: userPreface=${userPreface}`);
 			console.log(`IndexedDBAdapter.clearCache Success: userPreface=${userPreface}`);
 
 			cb(null, { status: "success" });
 		};
 
-		request.onerror = (err) => {
+		_request.onerror = (err: StandardError) => {
 			Logger.system.error("IndexedDBAdapter.clearCache failed Error", err, `userPreface=${userPreface}`);
 			console.error("IndexedDBAdapter.clearCache failed Error", err, `userPreface=${userPreface}`);
 
@@ -212,7 +227,7 @@ const IndexedDBAdapter = function (uuid) {
 	 * @param {string} params.key The key whose value is being deleted.
 	 * @param {function} cb callback to be invoked upon completion
 	 */
-	this.delete = (params, cb) => {
+	this.delete = (params: StorageKeyTopic, cb: Function) => {
 		if (!initialized) {
 			Logger.system.debug("queuing", "delete", [params, cb]);
 			console.debug("queuing", "delete", [params, cb]);
@@ -226,16 +241,16 @@ const IndexedDBAdapter = function (uuid) {
 		console.debug(`IndexedDBAdapter.delete for key=${combinedKey}`);
 
 		const objectStore = this.db.transaction(["fsbl"], "readwrite").objectStore("fsbl");
-		const request = objectStore.delete(combinedKey);
+		const _request = objectStore.delete(combinedKey);
 
-		request.onsuccess = () => {
+		_request.onsuccess = () => {
 			Logger.system.debug(`IndexedDBAdapter.delete key=${combinedKey}, Success`);
 			console.debug(`IndexedDBAdapter.delete key=${combinedKey}, Success`);
 
 			cb(null, { status: "success" });
 		};
 
-		request.onerror = (err) => {
+		_request.onerror = (err: StandardError) => {
 			Logger.system.error(`IndexedDBAdapter.delete key=${combinedKey}, Error`, err);
 			console.error(`IndexedDBAdapter.delete key=${combinedKey}, Error`, err);
 
@@ -247,7 +262,7 @@ const IndexedDBAdapter = function (uuid) {
 	 * Wipes the storage container.
 	 * @param {function} cb
 	 */
-	this.empty = (cb) => {
+	this.empty = (cb: Function) => {
 		if (!initialized) {
 			Logger.system.debug("queuing", "empty", [cb]);
 			console.debug("queuing", "empty", [cb]);
@@ -259,16 +274,16 @@ const IndexedDBAdapter = function (uuid) {
 		console.log("IndexedDBAdapter.empty");
 
 		const objectStore = this.db.transaction(["fsbl"], "readwrite").objectStore("fsbl");
-		const request = objectStore.clear();
+		const _request = objectStore.clear();
 
-		request.onerror = (err) => {
+		_request.onerror = (err: StandardError) => {
 			Logger.system.error("IndexedDBAdapter.empty failed Error", err);
 			console.error("IndexedDBAdapter.empty failed Error", err);
 
 			return cb(err, { status: "failed" });
 		};
 
-		request.onsuccess = () => {
+		_request.onsuccess = () => {
 			Logger.system.log("IndexedDBAdapter.empty Success");
 			console.log("IndexedDBAdapter.empty Success");
 
@@ -284,7 +299,7 @@ const IndexedDBAdapter = function (uuid) {
 	 * @param {string} params.key The key whose value is being set.
 	 * @param {function} cb callback to be invoked upon completion
 	 */
-	this.get = (params, cb) => {
+	this.get = (params: StorageKeyTopic, cb: Function) => {
 		if (!initialized) {
 			Logger.system.debug("queuing", "get", [params, cb]);
 			console.debug("queuing", "get", [params, cb]);
@@ -297,11 +312,11 @@ const IndexedDBAdapter = function (uuid) {
 
 		const combinedKey = this.getCombinedKey(this, params);
 		const objectStore = this.db.transaction(["fsbl"], "readwrite").objectStore("fsbl");
-		const request = objectStore.get(combinedKey);
+		const _request = objectStore.get(combinedKey);
 
-		request.onsuccess = (event) => {
+		_request.onsuccess = (event: Event) => {
 			let data;
-			if (event.target.result) data = event.target.result.value;
+			if ((event?.target as FinsembleEventResult).result) data = (event?.target as FinsembleEventResult).result.value;
 
 			Logger.system.debug(`IndexedDBAdapter.get for key=${combinedKey} data=`, data);
 			console.debug(`IndexedDBAdapter.get for key=${combinedKey} data=`, data);
@@ -309,7 +324,7 @@ const IndexedDBAdapter = function (uuid) {
 			cb(null, data);
 		};
 
-		request.onerror = (err) => {
+		_request.onerror = (err: StandardError) => {
 			Logger.system.error(`IndexedDBAdapter.get key=${combinedKey}, Error`, err);
 			console.error(`IndexedDBAdapter.get key=${combinedKey}, Error`, err);
 
@@ -323,7 +338,7 @@ const IndexedDBAdapter = function (uuid) {
 	 * @param {object} params
 	 * @param {function} cb
 	 */
-	this.keys = (params, cb) => {
+	this.keys = (params: StorageKeyTopic, cb: Function) => {
 		if (!initialized) {
 			Logger.system.debug("queuing", "keys", [params, cb]);
 			console.debug("queuing", "keys", [params, cb]);
@@ -331,17 +346,17 @@ const IndexedDBAdapter = function (uuid) {
 			return;
 		}
 
-		const keyPreface = this.getKeyPreface(params);
-		const keyRange = IDBKeyRange.forPrefix(keyPreface);
+		const keyPreface = this.getKeyPreface(this, params);
+		const keyRange = (IDBKeyRange as any).forPrefix(keyPreface);
 		const objectStore = this.db.transaction(["fsbl"], "readwrite").objectStore("fsbl");
-		const request = objectStore.getAllKeys(keyRange);
+		const _request = objectStore.getAllKeys(keyRange);
 
-		request.onsuccess = (event) => {
+		_request.onsuccess = (event: Event) => {
 			// Get results, if defined, otherwise default to an empty array
-			const data = event.target.result ? event.target.result : [];
+			const data = (event?.target as FinsembleEventResult).result ? (event?.target as FinsembleEventResult).result : [];
 
 			// Remove the keyPreface from the key, the methods add the key preface back in.
-			const keys = data.map((key) => key.replace(keyPreface, ""));
+			const keys = data.map((key: string) => key.replace(keyPreface, ""));
 
 			Logger.system.debug(`IndexedDBAdapter.keys for keyPreface=${keyPreface} keys=`, keys);
 			console.debug(`IndexedDBAdapter.get keys keyPreface=${keyPreface} keys=`, keys);
@@ -349,7 +364,7 @@ const IndexedDBAdapter = function (uuid) {
 			cb(null, keys);
 		};
 
-		request.onerror = (err) => {
+		_request.onerror = (err: StandardError) => {
 			Logger.system.error(`Failed to retrieve IndexedDBAdapter.keys keyPreface=${keyPreface}, Error`, err);
 			console.error(`Failed to retrieve IndexedDBAdapter.keys keyPreface=${keyPreface}, Error`, err);
 
@@ -366,7 +381,7 @@ const IndexedDBAdapter = function (uuid) {
 	 * @param {any} params.value The value being saved.
 	 * @param {function} cb callback to be invoked upon save completion
 	 */
-	this.save = (params, cb) => {
+	this.save = (params: StorageKeyTopic, cb: Function) => {
 		if (!initialized) {
 			Logger.system.debug("queuing", "save", [params, cb]);
 			console.debug("queuing", "save", [params, cb]);
@@ -379,16 +394,16 @@ const IndexedDBAdapter = function (uuid) {
 
 		const combinedKey = this.getCombinedKey(this, params);
 		const objectStore = this.db.transaction(["fsbl"], "readwrite").objectStore("fsbl");
-		const request = objectStore.put({ key: combinedKey, value: params.value });
+		const _request = objectStore.put({ key: combinedKey, value: params.value });
 
-		request.onsuccess = () => {
+		_request.onsuccess = () => {
 			Logger.system.debug("IndexedDBAdapter.save Request Succeeded");
 			console.debug("IndexedDBAdapter.save Request Succeeded");
 
 			cb(null, { status: "success" });
 		};
 
-		request.onerror = (err) => {
+		_request.onerror = (err: StandardError) => {
 			Logger.system.error("IndexedDBAdapter.save Request Failed: ", err);
 			console.error("IndexedDBAdapter.save Request Failed: ", err);
 
@@ -398,6 +413,6 @@ const IndexedDBAdapter = function (uuid) {
 	// #endregion
 };
 
-IndexedDBAdapter.prototype = new BaseStorage();
-new IndexedDBAdapter("IndexedDBAdapter");
-module.exports = IndexedDBAdapter; //Allows us to get access to the uninitialized object
+IndexedDBAdapter.prototype = Object.create(BaseStorage.prototype);
+new (IndexedDBAdapter as any)("IndexedDBAdapter");
+export const adapter = IndexedDBAdapter; //Allows us to get access to the uninitialized object

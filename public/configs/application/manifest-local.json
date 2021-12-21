@@ -36,17 +36,6 @@
 			},
 			"promptBeforeAllowingExternalApps": false
 		},
-		"logger": {
-			"defaultClientLogLevels": {
-				"Error": true,
-				"Warn": true,
-				"Info": false,
-				"Log": true,
-				"Debug": false,
-				"Verbose": false,
-				"LocalOnly": false
-			}
-		},
 		"custom": {
 			"//": "Customer macros definitions must go here (e.g. 'myApplicationRoot' so it can be referenced elsewhere as '$myApplicationRoot'), along with other custom config at this level."
 		},
