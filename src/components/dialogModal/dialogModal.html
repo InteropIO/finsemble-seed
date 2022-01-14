@@ -25,12 +25,14 @@
 		});
 		var drop = function (e) {
 			FSBL.Clients.RouterClient.transmit("tabbingDragEnd", { gotDrop: true });
-			FSBL.Clients.WindowClient.stopTilingOrTabbing({
+			const params = {
 				mousePosition: {
 					x: e.screenX,
 					y: e.screenY,
 				},
-			});
+			};
+			RouterClient.query("DockingService.stopTilingOrTabbing", params, function () {});
+			RouterClient.transmit("DockingService.stopTilingOrTabbing", params);
 		};
 
 		var dragOver = function (e) {
