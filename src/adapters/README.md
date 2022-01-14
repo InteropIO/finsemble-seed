@@ -1,4 +1,4 @@
-[![Finsemble SmartDesktop](./public/assets/img/Finsemble+Cosaic.svg)](https://documentation.finsemble.com/)
+[![Finsemble SmartDesktop](../../public/assets/img/Finsemble+Cosaic.svg)](https://documentation.finsemble.com/)
 
 # Finsemble Recipe: MongoDB Storage Adapter
 
