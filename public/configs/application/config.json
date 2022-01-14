@@ -98,15 +98,16 @@
 			"hotkeyShowCentralLogger": ["ctrl", "shift", "L"]
 		},
 		"storage": {
-			"defaultStorage": "IndexedDBAdapter",
+			"defaultStorage": "MongoStorageAdapter",
 			"topicToDataStoreAdapters": {
-				"finsemble": "IndexedDBAdapter",
-				"finsemble.workspace": "IndexedDBAdapter",
+				"finsemble": "MongoStorageAdapter",
+				"finsemble.workspace": "MongoStorageAdapter",
 				"finsemble.workspace.cache": "IndexedDBAdapter"
 			},
 			"dataStoreAdapters": {
 				"LocalStorageAdapter": "$applicationRoot/adapters/localStorageAdapter.js",
-				"IndexedDBAdapter": "$applicationRoot/adapters/indexedDBAdapter.js"
+				"IndexedDBAdapter": "$applicationRoot/adapters/indexedDBAdapter.js",
+				"MongoStorageAdapter": "$applicationRoot/adapters/MongoStorageAdapter.js"
 			}
 		}
 	},
