@@ -1,0 +1,21 @@
+{
+	"$schema": "../../../node_modules/@finsemble/finsemble-core/configs/schemas/fileBasedSchemas/securityPoliciesFile.schema.json",
+	"securityPolicies": {
+		"trusted": {},
+		"untrusted": {
+			"System": {
+				"clearCache": false,
+				"exit": false,
+				"launchExternalProcess": false
+			},
+			"Window": {
+				"executeJavaScript": false,
+				"webPreferences": {}
+			}
+		}
+	},
+	"securityPolicyRules": {
+		"crossDomain": "untrusted",
+		"sameDomain": "trusted"
+	}
+}
