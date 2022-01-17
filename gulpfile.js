@@ -529,10 +529,10 @@
 			const extensions = fs.existsSync(path.join(__dirname, "server-extensions.js"))
 				? require("./server-extensions")
 				: {
-						pre: (done) => done(),
-						post: (done) => done(),
-						updateServer: (app, cb) => cb(),
-				  };
+					pre: (done) => done(),
+					post: (done) => done(),
+					updateServer: (app, cb) => cb(),
+				};
 
 			const root = path.join(__dirname, "public");
 			const port = process.env.PORT ? parseInt(process.env.PORT) : 3375;
