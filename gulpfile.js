@@ -355,7 +355,9 @@
 			// Copy any command line args from server-environment-startup.json
 			config.args = taskMethods.startupConfig[environment]["args"];
 			// Prepend any command line arguments from the environment
-			config.args = process.env.ELECTRON_ARGS + " " + (config.args || "");
+			if (!!process.env.ELECTRON_ARGS) {
+				config.args = process.env.ELECTRON_ARGS + " " + (config.args || "");
+			}
 
 			if (!FEA) {
 				console.error("Could not launch ");
