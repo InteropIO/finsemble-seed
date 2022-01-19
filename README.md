@@ -42,7 +42,7 @@ world</del> turbocharge your workflow.
 
 Go ahead and take it for a spin!
 
-When you're ready to go deeper, check out the check out the
+When you're ready to go deeper, check out the 
 [seed project tutorial](https://documentation.finsemble.com/tutorial-gettingStarted.html), which will walk you through
 all the basics of building your SmartDesktop.
 
