@@ -21,8 +21,8 @@
 		"bootConfig": {
 			"onErrorMakeSystemManagerVisible": true,
 			"defaults": {
-				"startServiceTimeout": 10000,
-				"startComponentTimeout": 15000,
+				"startServiceTimeout": 30000,
+				"startComponentTimeout": 30000,
 				"startTaskTimeout": 10000
 			}
 		},

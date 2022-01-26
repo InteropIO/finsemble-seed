@@ -1,8 +1,8 @@
 {
 	"development": {
-		"//serverPort": "Port number for your server.",
+		"//serverPort": "Used for local development only. Port number for the server started for local development when running yarn dev and related scripts.",
 		"serverPort": 3375,
-		"//serverConfig": "Url for your application's manifest.",
+		"//serverConfig": "The URL that your application's manifest will be retrieved from. For local development work, make sure to use the the same port number as specified in serverPort",
 		"serverConfig": "http://localhost:3375/configs/application/manifest-local.json",
 		"//electronDebug": "Whether to start the finsemble-electron-adapter in debug mode. Default: true.",
 		"electronDebug": true,
@@ -13,9 +13,9 @@
 		"//socketCertificateCert": "example.crt"
 	},
 	"production": {
-		"//serverPort": "Port number for your server.",
+		"//serverPort": "Used for local development only. Port number for the server started for local development when running yarn dev and related scripts.",
 		"serverPort": 3375,
-		"//serverConfig": "Url for your application's manifest.",
+		"//serverConfig": "The URL that your application's manifest will be retrieved from. For local development work, make sure to use the the same port number as specified in serverPort",
 		"serverConfig": "http://localhost:3375/configs/application/manifest-local.json",
 		"//electronDebug": "Whether to start the finsemble-electron-adapter in debug mode. Default: true.",
 		"electronDebug": true,

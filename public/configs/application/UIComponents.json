@@ -4,8 +4,7 @@
 	"components": {
 		"fdc3Resolver": {
 			"bootParams": {
-				"stage": "preuser",
-				"timeout": 30000
+				"stage": "preuser"
 			},
 			"window": {
 				"url": "$applicationRoot/components/FDC3Resolver/FDC3Resolver.html",
@@ -52,8 +51,7 @@
 		"linkerWindow": {
 			"bootParams": {
 				"stage": "earlyuser",
-				"dependencies": ["Toolbar"],
-				"timeout": 15000
+				"dependencies": ["Toolbar"]
 			},
 			"window": {
 				"url": "$applicationRoot/components/linker/linker.html",
@@ -158,8 +156,7 @@
 		"yesNo": {
 			"bootParams": {
 				"stage": "earlyuser",
-				"dependencies": ["Toolbar"],
-				"timeout": 15000
+				"dependencies": ["Toolbar"]
 			},
 			"window": {
 				"url": "$applicationRoot/components/yesNoDialog/yesNoDialog.html",
@@ -520,8 +517,7 @@
 		"SystemTrayComponent": {
 			"bootParams": {
 				"stage": "earlyuser",
-				"dependencies": ["Toolbar"],
-				"timeout": 15000
+				"dependencies": ["Toolbar"]
 			},
 			"window": {
 				"url": "$applicationRoot/components/systemTrayComponent/systemTrayComponent.html",
@@ -631,8 +627,7 @@
 		"NotificationsToasts": {
 			"bootParams": {
 				"stage": "earlyuser",
-				"dependencies": ["Toolbar"],
-				"timeout": 15000
+				"dependencies": ["Toolbar"]
 			},
 			"window": {
 				"name": "notifications-toasts",

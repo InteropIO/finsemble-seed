@@ -46,6 +46,8 @@ const WindowTitleBar = () => {
 		<WindowTitleBarShell>
 			<div className="fsbl-header-left">
 				<LinkerButton />
+				{/* Note: The ShareButton component relies on deprecated APIs that 
+					will be removed in a future release. */}
 				<ShareButton />
 			</div>
 			<div className="fsbl-header-center">
