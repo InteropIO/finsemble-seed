@@ -91,7 +91,7 @@ const JSX_RULE = {
 						targets: {
 							browsers: "Chrome 85",
 						},
-						modules: "commonjs",
+						modules: false,
 					},
 				],
 				"@babel/preset-react",
