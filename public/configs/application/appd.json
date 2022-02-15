@@ -12,7 +12,7 @@
 					"width": 800,
 					"height": 600,
 					"options": {
-						"minWidth": 75
+						"minWidth": 175
 					}
 				},
 				"foreign": {
@@ -119,10 +119,10 @@
 			"manifest": {
 				"window": {
 					"url": "http://fdc3.finos.org/toolbox/fdc3-workbench",
-					"width": 800,
+					"width": 900,
 					"height": 750,
 					"options": {
-						"minWidth": 75
+						"minWidth": 175
 					}
 				},
 				"foreign": {

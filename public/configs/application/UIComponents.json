@@ -606,7 +606,7 @@
 							"hideClose": false,
 							"hideMinimize": true
 						},
-						"disableBrowserView": true
+						"titlebarType": "injected"
 					},
 					"Toolbar": {
 						"iconClass": "notification-center"
