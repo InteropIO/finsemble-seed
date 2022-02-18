@@ -25,6 +25,7 @@ const registrationHandler = () => {
 			finsembleWindow.close();
 		} else {
 			// Hiding splash screen because it can sometimes obscure the registration form.
+			// (This is probably no longer necessary because hideSplashScreenTask has been moved to the "authentication" boot phase, but better safe than sorry)
 			FSBL.System.hideSplashScreen();
 
 			// Check whether form is already showing to prevent flicker

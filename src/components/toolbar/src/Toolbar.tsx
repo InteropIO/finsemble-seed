@@ -46,7 +46,6 @@ const Toolbar = () => {
 				{/* Uncomment the following to enable the AdvancedAppLauncherMenu*/}
 				{/* <AdvancedAppLauncherMenu /> */}
 				<AppLauncherMenu />
-				<AppLauncherMenu dynamic={true} />
 			</ToolbarSection>
 			<ToolbarSection className="center" hideBelowWidth={115}>
 				<div className="divider" />

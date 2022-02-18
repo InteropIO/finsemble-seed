@@ -24,7 +24,7 @@ ReactDOM.render(
 				updateProjectSettings: (settings: any) => smartDesktopClient.updateProjectSettings(settings),
 				onThemeUpdated: (callback: any) => FSBL.Clients.SmartDesktopClient.onThemeUpdated(callback),
 				selectProjectPath: () => smartDesktopClient.selectProjectPath(),
-				restartFinsemble: () => FSBL.System.Application.getCurrent().restart(),
+				restartFinsemble: () => FSBL.restartApplication(),
 			}}
 		/>
 	</FinsembleProvider>,
