@@ -8,8 +8,8 @@ if (window.FSBL && FSBL.addEventListener) {
 
 function init() {
 	let contentElement = document.getElementById("contentURL");
-	let previousURL = "Missing previous";
+	let appType = "Unknown app";
 	let spData = FSBL.Clients.WindowClient.options.customData;
-	if (spData && spData.previousURL) previousURL = spData.previousURL;
-	contentElement.innerText = `URL: ${previousURL}.`;
+	if (spData && spData.component && spData.component.type) appType = spData.component.type;
+	contentElement.innerText = `App: ${appType}.`;
 }

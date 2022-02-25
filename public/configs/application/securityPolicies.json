@@ -5,8 +5,11 @@
 		"untrusted": {
 			"System": {
 				"clearCache": false,
+				"deleteAssets": false,
 				"exit": false,
-				"launchExternalProcess": false
+				"launchExternalProcess": false,
+				"getHostSpecs": false,
+				"getProcessList": false
 			},
 			"Window": {
 				"executeJavaScript": false,
