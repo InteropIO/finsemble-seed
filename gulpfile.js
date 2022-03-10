@@ -302,9 +302,11 @@
 					else process.exit(0);
 				};
 
+				let installerConfig = require("./public/configs/other/installer.json");
+				const name = (installerConfig && installerConfig.name) || "Finsemble";
 				let config = {
 					onElectronClose: handleElectronClose,
-					args: ["--smartDesktopDevMode"],
+					args: ["--name", name, "--smartDesktopDevMode"],
 				};
 
 				// Use `yarn jumpstart --reset` to copy the seed over the current default project
@@ -320,6 +322,8 @@
 		},
 		launchElectron: (done) => {
 			const cfg = taskMethods.startupConfig[environment];
+			let installerConfig = require("./public/configs/other/installer.json");
+			const name = (installerConfig && installerConfig.name) || "Finsemble";
 
 			/**
 			 * handleElectronClose() gets called when Electron is closed, in other words when the user quits Finsemble from the file menu or some other way.
@@ -350,6 +354,7 @@
 
 			// Copy any command line args from server-environment-startup.json
 			config.args = taskMethods.startupConfig[environment]["args"];
+			config.args = ["--name", name].concat(config.args);
 
 			if (!FEA) {
 				console.error("Could not launch ");
