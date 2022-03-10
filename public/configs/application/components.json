@@ -46,54 +46,6 @@
 				}
 			}
 		},
-		"Tour": {
-			"window": {
-				"url": "$applicationRoot/components/tour/tour.html",
-				"affinity": "workspaceComponents",
-				"options": {
-					"resizable": false,
-					"autoShow": true,
-					"alwaysOnTop": false,
-					"addToWorkspace": true
-				},
-				"top": "center",
-				"left": "center",
-				"width": 800,
-				"height": 600
-			},
-			"component": {
-				"displayName": "Take a Tour",
-				"preload": "$applicationRoot/preloads/zoom.js",
-				"enableGrpc": false
-			},
-			"foreign": {
-				"services": {
-					"windowService": {
-						"allowSnapping": true,
-						"allowGrouping": true,
-						"allowTabbing": true,
-						"allowAutoArrange": true,
-						"allowMinimize": true
-					}
-				},
-				"components": {
-					"App Launcher": {
-						"launchableByUser": true
-					},
-					"Window Manager": {
-						"alwaysOnTopIcon": false,
-						"FSBLHeader": {
-							"hideMaximize": true
-						},
-						"persistWindowState": true,
-						"title": "Take a Tour"
-					},
-					"Toolbar": {
-						"iconClass": "ff-component"
-					}
-				}
-			}
-		},
 		"nonConfiguredComponent": {
 			"window": {
 				"url": "$applicationRoot/components/nonConfiguredComponent/nonConfiguredComponent.html",

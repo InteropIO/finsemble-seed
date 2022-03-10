@@ -129,8 +129,8 @@ function collapseBuiltInFiles() {
 	const srcItems = fs.readdirSync(componentSrcPath);
 	for (let i = 0; i < srcItems.length; i++) {
 		const folder = srcItems[i];
-		if (folder === ".gitignore") {
-			// Don't copy a .gitignore folder.
+		if (folder === ".gitignore" || folder === ".DS_Store") {
+			// Don't copy illegal folders.
 			continue;
 		}
 
