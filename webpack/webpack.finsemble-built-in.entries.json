@@ -43,10 +43,6 @@
 		"output": "components/systemTrayComponent/SystemTrayComponent",
 		"entry": "./src/components/systemTrayComponent/SystemTrayComponent.tsx"
 	},
-	"smartDesktopDesigner": {
-		"output": "components/smartDesktopDesigner/smartDesktopDesigner",
-		"entry": "./src/components/smartDesktopDesigner/smartDesktopDesigner.tsx"
-	},
 	"NotificationsCenter": {
 		"output": "components/notificationsCenter/NotificationsCenter",
 		"entry": "./src/components/notificationsCenter/NotificationsCenter.tsx"
