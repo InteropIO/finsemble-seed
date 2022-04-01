@@ -11,7 +11,7 @@ const registrationHandler = () => {
 		setTimeout(registrationHandler, 500);
 	}
 
-	fin.desktop.System.getEnvironmentVariable("EVAL_FORM", (env) => {
+	FSBL.System.getEnvironmentVariable("EVAL_FORM", (env) => {
 		// check whether the username has already been set
 		let username = localStorage.getItem("username");
 		if (username || env !== "yes") {

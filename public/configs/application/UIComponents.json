@@ -57,7 +57,7 @@
 				"url": "$applicationRoot/components/linker/linker.html",
 				"affinity": "systemComponents",
 				"width": 132,
-				"height": 232,
+				"height": 265,
 				"ephemeral": true,
 				"options": {
 					"autoShow": false,

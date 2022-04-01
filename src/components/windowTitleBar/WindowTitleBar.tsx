@@ -19,11 +19,9 @@ import {
 } from "@finsemble/finsemble-ui/react/components/windowTitleBar";
 
 /**
- * The following css import assumes that WindowTitleBar is running in a BrowserView.
- * If not running in a BrowserView then some of the CSS directives may conflict with
- * your content. You can remove this line and manually import CSS files from @finsemble/finsemble-ui as necessary.
+ * Imports a subset of Finsemble UI's CSS, specifically relating to WindowTitleBar styling.
  */
-import "@finsemble/finsemble-ui/react/assets/css/finsemble.css";
+import "@finsemble/finsemble-ui/react/assets/css/windowTitleBar.css";
 import "../../../public/assets/css/theme.css";
 
 /**

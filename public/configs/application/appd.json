@@ -8,6 +8,7 @@
 			"description": "Visualize market data in the leading FDC3 compliant technical chart.",
 			"manifest": {
 				"window": {
+					"affinity": "test",
 					"url": "https://assets.finsemble.com/components/chart/technical-analysis-chart.html",
 					"width": 800,
 					"height": 600,
