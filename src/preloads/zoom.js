@@ -299,8 +299,26 @@ const runZoomHandler = () => {
 
 // Startup pattern for preload. Preloads can come in any order, so we need to wait on either the window event or the
 // FSBL event
+let fsblReady = false,
+	domReady = document.readyState === "loaded" || document.readyState === "completed";
+let checkAndInit = () => {
+	if (fsblReady && domReady) {
+		runZoomHandler();
+	}
+};
+let fsblIsReady = () => {
+	fsblReady = true;
+	checkAndInit();
+};
+let domIsReady = () => {
+	domReady = true;
+	checkAndInit();
+};
+
 if (window.FSBL && FSBL.addEventListener) {
-	FSBL.addEventListener("onReady", runZoomHandler);
+	FSBL.addEventListener("onReady", fsblIsReady);
 } else {
-	window.addEventListener("FSBLReady", runZoomHandler);
+	window.addEventListener("FSBLReady", fsblIsReady);
 }
+
+window.addEventListener("DOMContentLoaded", domIsReady);
