@@ -155,7 +155,7 @@ const FSBLReady = () => {
 				if (!error) {
 					addToBatch(logMessage.data);
 				} else {
-					Logger.error("Failed to setup LoggingExportService listener", error);
+					FSBL.Clients.Logger.error("Failed to setup LoggingExportService listener", error);
 				}
 			});
 		}
