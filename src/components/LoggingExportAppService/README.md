@@ -4,7 +4,7 @@ Simple log export service example which captures messages of specified categorie
 
 This implementation uses the "AppService" paradigm.
 
-The service will come up during finsemble startup - but will inevitably not be able to capture some of the earliest log messages.
+The service will come up during Finsemble startup - but will inevitably not be able to capture some of the earliest log messages.
 
 ## Setup and Customization ##
 In the enclosed _LoggingExportAppService.js_ file, look for `//TODO:` comments which indicate where to customize the service to your needs - inline documentation is provided. In particular, you will need to set your `LOGGING_ENDPOINT` and customize the request format and payload to suit your remote log collection endpoint.

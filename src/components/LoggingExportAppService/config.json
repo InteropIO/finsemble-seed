@@ -1,0 +1,33 @@
+{
+    "appd": {
+        "LoggingExportAppService": {
+            "appId": "LoggingExportAppService",
+            "name": "LoggingExportAppService",
+            "manifest": {
+                "window": {
+                    "options": {
+                        "autoShow": false
+                    },
+                    "url": "$applicationRoot/components/LoggingExportAppService/LoggingExportAppService.html"
+                },
+                "component": {
+                    "spawnOnStartup": true,
+                    "singleton": true
+                },
+                "foreign": {
+                    "components": {
+                        "App Launcher": {
+                            "launchableByUser": false
+                        },
+                        "Window Manager": {
+                            "FSBLHeader": false
+                        },
+                        "windowService": {
+                            "manageWindowMovement": false
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
