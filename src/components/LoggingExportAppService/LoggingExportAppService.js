@@ -7,7 +7,7 @@ const TIMEOUT_MILLISECS = 30 * 1000;
 /** Wait at most this number of milliseconds for batch transmission to complete */
 const TRANSMIT_TIMEOUT_MILLISECS = 10 * 1000;
 
-/** Log levels of messsages to capture. Valid values: Error, Warning, Log, Info, Debug, Verbose */
+/** Log levels of messages to capture. Valid values: Error, Warning, Log, Info, Debug, Verbose */
 CAPTURE_LOG_LEVELS = {
 	"Verbose": false,
 	"Debug": false,
