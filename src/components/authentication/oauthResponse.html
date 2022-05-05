@@ -72,7 +72,7 @@
 						// In the special case of "startup" then we publish the authorization, which releases Finsemble and lets is start
 						if (credentials.config.name === "startup") {
 							// "sub" is the user ID provided by the OP. Not all OP's support this. If not supported, then we just set the user to the access token.
-							const user = credentials.sub;
+							let user = credentials.sub;
 							if (!user) {
 								user = credentials.access_token;
 							}
@@ -129,7 +129,7 @@
 		<div class="fsbl-auth-top">
 			<img class="fsbl-logo" src="../../assets/img/cosaic-banner-100x20.png" width="100" height="25" />
 			<div class="fsbl-close" id="FSBL-close" onclick="OauthClient.closeThisWindow()">
-				<i class="ff-close" style="color: #666;"></i>
+				<i class="ff-close" style="color: #666"></i>
 			</div>
 		</div>
 		<div id="error"></div>
