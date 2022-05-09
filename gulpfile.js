@@ -3,6 +3,7 @@
 
 	// #region Imports
 	// NPM
+	require("dotenv").config();
 	const async = require("async");
 	const fs = require("fs");
 	const gulp = require("gulp");
@@ -393,16 +394,16 @@
 				}
 
 				const { osxSign, osxNotarize } = installerConfig;
-				const entitlementsFile =
-					process.env.osxSignEntitlementsFile ||
-					path.resolve("./", osxSign.entitlementsFile) ||
+				const entitlements =
+					process.env.osxSignEntitlements ||
+					path.resolve("./", osxSign.entitlements) ||
 					path.resolve("./", "./public/configs/other/entitlements.plist");
 
 				return {
 					...installerConfig,
 					osxSign: {
 						identity: process.env.osxSignIdentity || osxSign.identity,
-						entitlementsFile,
+						entitlements,
 					},
 					osxNotarize: {
 						appleId: process.env.osxNotarizeAppleId || osxNotarize.appleId,
