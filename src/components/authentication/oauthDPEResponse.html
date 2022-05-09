@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 	<!--
     /**
     * Copyright 2019, ChartIQ, Inc.
@@ -7,6 +7,8 @@
 	*/
 	
 	OAUTH Authentication example. This example uses Google as a OpenID Provider (OP).
+
+	This file is used internally by Cosaic a the response from Cosaic Cloud's identity providers (google, keycloak, etc).
 -->
 
 	<head>
@@ -38,7 +40,7 @@
 						if (!this.sddEnabled && !credentials) {
 							FSBL.shutdownApplication();
 						} else {
-							FSBL.Clients.WindowClient.getCurrentWindow().close();
+							FSBL.Clients.WindowClient.close();
 						}
 					});
 				}
@@ -72,7 +74,7 @@
 			}
 
 			function onReady() {
-				FSBL.Clients.SmartDesktopClient.isEnabled().then((sddEnabled) => {
+				FSBL.getFSBLInfo.then(({ sddEnabled }) => {
 					// check if Smart Desktop Designer mode is currently enabled
 					// if enabled, this window must be from test auth,
 					// so we report back and close it
