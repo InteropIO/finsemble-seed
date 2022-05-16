@@ -182,6 +182,8 @@ function createCopyWebpackConfig() {
 webpackConfig.plugins.push(new CopyWebpackPlugin(createCopyWebpackConfig()));
 webpackConfig.plugins.push(
 	new DllReferencePlugin({
+		// Establishes the root for relative module paths in the manifest. This is important if the build process might occur from different directories.
+		context: path.join(__dirname, "./"),
 		manifest: VENDOR_MANIFEST,
 	})
 );
