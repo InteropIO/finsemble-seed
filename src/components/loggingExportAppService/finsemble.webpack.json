@@ -1,0 +1,6 @@
+{
+    "LoggingExportAppService": {
+        "output": "components/loggingExportAppService/LoggingExportAppService",
+        "entry": "./src/components/loggingExportAppService/LoggingExportAppService.js"
+    }
+}

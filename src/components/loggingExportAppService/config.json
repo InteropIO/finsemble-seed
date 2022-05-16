@@ -1,0 +1,14 @@
+{
+    "appd": {
+        "LoggingExportAppService": {
+            "appId": "LoggingExportAppService",
+            "name": "LoggingExportAppService",
+            "manifest": {
+                "appService": true,
+                "window": {
+                    "url": "$applicationRoot/components/loggingExportAppService/LoggingExportAppService.html"
+                }
+            }
+        }
+    }
+}
