@@ -42,11 +42,6 @@ The entire entry would look like:
             "appId": "LoggingExportAppService",
             "name": "LoggingExportAppService",
             "manifest": {
-                "//appService": true,
-                "bootParams": {
-                    "autoStart": true,
-                    "stage": "preuser"
-                },
                 "window": {
                     "url": "$applicationRoot/components/loggingExportAppService/LoggingExportAppService.html",
                     "options": {
