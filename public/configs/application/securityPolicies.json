@@ -9,9 +9,7 @@
 				"exit": false,
 				"launchExternalProcess": false,
 				"getHostSpecs": false,
-				"getProcessList": false,
-				"logToDisk": false,
-				"getEnvironmentVariable": false
+				"getProcessList": false
 			},
 			"Window": {
 				"executeJavaScript": false,

@@ -8,7 +8,6 @@
 			"description": "Visualize market data in the leading FDC3 compliant technical chart.",
 			"manifest": {
 				"window": {
-					"affinity": "test",
 					"url": "https://assets.finsemble.com/components/chart/technical-analysis-chart.html",
 					"width": 800,
 					"height": 600,
@@ -65,7 +64,7 @@
 		},
 		"AG-Grid Example Blotter": {
 			"appId": "AG-Grid Example Blotter",
-			"name": "AG-Grid Example Blotter Name",
+			"name": "AG-Grid Example Blotter",
 			"description": "Organize data with FDC3 compliant blotters built on AG Grid",
 			"manifest": {
 				"window": {

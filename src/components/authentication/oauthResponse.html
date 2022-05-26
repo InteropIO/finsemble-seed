@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 	<!--
     /**
     * Copyright 2019, ChartIQ, Inc.
@@ -33,7 +33,7 @@
 						if (!credentials) {
 							FSBL.shutdownApplication();
 						} else {
-							FSBL.Clients.close();
+							FSBL.Clients.WindowClient.getCurrentWindow().close();
 						}
 					});
 				}

@@ -173,6 +173,7 @@
 				}
 			},
 			"component": {
+				"neededClients": ["LauncherClient", "AuthenticationClient", "StorageClient"],
 				"category": "system"
 			},
 			"foreign": {
@@ -207,6 +208,7 @@
 				}
 			},
 			"component": {
+				"neededClients": ["LauncherClient", "AuthenticationClient", "StorageClient"],
 				"category": "system",
 				"preload": "$applicationRoot/preloads/registration.js"
 			},

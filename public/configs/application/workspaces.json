@@ -23,6 +23,7 @@
 					"frame": false,
 					"fullscreen": false,
 					"height": 600,
+					"icon": "http://localhost:3375/assets/img/Finsemble_Taskbar_Icon.png",
 					"left": 0,
 					"maxHeight": 8000,
 					"maxWidth": 8000,
