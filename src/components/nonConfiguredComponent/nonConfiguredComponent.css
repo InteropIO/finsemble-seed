@@ -1,7 +1,7 @@
 @import url("../../../public/assets/css/theme.css");
 
 body {
-	margin: 0px;
+	margin: 0;
 	background-color: black;
 	color: white;
 }
@@ -13,11 +13,13 @@ body {
 	justify-content: center;
 	align-items: center;
 }
+
 #content {
 	font-size: 20px;
 	flex: 1;
 	text-align: center;
 }
+
 .spacer1 {
 	height: 50px;
 }
@@ -31,7 +33,7 @@ body {
 }
 
 .spacer4 {
-	height: 0px;
+	height: 0;
 }
 
 h1 {
@@ -41,21 +43,23 @@ h1 {
 
 button {
 	width: 200px;
+	/* stylelint-disable-next-line declaration-no-important */
 	text-align: center !important;
-	margin: 0px auto;
+	margin: 0 auto;
 	max-width: 2000px;
-	-webkit-appearance: none;
+	appearance: none;
 	background-color: #2068c3;
 	color: #fff;
 	font-family: "Open Sans", sans-serif;
 	font-weight: 400;
 	font-size: 125%;
-	border: 0px;
+	border: 0;
 	border-radius: 3px;
 	padding: 10px 15px;
 	vertical-align: middle;
 	transition: all 0.2s ease;
 }
+
 button:hover {
 	background-color: #039bff;
 	cursor: pointer;
@@ -64,7 +68,7 @@ button:hover {
 
 #quitFS {
 	color: #ee5c5c;
-	background-color: #ffffff;
+	background-color: #fff;
 	font-size: 100%;
 	width: 140px;
 }
