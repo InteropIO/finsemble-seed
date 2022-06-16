@@ -10,8 +10,8 @@
 /**
  * We have a baseStorage model that provides some methods, such as `getCombinedKey`, which will return a nice key to save our value under. Example: `Finsemble:defaultUser:finsemble:activeWorkspace`. That key would hold the value of our activeWorkspace.
  */
-const BaseStorage = require("@chartiq/finsemble").models.baseStorage;
-const Logger = require("@chartiq/finsemble").Clients.Logger;
+const BaseStorage = require("@finsemble/finsemble-core").models.baseStorage;
+const Logger = require("@finsemble/finsemble-core").Clients.Logger;
 
 // Because calls to this storage adapter will likely come from many different windows, we will log successes and failures in the central logger.
 Logger.start();
@@ -41,7 +41,7 @@ class MongoStorageAdapter extends BaseStorage {
 	get = function(params, cb) {
 		console.log('get')
 		let combinedKey = this.getCombinedKey(this, params);
-		
+
 		fetch(`${this.ROUTES.GET}?key=${combinedKey}`)
 			.then(response => response.json())
 			.then(data => {
@@ -66,7 +66,7 @@ class MongoStorageAdapter extends BaseStorage {
 		let combinedKey = this.getCombinedKey(this, params);
 
 		Logger.system.debug("Mongo.save for key=" + combinedKey + " with data=" + params.value);
-		
+
 		fetch(`${this.ROUTES.SAVE}`, {
 			method: "POST",
 			body: JSON.stringify({ key: combinedKey, value: params.value }),
@@ -76,7 +76,7 @@ class MongoStorageAdapter extends BaseStorage {
 		})
 		.then(data => {
 			cb(null, { status: "success" });
-		})		
+		})
 		.catch(err => {
 			Logger.system.error("Mongo.save Error", err, "key=" + combinedKey, "value=", params.value);
 			cb(err, { status: "failed" });
@@ -128,7 +128,7 @@ class MongoStorageAdapter extends BaseStorage {
 		})
 		.then(data => {
 			cb(null, { status: "success" });
-		})		
+		})
 		.catch(err => {
 			Logger.system.error("Mongo.delete key=" + combinedKey + ", Error", err);
 			cb(err, { status: "failed" });
