@@ -182,15 +182,11 @@
 		 * Cleans the project folder of generated files.
 		 */
 		clean: (done) => {
-			shell.rm("-rf", taskMethods.distPath);
-			shell.rm("-rf", ".babel_cache");
-			shell.rm("-rf", "finsemble");
 			shell.rm("-rf", path.join(__dirname, "webpack/vendor-manifest.json"));
-			shell.rm("-rf", ".webpack-file-cache");
-			shell.rm("-rf", "installer-tmp");
-			shell.rm("-rf", "finsemble");
-			shell.rm("-rf", "public/build");
-			shell.rm("-rf", "pkg");
+			shell.rm("-rf", path.join(__dirname, ".webpack-file-cache"));
+			shell.rm("-rf", path.join(__dirname, "installer-tmp"));
+			shell.rm("-rf", path.join(__dirname, "public/build"));
+			shell.rm("-rf", path.join(__dirname, "pkg"));
 			done();
 		},
 		checkSymbolicLinks: (done) => {
@@ -306,9 +302,11 @@
 					else process.exit(0);
 				};
 
+				let installerConfig = require("./public/configs/other/installer.json");
+				const name = (installerConfig && installerConfig.name) || "Finsemble";
 				let config = {
 					onElectronClose: handleElectronClose,
-					args: ["--smartDesktopDevMode"],
+					args: ["--name", name, "--smartDesktopDevMode"],
 				};
 
 				// Use `yarn jumpstart --reset` to copy the seed over the current default project
@@ -324,6 +322,8 @@
 		},
 		launchElectron: (done) => {
 			const cfg = taskMethods.startupConfig[environment];
+			let installerConfig = require("./public/configs/other/installer.json");
+			const name = (installerConfig && installerConfig.name) || "Finsemble";
 
 			/**
 			 * handleElectronClose() gets called when Electron is closed, in other words when the user quits Finsemble from the file menu or some other way.
@@ -354,6 +354,7 @@
 
 			// Copy any command line args from server-environment-startup.json
 			config.args = taskMethods.startupConfig[environment]["args"];
+			config.args = ["--name", name].concat(config.args);
 
 			if (!FEA) {
 				console.error("Could not launch ");
@@ -378,6 +379,36 @@
 					}
 				});
 				return obj;
+			}
+
+			// This method adds the required sign and notarization objects
+			function maybeAddOSXNotarizationConfigs(installerConfig) {
+				// Skip if we're not on OSX or don't have the required configs
+				if (
+					process.platform !== "darwin" ||
+					((!installerConfig.osxSign || !process.env.osxSign) &&
+						(!installerConfig.osxNotarize || !process.env.osxNotarize))
+				) {
+					return installerConfig;
+				}
+
+				const { osxSign, osxNotarize } = installerConfig;
+				const entitlementsFile =
+					process.env.osxSignEntitlementsFile ||
+					path.resolve("./", osxSign.entitlementsFile) ||
+					path.resolve("./", "./public/configs/other/entitlements.plist");
+
+				return {
+					...installerConfig,
+					osxSign: {
+						identity: process.env.osxSignIdentity || osxSign.identity,
+						entitlementsFile,
+					},
+					osxNotarize: {
+						appleId: process.env.osxNotarizeAppleId || osxNotarize.appleId,
+						appleIdPassword: process.env.osxNotarizationApplePassword || osxNotarize.appleIdPassword,
+					},
+				};
 			}
 
 			// Inline require because this file is so large, it reduces the amount of scrolling the user has to do.
@@ -411,6 +442,8 @@
 
 			// need absolute paths for certain installer configs
 			installerConfig = resolveRelativePaths(installerConfig, ["icon", "macIcon", "background"], "./");
+
+			installerConfig = maybeAddOSXNotarizationConfigs(installerConfig);
 
 			const manifestUrl = process.env.manifesturl || taskMethods.startupConfig[environment].serverConfig;
 			console.log("The manifest location is: ", manifestUrl);

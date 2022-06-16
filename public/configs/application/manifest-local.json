@@ -2,15 +2,13 @@
 	"$schema": "../../../node_modules/@finsemble/finsemble-core/configs/schemas/fileBasedSchemas/manifestFile.schema.json",
 	"devtools_port": 9090,
 	"startup_app": {
-		"name": "Finsemble",
-		"uuid": "Finsemble",
 		"requireHandshake": true
 	},
 	"splashScreenTimeout": 3000,
 	"appAssets": [
 		{
-			"src": "https://assets.finsemble.com/assimilation/assimilation_6.3.0.0.zip",
-			"version": "6.3.0.0",
+			"src": "https://assets.finsemble.com/releases/6.6.0/assimilation/assimilation.zip",
+			"version": "6.6.0.0",
 			"alias": "assimilation",
 			"target": "AssimilationMain.exe"
 		}
@@ -21,8 +19,8 @@
 		"bootConfig": {
 			"onErrorMakeSystemManagerVisible": true,
 			"defaults": {
-				"startServiceTimeout": 10000,
-				"startComponentTimeout": 15000,
+				"startServiceTimeout": 30000,
+				"startComponentTimeout": 30000,
 				"startTaskTimeout": 10000
 			}
 		},

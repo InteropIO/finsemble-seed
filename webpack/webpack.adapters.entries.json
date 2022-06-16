@@ -5,7 +5,7 @@
 	},
 	"indexDBAdapter": {
 		"output": "adapters/indexedDBAdapter",
-		"entry":"./src/adapters/indexedDBAdapter.js"
+		"entry": "./src/adapters/indexedDBAdapter.ts"
 	},
 	"MongoStorageAdapter": {
 		"output": "adapters/MongoStorageAdapter",
