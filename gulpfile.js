@@ -72,6 +72,29 @@
 		return socketCertificatePath;
 	};
 
+	const startFEA = (doneFEA) => {
+		const handleElectronClose = () => {
+			if (isMacOrNix) treeKill(process.pid);
+			else process.exit(0);
+		};
+
+		let installerConfig = require("./public/configs/other/installer.json");
+		const name = (installerConfig && installerConfig.name) || "Finsemble";
+		let config = {
+			onElectronClose: handleElectronClose,
+			args: ["--name", name, "--smartDesktopDevMode"],
+		};
+
+		// Use `yarn jumpstart --reset` to copy the seed over the current default project
+		const args = parseArgs(process.argv);
+		if (args["reset"]) config.args.push("--reset-default-project");
+		if (args["update"]) config.args.push("--update-project-from-template");
+		const envargs = taskMethods.startupConfig[environment]["args"];
+		if (envargs) config.args = config.args.concat(envargs);
+
+		FEA.e2oLauncher(config, doneFEA);
+	};
+
 	/**
 	 * Object containing all of the methods used by the gulp tasks.
 	 */
@@ -296,29 +319,10 @@
 		 * another process.
 		 */
 		jumpstart: (done) => {
-			const startFEA = (doneFEA) => {
-				const handleElectronClose = () => {
-					if (isMacOrNix) treeKill(process.pid);
-					else process.exit(0);
-				};
-
-				let installerConfig = require("./public/configs/other/installer.json");
-				const name = (installerConfig && installerConfig.name) || "Finsemble";
-				let config = {
-					onElectronClose: handleElectronClose,
-					args: ["--name", name, "--smartDesktopDevMode"],
-				};
-
-				// Use `yarn jumpstart --reset` to copy the seed over the current default project
-				const args = parseArgs(process.argv);
-				if (args["reset"]) config.args.push("--reset-default-project");
-				if (args["update"]) config.args.push("--update-project-from-template");
-				const envargs = taskMethods.startupConfig[environment]["args"];
-				if (envargs) config.args = config.args.concat(envargs);
-
-				FEA.e2oLauncher(config, doneFEA);
-			};
 			async.series([taskMethods.setDevEnvironment, taskMethods.build], startFEA, done);
+		},
+		jlaunch: (done) => {
+			async.series([startFEA], done);
 		},
 		launchElectron: (done) => {
 			const cfg = taskMethods.startupConfig[environment];
