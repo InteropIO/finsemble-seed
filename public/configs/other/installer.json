@@ -1,7 +1,7 @@
 {
   "//icon": "Path to an icon to be used for your executable. This is relative to the root of the finsemble-seed",
   "icon": "./public/assets/img/installer_icon.ico",
-  "version": "7.2.0",
+  "version": "7.3.0",
   "//outputDirectory": "Path where you would like the executable to be dumped. This is relative to the root of the finsemble-seed",
   "outputDirectory": "./pkg",
   "//name": "Name of your application. Will be used for the exe and windows metadata. Only alphanumeric characters, spaces, dashes(-), periods(.), and underscores(_) are allowed",
