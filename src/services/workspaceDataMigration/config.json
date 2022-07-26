@@ -1,0 +1,14 @@
+{
+	"services": {
+		"workspaceDataMigrationService": {
+			"name": "workspaceDataMigrationService",
+			"visible": false,
+			"html": "$applicationRoot/services/workspaceDataMigration/workspaceDataMigrationService.html",
+			"bootParams": {
+				"timeout": 50000,
+				"stage": "preuser",
+				"dependencies": []
+			}
+		}
+	}
+}
