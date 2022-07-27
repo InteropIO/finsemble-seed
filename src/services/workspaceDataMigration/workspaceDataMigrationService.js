@@ -5,8 +5,7 @@ const {
 	RouterClient,
 	Logger,
 	StorageClient,
-	WorkspaceClient,
-	LauncherClient
+	WorkspaceClient
 } = Finsemble.Clients;
 
 Logger.start();
@@ -256,8 +255,8 @@ const completeMigration = async (activeWorkspace) => {
 
 /**
  * Determines if the user's data has been migrated by checking for a key in storage service of
- * "migrated_from_<adapter to migrate from>",
- * which in this example is "migrated_from_IndexedDBAdapter".
+ * "<date>_<migration_desc>",
+ * which in this example is "20220718_linker_to_interop_migration".
  */
 const fetchUserStatus = async function () {
 	try {
