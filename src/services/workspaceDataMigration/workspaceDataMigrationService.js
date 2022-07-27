@@ -1,18 +1,8 @@
-const Finsemble = require("@finsemble/finsemble-core");
-
-const BaseService = Finsemble.baseService;
-const {
-	RouterClient,
-	Logger,
-	StorageClient,
-	WorkspaceClient
-} = Finsemble.Clients;
-
-Logger.start();
 
 //Migration config
 const MIGRATION_NAME = "20220718_linker_to_interop_migration";
 const MIGRATION_TEMP_WORKSPACE_NAME = "TEMPORARY MIGRATION WORKSPACE";
+let ranMigrationCheck = false;
 
 //----------------------------------------------------------------------
 // Migration functions
@@ -117,7 +107,6 @@ const migrateWorkspace = function (workspaceName, workspaceData) {
 	for (let w = 0; w < workspaceObj.windows.length; w++) {
 
 		//lookup the new componentType for the window somehow - probably using the old window name
-		let windowName = workspaceObj.windows[w];
 		let migratedWindow = migrateWindow(workspaceObj.windowData[w]);
 		if (migratedWindow) {
 			workspaceObj.windowData[w] = migratedWindow;
@@ -150,6 +139,7 @@ const migrateWorkspace = function (workspaceName, workspaceData) {
  *
  */
 const runMigration = async () => {
+	const { WorkspaceClient,StorageClient, Logger, RouterClient } = FSBL.Clients
 	const promiseSet = [];
 
 	let activeWorkspace = "Default Workspace";
@@ -238,6 +228,7 @@ const runMigration = async () => {
  * Mark the migration completed.
  */
 const completeMigration = async (activeWorkspace) => {
+	const { WorkspaceClient,StorageClient, Logger, RouterClient } = FSBL.Clients
 	//complete migration
 	await StorageClient.save({topic: "finsemble", key: `${MIGRATION_NAME}`, value: Date.now()});
 	RouterClient.publish("Migration", "end");
@@ -259,6 +250,7 @@ const completeMigration = async (activeWorkspace) => {
  * which in this example is "20220718_linker_to_interop_migration".
  */
 const fetchUserStatus = async function () {
+	const { StorageClient, Logger } = FSBL.Clients
 	try {
 		const data = await StorageClient.get({topic: "finsemble", key: `${MIGRATION_NAME}`});
 		if (!data) {
@@ -269,25 +261,12 @@ const fetchUserStatus = async function () {
 	} //else skip migration
 }
 
+const FSBLReady = async () => {
+	const { Logger, RouterClient } = FSBL.Clients
 
-class WorkspaceDataMigrationService extends BaseService {
-	constructor(args) {
-		super(args);
-	}
-}
-
-const dms = new WorkspaceDataMigrationService({
-	startupDependencies: {
-		services: ["authenticationService", "configService", "storageService", "workspaceService"]
-	}
-});
-
-dms.onBaseServiceReady(async (callback) => {
-	let ranMigrationCheck = false; //to make sure we only do this once, as technically auth can be run multiple times
-
-	RouterClient.subscribe("AuthorizationState", function (err, notify) {
+	RouterClient.subscribe("AuthorizationState", function (err) {
 		if (err) {
-			Logger.error("*** workspacemigration failed to auth");
+			Logger.error("*** workspace migration failed to auth");
 		} else {
 		}
 	})
@@ -296,9 +275,13 @@ dms.onBaseServiceReady(async (callback) => {
 		console.log("Running check")
 		ranMigrationCheck = true;
 		await fetchUserStatus();
-		callback();
+		FSBL.publishReady();
 	}
-});
+}
 
-dms.start();
-// module.exports = dms;
+
+if (window.FSBL && FSBL.addEventListener) {
+	FSBL.addEventListener("onReady", FSBLReady);
+} else {
+	window.addEventListener("FSBLReady", FSBLReady);
+}
