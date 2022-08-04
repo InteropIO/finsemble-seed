@@ -175,6 +175,7 @@ const generateDefaultConfig = (name) => {
 			 */
 			managedPaths: [],
 		},
+		stats: "minimal",
 		module: {
 			rules: [CSS_RULE, SVG_RULE, IMAGE_AND_FONT_RULE, JSX_RULE, TSX_RULE, SOURCE_MAPS_RULE],
 		},

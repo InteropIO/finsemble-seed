@@ -1,50 +1,46 @@
 {
-  "$schema": "../../../node_modules/@finsemble/finsemble-core/configs/schemas/fileBasedSchemas/manifestFile.schema.json",
-  "devtools_port": 9090,
-  "startup_app": {
-    "requireHandshake": true
-  },
-  "splashScreenTimeout": 3000,
-  "appAssets": [
-    {
-      "src": "https://assets.finsemble.com/releases/7.3.0/assimilation/assimilation.zip",
-      "version": "7.3.0",
-      "alias": "assimilation",
-      "target": "AssimilationMain.exe"
-    }
-  ],
-  "finsemble": {
-    "systemTrayIcon": "../../assets/img/Finsemble_SystemTray_Icon.png",
-    "waitForUpdate": false,
-    "bootConfig": {
-      "onErrorMakeSystemManagerVisible": true,
-      "defaults": {
-        "startServiceTimeout": 30000,
-        "startComponentTimeout": 30000,
-        "startTaskTimeout": 10000
-      }
-    },
-    "router": {
-      "crossDomainTransport": "IPCBus",
-      "sameDomainTransport": "SharedWorker",
-      "transportSettings": {
-        "FinsembleTransport": {
-          "serverAddress": "ws://127.0.0.1:3376"
-        }
-      },
-      "promptBeforeAllowingExternalApps": false
-    },
-    "custom": {
-      "//": "Customer macros definitions must go here (e.g. 'myApplicationRoot' so it can be referenced elsewhere as '$myApplicationRoot'), along with other custom config at this level."
-    },
-    "importConfig": [
-      "../../configs/application/config.json"
-    ]
-  },
-  "finsemble-electron-adapter": {
-    "useDOMBasedMovement": true,
-    "allowedManifestDomains": [
-      "*"
-    ]
-  }
+	"$schema": "../../../node_modules/@finsemble/finsemble-core/configs/schemas/fileBasedSchemas/manifestFile.schema.json",
+	"devtools_port": 9090,
+	"startup_app": {
+		"requireHandshake": true
+	},
+	"splashScreenTimeout": 3000,
+	"appAssets": [
+		{
+			"src": "https://assets.finsemble.com/releases/6.6.0/assimilation/assimilation.zip",
+			"version": "6.6.0.0",
+			"alias": "assimilation",
+			"target": "AssimilationMain.exe"
+		}
+	],
+	"finsemble": {
+		"systemTrayIcon": "../../assets/img/Finsemble_SystemTray_Icon.png",
+		"waitForUpdate": false,
+		"bootConfig": {
+			"onErrorMakeSystemManagerVisible": true,
+			"defaults": {
+				"startServiceTimeout": 30000,
+				"startComponentTimeout": 30000,
+				"startTaskTimeout": 10000
+			}
+		},
+		"router": {
+			"crossDomainTransport": "IPCBus",
+			"sameDomainTransport": "SharedWorker",
+			"transportSettings": {
+				"FinsembleTransport": {
+					"serverAddress": "ws://127.0.0.1:3376"
+				}
+			},
+			"promptBeforeAllowingExternalApps": false
+		},
+		"custom": {
+			"//": "Customer macros definitions must go here (e.g. 'myApplicationRoot' so it can be referenced elsewhere as '$myApplicationRoot'), along with other custom config at this level."
+		},
+		"importConfig": ["../../configs/application/config.json"]
+	},
+	"finsemble-electron-adapter": {
+		"useDOMBasedMovement": true,
+		"allowedManifestDomains": ["*"]
+	}
 }

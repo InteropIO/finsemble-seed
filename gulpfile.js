@@ -3,7 +3,6 @@
 
 	// #region Imports
 	// NPM
-	require("dotenv").config();
 	const async = require("async");
 	const fs = require("fs");
 	const gulp = require("gulp");
@@ -71,29 +70,6 @@
 			};
 		}
 		return socketCertificatePath;
-	};
-
-	const startFEA = (doneFEA) => {
-		const handleElectronClose = () => {
-			if (isMacOrNix) treeKill(process.pid);
-			else process.exit(0);
-		};
-
-		let installerConfig = require("./public/configs/other/installer.json");
-		const name = (installerConfig && installerConfig.name) || "Finsemble";
-		let config = {
-			onElectronClose: handleElectronClose,
-			args: ["--name", name, "--smartDesktopDevMode"],
-		};
-
-		// Use `yarn jumpstart --reset` to copy the seed over the current default project
-		const args = parseArgs(process.argv);
-		if (args["reset"]) config.args.push("--reset-default-project");
-		if (args["update"]) config.args.push("--update-project-from-template");
-		const envargs = taskMethods.startupConfig[environment]["args"];
-		if (envargs) config.args = config.args.concat(envargs);
-
-		FEA.e2oLauncher(config, doneFEA);
 	};
 
 	/**
@@ -320,10 +296,29 @@
 		 * another process.
 		 */
 		jumpstart: (done) => {
+			const startFEA = (doneFEA) => {
+				const handleElectronClose = () => {
+					if (isMacOrNix) treeKill(process.pid);
+					else process.exit(0);
+				};
+
+				let installerConfig = require("./public/configs/other/installer.json");
+				const name = (installerConfig && installerConfig.name) || "Finsemble";
+				let config = {
+					onElectronClose: handleElectronClose,
+					args: ["--name", name, "--smartDesktopDevMode"],
+				};
+
+				// Use `yarn jumpstart --reset` to copy the seed over the current default project
+				const args = parseArgs(process.argv);
+				if (args["reset"]) config.args.push("--reset-default-project");
+				if (args["update"]) config.args.push("--update-project-from-template");
+				const envargs = taskMethods.startupConfig[environment]["args"];
+				if (envargs) config.args = config.args.concat(envargs);
+
+				FEA.e2oLauncher(config, doneFEA);
+			};
 			async.series([taskMethods.setDevEnvironment, taskMethods.build], startFEA, done);
-		},
-		jlaunch: (done) => {
-			async.series([startFEA], done);
 		},
 		launchElectron: (done) => {
 			const cfg = taskMethods.startupConfig[environment];
@@ -398,16 +393,16 @@
 				}
 
 				const { osxSign, osxNotarize } = installerConfig;
-				const entitlements =
-					process.env.osxSignEntitlements ||
-					path.resolve("./", osxSign.entitlements) ||
+				const entitlementsFile =
+					process.env.osxSignEntitlementsFile ||
+					path.resolve("./", osxSign.entitlementsFile) ||
 					path.resolve("./", "./public/configs/other/entitlements.plist");
 
 				return {
 					...installerConfig,
 					osxSign: {
 						identity: process.env.osxSignIdentity || osxSign.identity,
-						entitlements,
+						entitlementsFile,
 					},
 					osxNotarize: {
 						appleId: process.env.osxNotarizeAppleId || osxNotarize.appleId,

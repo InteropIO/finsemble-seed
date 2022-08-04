@@ -313,20 +313,13 @@ const IndexedDBAdapter = function (
 		const combinedKey = this.getCombinedKey(this, params);
 		const objectStore = this.db.transaction(["fsbl"], "readwrite").objectStore("fsbl");
 		const _request = objectStore.get(combinedKey);
-		const startTime = performance.now();
 
 		_request.onsuccess = (event: Event) => {
 			let data;
 			if ((event?.target as FinsembleEventResult).result) data = (event?.target as FinsembleEventResult).result.value;
 
-			Logger.system.debug(
-				`IndexedDBAdapter.get for key=${combinedKey} elapsed ms=${performance.now() - startTime} data=`,
-				data
-			);
-			console.debug(
-				`IndexedDBAdapter.get for key=${combinedKey} elapsed ms=${performance.now() - startTime} data=`,
-				data
-			);
+			Logger.system.debug(`IndexedDBAdapter.get for key=${combinedKey} data=`, data);
+			console.debug(`IndexedDBAdapter.get for key=${combinedKey} data=`, data);
 
 			cb(null, data);
 		};

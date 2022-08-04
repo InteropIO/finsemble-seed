@@ -57,7 +57,7 @@
 				"url": "$applicationRoot/components/linker/linker.html",
 				"affinity": "systemComponents",
 				"width": 132,
-				"height": 265,
+				"height": 232,
 				"ephemeral": true,
 				"options": {
 					"autoShow": false,
@@ -539,8 +539,7 @@
 					"windowService": {
 						"allowGrouping": false,
 						"allowAutoArrange": false,
-						"shouldRegister": false,
-						"manageWindowMovement": false
+						"shouldRegister": false
 					}
 				},
 				"components": {
@@ -605,8 +604,7 @@
 						"FSBLHeader": {
 							"hideMaximize": true,
 							"hideClose": false,
-							"hideMinimize": true,
-							"hackScrollbar": false
+							"hideMinimize": true
 						},
 						"titlebarType": "injected"
 					},
