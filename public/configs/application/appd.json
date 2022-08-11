@@ -225,42 +225,6 @@
                 }
             ]
         },
-        "TmpInteropTest": {
-            "appId": "TmpInteropTest",
-            "name": "TmpInteropTest",
-            "manifest": {
-                "window": {
-                    "url": "$applicationRoot/components/TmpInteropTest/TmpInteropTest.html",
-                    "options": {},
-                    "width": 800,
-                    "height": 600
-                },
-                "foreign": {
-                    "fdc3": {
-                        "intents": [
-                            {
-                                "name": "fdc3.instrument",
-                                "displayName": "ViewChart",
-                                "contexts": [
-                                    "fdc3.contact"
-                                ]
-                            }
-                        ]
-                    },
-                    "components": {
-                        "App Launcher": {
-                            "launchableByUser": true
-                        },
-                        "Window Manager": {
-                            "FSBLHeader": true
-                        },
-                        "Toolbar": {
-                            "iconClass": "ff-component"
-                        }
-                    }
-                }
-            }
-        },
         "colorComponent": {
             "appId": "colorComponent",
             "name": "colorComponent",
