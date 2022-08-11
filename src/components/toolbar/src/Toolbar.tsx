@@ -1,3 +1,4 @@
+import { SampleMenu } from "./SampleMenu";
 /*!
  * Copyright 2017 by ChartIQ, Inc.
  * All rights reserved.
@@ -44,8 +45,9 @@ const Toolbar = () => {
 				<Search openHotkey={["ctrl", "alt", "f"]} />
 				<WorkspaceManagementMenu />
 				{/* Uncomment the following to enable the AdvancedAppLauncherMenu*/}
-				{/* <AdvancedAppLauncherMenu /> */}
+				<AdvancedAppLauncherMenu enableQuickComponents={true} />
 				<AppLauncherMenu />
+				<SampleMenu />
 			</ToolbarSection>
 			<ToolbarSection className="center" hideBelowWidth={115}>
 				<div className="divider" />

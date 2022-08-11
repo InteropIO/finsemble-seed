@@ -1,4 +1,13 @@
 {
-	"$schema": "../../../node_modules/@finsemble/finsemble-core/configs/schemas/fileBasedSchemas/servicesFile.schema.json",
-	"services": {}
+    "$schema": "../../../node_modules/@finsemble/finsemble-core/configs/schemas/fileBasedSchemas/servicesFile.schema.json",
+    "services": {
+        "colorSearchProviderService": {
+            "bootParams": {
+                "stage": "preuser",
+                "dependencies": []
+            },
+            "name": "colorSearchProviderService",
+            "html": "$applicationRoot/services/colorSearchProvider/colorSearchProvider.html"
+        }
+    }
 }

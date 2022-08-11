@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<script></script>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<script src="../../vendor.bundle.js"></script>
+		<script src="./TmpInteropTest.js"></script>
+		<title>Interop Testing</title>
+	</head>
+
+	<body style="color: white" class="finsemble">
+		<h2>General</h2>
+		<div id="container1">
+			<button onClick="window.showDevTools()">show developer tools</button>
+			<button onClick="window.addContextListenerSymbol()">addContextListener "symbol"</button>
+			<button id="broadcast" onClick="window.broadcastSymbol()">broadcast symbol="IBM"</button>
+			<button onClick="window.listenForIntentViewChart()">listen for "ViewChart" Intent (in appd)</button>
+			<button onClick="window.listenForIntentHotdog()">listen for "hotdog" Intent (not in appd)</button>
+			<button onClick="window.raiseIntentHotdog()">Raise "hotdog" Intent</button>
+			<button onClick="window.getSystemChannelsTest()">getSystemChannels</button>
+			<button onClick="window.getCurrentChannelsTest()">getCurrentChannels</button>
+			<button onClick="window.broadcastToCurrentChannelTest()">broadcastToCurrentChannelTest</button>
+			<button onClick="window.joinChannelTest()">joinChannel</button>
+			<button onClick="window.getInfoTest()">getInfo</button>
+			<button onClick="window.sampleIntentResolver()">sampleIntentResolver</button>
+			<button onClick="window.dynamicConfig()">Add app with dynamic config</button>
+		</div>
+		<h2>Find Intent</h2>
+		<div id="container2">
+			<button onClick="window.findIntentTest1()">find 1: ViewChart + fdc3.instrument</button>
+			<button onClick="window.findIntentTest2()">find 2: ViewChartStudy + fdc3.instrument</button>
+			<button onClick="window.findIntentTest3()">find 3: ViewNews + fdc3.date</button>
+			<button onClick="window.findIntentTest4()">find 4: ViewChart + fdc3.news</button>
+			<button onClick="window.findIntentTest5()">find 5: ViewChart w/o context</button>
+			<button onClick="window.findIntentTest6()">find 6: UnknownIntent</button>
+			<p id="intentResponse1">Result for 1:</p>
+			<p id="intentResponse2">Result for 2:</p>
+			<p id="intentResponse3">Result for 3:</p>
+			<p id="intentResponse4">Result for 4:</p>
+			<p id="intentResponse5">Result for 5:</p>
+			<p id="intentResponse6">Result for 6:</p>
+		</div>
+		<h2>Find Intents by Context</h2>
+		<div id="container3">
+			<button onClick="window.findIntents1()">find 1: fdc3.instrument</button>
+			<button onClick="window.findIntents2()">find 2: fdc3.news</button>
+			<button onClick="window.findIntents3()">find 3: fdc3.date</button>
+			<button onClick="window.findIntents4()">find 4: UnknownContext</button>
+			<button onClick="window.findIntents5()">find 5: w/o context</button>
+			<p id="intentsResponse1">Result for 1:</p>
+			<p id="intentsResponse2">Result for 2:</p>
+			<p id="intentsResponse3">Result for 3:</p>
+			<p id="intentsResponse4">Result for 4:</p>
+			<p id="intentsResponse5">Result for 5:</p>
+		</div>
+		<h2>Raise Intents</h2>
+		<div id="container4">
+			<button onClick="window.raiseIntentTestViewNews()">Raise One Intent("ViewNews" for "IBM")</button>
+			<button onClick="window.raiseIntentTestViewChartWithTarget()">
+				Raise One Intent("ViewChart" for "IBM") for Chart
+			</button>
+			<button onClick="window.raiseIntentTestViewChart()">Raise One Intent("ViewChart" for "IBM")</button>
+			<button onClick="window.raiseIntentTestThreeIntents()">
+				Raise Three Intents("ViewChart" for "A" & "B" & "C")
+			</button>
+			<button onClick="window.raiseIntentTestViewChartABC()">Raise Bad Intent</button>
+		</div>
+		<h2>Raise Intents for Context</h2>
+		<div id="container5">
+			<button onClick="window.raiseIntentForContextTest1()">Raise One Intent for "IBM"</button>
+			<button onClick="window.raiseIntentForContextTest2()">Raise One Intent for "IBM" for Chart</button>
+		</div>
+
+		<h2>Open Apps</h2>
+		<div id="container6">
+			<button onClick="window.openAppTest1()">Open Chart("APPL")</button>
+			<button onClick="window.openAppTest2()">Open Bad App</button>
+		</div>
+		<h2>Admin</h2>
+		<div id="container7">
+			<button onClick="window.addApps()">add AppD data to InteropService</button>
+			<button onClick="window.removeApps()">remove chart app from InteropService</button>
+		</div>
+	</body>
+</html>

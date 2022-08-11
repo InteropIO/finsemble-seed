@@ -1,0 +1,6 @@
+{
+	"TmpInteropTest": {
+		"output": "components/TmpInteropTest/TmpInteropTest",
+		"entry": "./src/components/TmpInteropTest/TmpInteropTest.ts"
+	}
+}
