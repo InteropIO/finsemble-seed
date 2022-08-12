@@ -6,5 +6,9 @@
 	"indexDBAdapter": {
 		"output": "adapters/indexedDBAdapter",
 		"entry": "./src/adapters/indexedDBAdapter.ts"
-	}
+	},
+	"InMemoryStorageAdapter": {
+        "output": "adapters/InMemoryStorageAdapter",
+        "entry":"./src/adapters/InMemoryStorageAdapter.js"
+    }
 }

@@ -103,15 +103,16 @@
 			"hotkeyShowCentralLogger": ["ctrl", "shift", "L"]
 		},
 		"storage": {
-			"defaultStorage": "IndexedDBAdapter",
+			"defaultStorage": "InMemoryStorageAdapter",
 			"topicToDataStoreAdapters": {
-				"finsemble": "IndexedDBAdapter",
-				"finsemble.workspace": "IndexedDBAdapter",
-				"finsemble.workspace.cache": "IndexedDBAdapter"
+				"finsemble": "InMemoryStorageAdapter",
+				"finsemble.workspace": "InMemoryStorageAdapter",
+				"finsemble.workspace.cache": "InMemoryStorageAdapter"
 			},
 			"dataStoreAdapters": {
 				"LocalStorageAdapter": "$applicationRoot/adapters/localStorageAdapter.js",
-				"IndexedDBAdapter": "$applicationRoot/adapters/indexedDBAdapter.js"
+				"IndexedDBAdapter": "$applicationRoot/adapters/indexedDBAdapter.js",
+				"InMemoryStorageAdapter": "$applicationRoot/adapters/InMemoryStorageAdapter.js"
 			}
 		},
 		"workspace": {
