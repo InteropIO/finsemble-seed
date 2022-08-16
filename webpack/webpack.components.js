@@ -158,7 +158,7 @@ function createCopyWebpackConfig() {
 				to: "./assets/",
 			},
 			{
-				from: "./node_modules/@finsemble/finsemble-core/dist",
+				from: "./node_modules/@finsemble/finsemble-core/dist/platform",
 				to: path.join(__dirname, "../public/build/finsemble/"),
 			},
 		],

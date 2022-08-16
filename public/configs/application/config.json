@@ -16,7 +16,10 @@
 					"preferPreviousState": true,
 					"foundation": {
 						"appFolders": {
-							"list": ["Advanced App Launcher", "Favorites"],
+							"list": [
+								"Advanced App Launcher",
+								"Favorites"
+							],
 							"folders": {
 								"Advanced App Launcher": {
 									"icon": "ff-component",
@@ -100,19 +103,24 @@
 			"enabled": false
 		},
 		"logger": {
-			"hotkeyShowCentralLogger": ["ctrl", "shift", "L"]
+			"hotkeyShowCentralLogger": [
+				"ctrl",
+				"shift",
+				"L"
+			]
 		},
 		"storage": {
 			"defaultStorage": "InMemoryStorageAdapter",
 			"topicToDataStoreAdapters": {
 				"finsemble": "InMemoryStorageAdapter",
-				"finsemble.workspace": "InMemoryStorageAdapter",
+				"finsemble.workspace": "StorageAdapter",
 				"finsemble.workspace.cache": "InMemoryStorageAdapter"
 			},
 			"dataStoreAdapters": {
 				"LocalStorageAdapter": "$applicationRoot/adapters/localStorageAdapter.js",
 				"IndexedDBAdapter": "$applicationRoot/adapters/indexedDBAdapter.js",
-				"InMemoryStorageAdapter": "$applicationRoot/adapters/InMemoryStorageAdapter.js"
+				"InMemoryStorageAdapter": "$applicationRoot/adapters/InMemoryStorageAdapter.js",
+				"StorageAdapter": "$applicationRoot/StorageAdapter/index.js"
 			}
 		},
 		"workspace": {
@@ -135,5 +143,99 @@
 		"$configRoot/application/securityPolicies.json",
 		"$configRoot/application/dashbarConfig.json"
 	],
-	"toolbarMenus": {}
+	"toolbarMenus": {},
+	"components": {
+		"Toolbar": {
+			"uiComponent": true,
+			"bootParams": {
+				"stage": "earlyuser",
+				"checkpoints": {
+					"initialize": {
+						"postStartupCompletion": true
+					}
+				}
+			},
+			"window": {
+				"id": "launcher",
+				"url": "$applicationRoot/components/toolbar/toolbar.html",
+				"affinity": "systemComponents",
+				"width": 600,
+				"height": 39,
+				"dockedHeight": 39,
+				"top": 0,
+				"left": 0,
+				"right": 0,
+				"position": "available",
+				"dockable": [
+					"top",
+					"bottom"
+				],
+				"maxHeight": 39,
+				"minHeight": 39,
+				"minWidth": 300,
+				"docked": "top",
+				"canGroup": false,
+				"options": {
+					"autoShow": true,
+					"contextMenu": false,
+					"showTaskbarIcon": true,
+					"smallWindow": true,
+					"maximizable": false
+				}
+			},
+			"component": {
+				"category": "system",
+				"spawnOnStartup": true,
+				"spawnOnAllMonitors": false,
+				"canMinimize": false,
+				"canMaximize": false
+			},
+			"foreign": {
+				"services": {
+					"windowService": {
+						"allowAutoArrange": false,
+						"allowSnapping": false,
+						"allowTabbing": false,
+						"allowTiling": false
+					},
+					"workspaceService": {
+						"global": true
+					}
+				},
+				"components": {
+					"App Launcher": {
+						"launchableByUser": false
+					},
+					"Window Manager": {
+						"persistWindowState": false,
+						"FSBLHeader": false
+					}
+				}
+			},
+			"childWindowOptions": {
+				"window": {
+					"resizable": false,
+					"maxHeight": null,
+					"minHeight": null,
+					"dockable": false,
+					"show": false
+				},
+				"foreign": {
+					"components": {
+						"Window Manager": {
+							"FSBLHeader": false
+						}
+					},
+					"services": {
+						"windowService": {
+							"manageWindowMovement": false
+						},
+						"workspaceService": {
+							"addToWorkspace": false
+						}
+					}
+				}
+			}
+		}
+	}
 }

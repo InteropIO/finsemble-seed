@@ -44,7 +44,7 @@ let plugins = [
  */
 module.exports = {
 	entry: {
-		vendor: ["react", "react-dom", "async", "lodash", "date-fns", "@finsemble/finsemble-core"],
+		vendor: ["react", "react-dom", "async", "lodash", "date-fns"],
 	},
 	output: {
 		filename: "vendor.bundle.js",

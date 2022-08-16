@@ -15,6 +15,7 @@ const env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
  */
 const CSS_RULE = {
 	test: /\.s?css$/i,
+	exclude: /\.lazy\.css$/i,
 	use: [
 		"style-loader",
 		{
@@ -26,6 +27,23 @@ const CSS_RULE = {
 	],
 };
 
+const LAZY_CSS_RULE = {
+	test: /\.lazy\.css$/i,
+	use: [
+		{
+			loader: "style-loader",
+			options: {
+				injectType: "lazySingletonStyleTag",
+			},
+		},
+		{
+			loader: "css-loader",
+			options: {
+				sourceMap: env !== "production",
+			},
+		},
+	],
+};
 /**
  * This rule will convert imported images and fonts into standalone assets.
  * The assets are compiled into /assets/file-loader/ to distinguish them from static assets.
@@ -176,7 +194,7 @@ const generateDefaultConfig = (name) => {
 			managedPaths: [],
 		},
 		module: {
-			rules: [CSS_RULE, SVG_RULE, IMAGE_AND_FONT_RULE, JSX_RULE, TSX_RULE, SOURCE_MAPS_RULE],
+			rules: [CSS_RULE, LAZY_CSS_RULE, SVG_RULE, IMAGE_AND_FONT_RULE, JSX_RULE, TSX_RULE, SOURCE_MAPS_RULE],
 		},
 		mode: env,
 		plugins: plugins,
