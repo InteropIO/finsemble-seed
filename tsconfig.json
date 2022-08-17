@@ -1,18 +1,24 @@
 {
+	".": "This is the default tsconfig file for the seed project. It can be copied directly into the seed project.",
+	"..": "baseUrl and paths are configured so that Finsemble's dependencies can be used without installing them",
+	"...": "typeRoots are configured so that the FSBL object is global.",
+	"....": "noImplicitAny: false prevents errors from missing @types/react and @types/react-dom. Install those to enable this feature.",
 	"compilerOptions": {
 		"allowJs": true,
 		"allowSyntheticDefaultImports": true,
 		"jsx": "react",
 		"moduleResolution": "node",
-		"noImplicitAny": true,
-		"outDir": "./public/build/",
+		"noImplicitAny": false,
 		"preserveConstEnums": true,
 		"removeComments": true,
 		"sourceMap": true,
 		"strict": true,
 		"target": "ES2020",
-		"typeRoots": ["node_modules/@types", "node_modules/@finsemble"]
+		"typeRoots": ["node_modules/@types", "node_modules/@finsemble"],
+		"baseUrl": ".",
+		"paths": {
+			"*": ["node_modules/*", "node_modules/@finsemble/finsemble-core/node_modules/*"]
+		}
 	},
-	"include": ["src/**/*"],
-	"exclude": ["src/angular-components/"]
+	"include": ["src/**/*"]
 }

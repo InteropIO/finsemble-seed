@@ -113,7 +113,7 @@
 			"defaultStorage": "InMemoryStorageAdapter",
 			"topicToDataStoreAdapters": {
 				"finsemble": "InMemoryStorageAdapter",
-				"finsemble.workspace": "StorageAdapter",
+				"finsemble.workspace": "InMemoryStorageAdapter",
 				"finsemble.workspace.cache": "InMemoryStorageAdapter"
 			},
 			"dataStoreAdapters": {
