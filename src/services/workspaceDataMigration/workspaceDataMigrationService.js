@@ -1,4 +1,4 @@
-import Finsemble from "@chartiq/finsemble";
+import Finsemble from "@finsemble/finsemble-core";
 import _get from "lodash.get";
 import _set from "lodash.set";
 
@@ -34,7 +34,7 @@ const MIGRATION_SOURCE_FIELD = "componentType";
 //map of values of the source field to fields and values to set, which are defined as destination field path:value
 const MIGRATION_SOURCE_TO_DESTINATION_VALUE_MAP = {
 	"Welcome Component": {
-		"componentType": "Process Monitor", 
+		"componentType": "Process Monitor",
 		"customData.component.type": "Process Monitor",
 		"url": "http://localhost:3375/components/processMonitor/processMonitor.html",
 		"customData.window.url": "http://localhost:3375/components/processMonitor/processMonitor.html"
@@ -44,25 +44,25 @@ const MIGRATION_SOURCE_TO_DESTINATION_VALUE_MAP = {
 
 //----------------------------------------------------------------------
 // Example Migration functions
-// Customize or replace these functions to customize the example 
+// Customize or replace these functions to customize the example
 // migration to suit your own use case.
 //----------------------------------------------------------------------
 /**
  * Function that determines whether a window needs to be migrated or not, based on
  * the content of the windowData parameter..
- * @param {*} windowData 
+ * @param {*} windowData
  */
 const migrationRequired = function(windowData) {
 	// TODO: Implement a test  to determine whether a window needs to be migrated here, e.g.
 	let val = _get(windowData,MIGRATION_SOURCE_FIELD);
-	return  val&& 
+	return  val&&
 		(MIGRATION_SOURCE_TO_DESTINATION_VALUE_MAP[val] ? true : false);
 
 }
 
 /**
  * Migration function applied to each window in the workspace definitions.
- * @param {*} windowData 
+ * @param {*} windowData
  */
 const migrateWindow = function(windowData) {
 	//check if the MIGRATION_SOURCE_FIELD has a value indicating a migration of the windows config is required
@@ -76,7 +76,7 @@ const migrateWindow = function(windowData) {
 		destinationFields.forEach((field) => {
 			_set(windowData, field, toApply[field]);
 		});
-		
+
 		//N.B. you may also want to override the 'customData' element with the full new configuration of the component (which you could retrieve with the ConfigClient)
 
 
@@ -93,8 +93,8 @@ const migrateWindow = function(windowData) {
 //----------------------------------------------------------------------
 /**
  * Migration function applied to each exported workspace definition.
- * @param {*} workspaceName 
- * @param {*} workspaceData 
+ * @param {*} workspaceName
+ * @param {*} workspaceData
  */
 const migrateWorkspace = function(workspaceName, workspaceData) {
 	let madeChanges = false;
@@ -103,14 +103,14 @@ const migrateWorkspace = function(workspaceName, workspaceData) {
 
 	//migrate each window in the workspace and determine if any changes were made
 	for(let w=0; w<workspaceObj.windows.length; w++){
-		
+
 		//lookup the new componentType for the window somehow - probably using the old window name
 		let windowName = workspaceObj.windows[w];
 		let migratedWindow = migrateWindow(workspaceObj.windowData[w]);
 		if (migratedWindow){
 			workspaceObj.windowData[w] = migratedWindow;
 			madeChanges = true;
-		}			
+		}
 	}
 	if (madeChanges){
 		workspaceData[workspaceName] = workspaceObj;
@@ -167,9 +167,9 @@ const runMigration = function() {
 											Logger.log("*** no change from migration of " + workspace.name);
 											resolve();
 										}
-										
+
 									}
-								}); 
+								});
 							}));
 						});
 
@@ -227,8 +227,8 @@ const completeMigration = function(activeWorkspace) {
 }
 
 /**
- * Determines if the user's data has been migrated by checking for a key in storage service of 
- * "migrated_from_<adapter to migrate from>", 
+ * Determines if the user's data has been migrated by checking for a key in storage service of
+ * "migrated_from_<adapter to migrate from>",
  * which in this example is "migrated_from_IndexedDBAdapter".
  */
 const fetchUserStatus = function() {
@@ -266,10 +266,10 @@ const fetchUserStatus = function() {
 
 /**
  * class WorkspaceDataMigrationService
- * 
+ *
  * This class is configurable to migrate data from one storage adapter to another.
  * In this example, IndexedDB data is being migrated to LocalStorage for all internal Finsemble data.
- * 
+ *
  */
 class WorkspaceDataMigrationService extends BaseService {
 	constructor(args) {
@@ -277,7 +277,7 @@ class WorkspaceDataMigrationService extends BaseService {
 	}
 }
 
-const dms = new WorkspaceDataMigrationService({ 
+const dms = new WorkspaceDataMigrationService({
 	startupDependencies: {
 		services: ["authenticationService", "configService", "storageService", "workspaceService"]
 	}
@@ -285,7 +285,7 @@ const dms = new WorkspaceDataMigrationService({
 
 dms.onBaseServiceReady((callback) => {
 	let ranMigrationCheck = false; //to make sure we only do this once, as technically auth can be run multiple times
-	
+
 	RouterClient.subscribe("AuthorizationState", function(err,notify) {
 		if (err) {
 			Logger.error("*** workspacemigration failed to auth");
@@ -293,7 +293,7 @@ dms.onBaseServiceReady((callback) => {
 			if (!ranMigrationCheck && notify.data.state == "done") {
 				ranMigrationCheck = true;
 				fetchUserStatus();
-			}	
+			}
 		}
 	})
 	callback();
