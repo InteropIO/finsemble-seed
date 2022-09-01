@@ -2,6 +2,68 @@
 	"comment": "AppD component config",
 	"$schema": "../../../node_modules/@finsemble/finsemble-core/configs/schemas/fileBasedSchemas/appdConfigFile.schema.json",
 	"appd": {
+		"Getting Started Tutorial": {
+			"appId": "Getting Started Tutorial",
+			"name": "Getting Started Tutorial",
+			"manifest": {
+				"window": {
+					"url": "https://documentation.finsemble.com/tutorial-gettingStarted.html",
+					"height": 800,
+					"width": 1000
+				},
+				"component": {
+					"spawnOnStartup": false
+				},
+				"foreign": {
+					"services": {
+						"workspaceService": {
+							"persistURL": true
+						}
+					},
+					"components": {
+						"App Launcher": {
+							"launchableByUser": false
+						},
+						"Window Manager": {
+							"FSBLHeader": true,
+							"persistWindowState": true,
+							"title": "Finsemble Getting Started Tutorial"
+						}
+					}
+				}
+			}
+		},
+		"Finsemble Documentation": {
+			"appId": "Finsemble Documentation",
+			"name": "Finsemble Documentation",
+			"manifest": {
+				"window": {
+					"url": "http://documentation.chartiq.com/finsemble",
+					"left": "center",
+					"top": "center",
+					"height": 800,
+					"width": 1000
+				},
+				"component": {},
+				"foreign": {
+					"services": {
+						"workspaceService": {
+							"persistURL": true
+						}
+					},
+					"components": {
+						"App Launcher": {
+							"launchableByUser": false
+						},
+						"Window Manager": {
+							"FSBLHeader": true,
+							"persistWindowState": true,
+							"title": "Finsemble Documentation"
+						}
+					}
+				}
+			}
+		},
 		"ChartIQ Example App": {
 			"name": "ChartIQ Example App",
 			"appId": "ChartIQ Example App",
@@ -152,7 +214,7 @@
 			"name": "Tour",
 			"manifest": {
 				"window": {
-					"url": "$applicationRoot/components/tour/tour.html",
+					"url": "$moduleRoot/ui-components/tour/tour.html",
 					"affinity": "workspaceComponents",
 					"options": {
 						"resizable": false,
@@ -167,7 +229,7 @@
 				},
 				"component": {
 					"displayName": "Take a Tour",
-					"preload": "$applicationRoot/preloads/zoom.js"
+					"preload": "$moduleRoot/preloads/zoom.js"
 				},
 				"foreign": {
 					"services": {
@@ -198,7 +260,7 @@
 			"publisher": "Cosaic",
 			"icons": [
 				{
-					"src": "$applicationRoot/components/tour/take-a-tour.svg"
+					"src": "$moduleRoot/ui-components/tour/take-a-tour.svg"
 				}
 			]
 		}
