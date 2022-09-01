@@ -2,7 +2,7 @@
 @import url("../../../assets/css/theme.css");
 
 body {
-	margin: 0;
+	margin: 0px;
 	user-select: none;
 }
 
@@ -26,7 +26,7 @@ body {
 }
 
 .spacer4 {
-	height: 0;
+	height: 0px;
 }
 
 h1 {
@@ -36,22 +36,20 @@ h1 {
 
 button {
 	width: 200px;
-	/* stylelint-disable-next-line declaration-no-important */
 	text-align: center !important;
-	margin: 0 auto;
+	margin: 0px auto;
 	max-width: 2000px;
-	appearance: none;
+	-webkit-appearance: none;
 	background-color: var(--button-affirmative-background-color);
 	color: #fff;
 	font-weight: 400;
 	font-size: 125%;
-	border: 0;
+	border: 0px;
 	border-radius: 4px;
 	padding: 10px 15px;
 	vertical-align: middle;
 	transition: all 0.2s ease;
 }
-
 button:hover {
 	background-color: var(--button-affirmative-background-hover-color);
 	cursor: pointer;
@@ -60,7 +58,7 @@ button:hover {
 
 #quitFS {
 	color: #ee5c5c;
-	background-color: #fff;
+	background-color: #ffffff;
 	font-size: 100%;
 	width: 140px;
 }
