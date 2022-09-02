@@ -58,45 +58,6 @@
 	let launchTimestamp = 0;
 
 	/**
-	 * Returns an object containing the absolute paths of the socket certificate files used to secure Finsemble Transport
-	 * If both a key and certificate path are not configured nothing is returned.
-	 */
-	const deriveSocketCertificatePaths = () => {
-		const cfg = taskMethods.startupConfig[environment];
-		let socketCertificatePath;
-		if (cfg.socketCertificateKey && cfg.socketCertificateCert) {
-			socketCertificatePath = {
-				key: path.resolve(path.join(__dirname, cfg.socketCertificateKey)),
-				cert: path.resolve(path.join(__dirname, cfg.socketCertificateCert)),
-			};
-		}
-		return socketCertificatePath;
-	};
-
-	const startFEA = (doneFEA) => {
-		const handleElectronClose = () => {
-			if (isMacOrNix) treeKill(process.pid);
-			else process.exit(0);
-		};
-
-		let installerConfig = require("./public/configs/other/installer.json");
-		const name = (installerConfig && installerConfig.name) || "Finsemble";
-		let config = {
-			onElectronClose: handleElectronClose,
-			args: ["--name", name, "--smartDesktopDevMode"],
-		};
-
-		// Use `yarn jumpstart --reset` to copy the seed over the current default project
-		const args = parseArgs(process.argv);
-		if (args["reset"]) config.args.push("--reset-default-project");
-		if (args["update"]) config.args.push("--update-project-from-template");
-		const envargs = taskMethods.startupConfig[environment]["args"];
-		if (envargs) config.args = config.args.concat(envargs);
-
-		FEA.e2oLauncher(config, doneFEA);
-	};
-
-	/**
 	 * Object containing all of the methods used by the gulp tasks.
 	 */
 	const taskMethods = {
@@ -320,10 +281,29 @@
 		 * another process.
 		 */
 		jumpstart: (done) => {
+			const startFEA = (doneFEA) => {
+				const handleElectronClose = () => {
+					if (isMacOrNix) treeKill(process.pid);
+					else process.exit(0);
+				};
+
+				let installerConfig = require("./public/configs/other/installer.json");
+				const name = (installerConfig && installerConfig.name) || "Finsemble";
+				let config = {
+					onElectronClose: handleElectronClose,
+					args: ["--name", name, "--smartDesktopDevMode"],
+				};
+
+				// Use `yarn jumpstart --reset` to copy the seed over the current default project
+				const args = parseArgs(process.argv);
+				if (args["reset"]) config.args.push("--reset-default-project");
+				if (args["update"]) config.args.push("--update-project-from-template");
+				const envargs = taskMethods.startupConfig[environment]["args"];
+				if (envargs) config.args = config.args.concat(envargs);
+
+				FEA.e2oLauncher(config, doneFEA);
+			};
 			async.series([taskMethods.setDevEnvironment, taskMethods.build], startFEA, done);
-		},
-		jlaunch: (done) => {
-			async.series([startFEA], done);
 		},
 		launchElectron: (done) => {
 			const cfg = taskMethods.startupConfig[environment];
@@ -348,12 +328,10 @@
 				else process.exit(0);
 			};
 
-			const socketCertificatePath = deriveSocketCertificatePaths();
 			let config = {
 				manifest: cfg.serverConfig,
 				onElectronClose: handleElectronClose,
 				chromiumFlags: JSON.stringify(cfg.chromiumFlags),
-				socketCertificatePath,
 				breakpointOnStart: cfg.breakpointOnStart,
 			};
 
@@ -484,14 +462,11 @@
 				console.error("Cannot create installer because Finsemble Electron Adapter is not installed");
 				process.exit(1);
 			}
-			const socketCertificatePath = deriveSocketCertificatePaths();
 
-			FEAPackager.setFeaPath(FEA_PATH);
 			await FEAPackager.setApplicationFolderName(installerConfig.name);
 			await FEAPackager.setManifestURL(manifestUrl);
 			await FEAPackager.setUpdateURL(updateUrl);
 			await FEAPackager.setChromiumFlags(chromiumFlags || {});
-			await FEAPackager.copySocketCertificates(socketCertificatePath);
 			await FEAPackager.createFullInstaller(installerConfig);
 			done();
 		},

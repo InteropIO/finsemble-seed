@@ -15,8 +15,27 @@ const env = process.env.NODE_ENV ? process.env.NODE_ENV : "development";
  */
 const CSS_RULE = {
 	test: /\.s?css$/i,
+	exclude: /\.lazy\.css$/i,
 	use: [
 		"style-loader",
+		{
+			loader: "css-loader",
+			options: {
+				sourceMap: env !== "production",
+			},
+		},
+	],
+};
+
+const LAZY_CSS_RULE = {
+	test: /\.lazy\.css$/i,
+	use: [
+		{
+			loader: "style-loader",
+			options: {
+				injectType: "lazySingletonStyleTag",
+			},
+		},
 		{
 			loader: "css-loader",
 			options: {
@@ -65,9 +84,16 @@ const SVG_RULE = {
 			loader: "@svgr/webpack",
 			options: {
 				svgoConfig: {
-					plugins: {
-						removeViewBox: false,
-					},
+					plugins: [
+						{
+							name: "preset-default",
+							params: {
+								overrides: {
+									removeViewBox: false,
+								},
+							},
+						},
+					],
 				},
 			},
 		},
@@ -175,8 +201,9 @@ const generateDefaultConfig = (name) => {
 			 */
 			managedPaths: [],
 		},
+		stats: "minimal",
 		module: {
-			rules: [CSS_RULE, SVG_RULE, IMAGE_AND_FONT_RULE, JSX_RULE, TSX_RULE, SOURCE_MAPS_RULE],
+			rules: [CSS_RULE, LAZY_CSS_RULE, SVG_RULE, IMAGE_AND_FONT_RULE, JSX_RULE, TSX_RULE, SOURCE_MAPS_RULE],
 		},
 		mode: env,
 		plugins: plugins,
