@@ -539,8 +539,7 @@
 					"windowService": {
 						"allowGrouping": false,
 						"allowAutoArrange": false,
-						"shouldRegister": false,
-						"manageWindowMovement": false
+						"shouldRegister": false
 					}
 				},
 				"components": {

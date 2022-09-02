@@ -158,7 +158,7 @@ function createCopyWebpackConfig() {
 				to: "./assets/",
 			},
 			{
-				from: "./node_modules/@finsemble/finsemble-core/dist",
+				from: "./node_modules/@finsemble/finsemble-core/dist/platform/",
 				to: path.join(__dirname, "../public/build/finsemble/"),
 			},
 		],
@@ -182,8 +182,6 @@ function createCopyWebpackConfig() {
 webpackConfig.plugins.push(new CopyWebpackPlugin(createCopyWebpackConfig()));
 webpackConfig.plugins.push(
 	new DllReferencePlugin({
-		// Establishes the root for relative module paths in the manifest. This is important if the build process might occur from different directories.
-		context: path.join(__dirname, "./"),
 		manifest: VENDOR_MANIFEST,
 	})
 );
