@@ -18,7 +18,7 @@ See the [Finsemble Authentication tutorial](https://documentation.finsemble.com/
   - e.g. the Authentication component itself via Central logger, or Toolbar by clicking on it and hitting Ctrl + shift + i
 - Then run:
 
-  ```
+  ```javascript
   FSBL.System.clearCache({appcache: false, cookies: true, localstorage: false});
   FSBL.System.restart();
    ```
