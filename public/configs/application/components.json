@@ -165,11 +165,11 @@
 				"top": "center",
 				"left": "center",
 				"width": 400,
-				"height": 600,
+				"height": 710,
 				"ephemeral": true,
-				"alwaysOnTop": true,
 				"options": {
-					"autoShow": true
+					"autoShow": true,
+					"alwaysOnTop": true
 				}
 			},
 			"component": {
