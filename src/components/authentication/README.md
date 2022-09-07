@@ -9,8 +9,8 @@ See the [Finsemble Authentication tutorial](https://documentation.finsemble.com/
 
 **Note:** the recipe is preconfigured for an Auth0 zero account which is used for testing. Test login credentials:
 
-username: kris+oauthtest@cosaic.io
-password: testWithAuth0
+- username: kris+oauthtest@cosaic.io
+- password: testWithAuth0
 
 **Note:** Log out is not implemented in this example. Hence, to clear the login session and reauthenticate:
 
