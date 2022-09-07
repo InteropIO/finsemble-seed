@@ -164,8 +164,8 @@
 				"url": "$applicationRoot/components/authentication/Authentication.html",
 				"top": "center",
 				"left": "center",
-				"width": 358,
-				"height": 460,
+				"width": 400,
+				"height": 600,
 				"ephemeral": true,
 				"alwaysOnTop": true,
 				"options": {

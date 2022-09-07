@@ -5,7 +5,12 @@
 	"authentication": {
 		"startup": {
 			"adapter": "PASSWORD",
-			"component": "Registration"
+			"component": "Authentication",
+			"client_id": "iLYjYGyc8Ix9Z5RQgqBitHzLJKH3CGZ0",
+			"redirect_uri": "http://localhost:3375/build/components/authentication/Authentication.html",
+			"authorization_url": "https://dev-l6qsa4rd.us.auth0.com/authorize",
+			"token_url": "https://dev-l6qsa4rd.us.auth0.com/oauth/token",
+			"user_info_url": "https://dev-l6qsa4rd.us.auth0.com/userinfo"
 		}
 	},
 	"servicesConfig": {
