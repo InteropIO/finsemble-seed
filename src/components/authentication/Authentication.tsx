@@ -19,6 +19,7 @@ import "@finsemble/finsemble-ui/react/assets/css/dialogs.css";
 import "@finsemble/finsemble-ui/react/assets/css/authentication.css";
 import "../../../public/assets/css/theme.css";
 import "./Authentication.css";
+import { PublishCallback, SubscribeCallback, UnsubscribeCallback } from "@finsemble/finsemble-core/types/clients/routerClient";
 
 const log = (...args: any) => {
 	FSBL.Clients.Logger.log(...args);
@@ -58,13 +59,40 @@ export const Authentication = () => {
 					const userInfo = await getUserInfo({ accessToken });
 					const username = userInfo.sub;
 
-					/**
-					 * This is the most important step. Once your back end server has authenticated the user
-					 * call publishAuthorization() from the useAuth() hook. The first parameter (username) is
-					 * required. The second parameter (credentials) is optional. Credentials can contain anything
-					 * that is useful for session management, such as user ID, tokens, etc.
+					const credentialsToPublish = { userInfo };
+					const credentialsToProtect = { token };
+
+					/*
+					 * Publish any credentials you need to protect via a mechanism that can keep them private.
+					 * For example via local storage (accessible from a particular origin), or a Finsemble Router 
+					 * Pub/Sub topic with publish and subscribe callbacks.
+					 * 
+					 * e.g. 
+					 * FSBL.Clients.RouterClient.publish("OAuth_Access_Token", credentialsToProtect);
+					 * 
+					 * For an example of setting up a controlled PubSub topic see RouterPubSubTools.ts
+					 * Note: you'll need to do this before the first access to the topic - hence, do the
+					 * setup in a storage adapter if you'll use it there (and remember to replace references to
+					 * Finsemble Clients which have to imported in storage adapters).
 					 */
-					publishAuthorization(username, { token, userInfo });
+					
+					
+
+					/*
+					 * Calling  publishAuthorization() from the useAuth() hook is the final step of the startup 
+					 * authentication cycle (Finsemble will continue its boot phase after this call is made). 
+					 * 
+					 * The first parameter (username) is required as it used by Finsemble's storage adapters. 
+					 * 
+					 * The second parameter (credentialsToPublish) is optional. Credentials can contain anything 
+					 * that is useful for session management, such as user ID, tokens, etc..
+					 * These can be retrieved by *any* application running in Finsemble using our API.
+					 */
+					publishAuthorization(username, credentialsToPublish);
+
+					//implement token refresh here
+
+
 
 				}
 			} catch (err) {
