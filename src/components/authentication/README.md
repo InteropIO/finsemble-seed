@@ -11,7 +11,8 @@ Please note that:
 - [_oAuthPKCE.ts_](oAuthPKCE.ts) accesses Finsemble's `startup` auth configuration in [_/public/configs/application/config.json_](../../../public/configs/application/config.json) for the details needed to authenticate. 
 - In this version of the recipe the auth component is treated as a single page application (may be restricted by allowed callback URL and/or web origin) and hence no client secret is used in the access token retrieval. To upgrade it to use a flow with a backchannel and a client secret, access token retrieval that should be performed on a server, replacing the token retrieval in [`oAuthPKCA.getToken()`](oAuthPKCE.ts) with a call to your server, which should handle the retrieval and return the token to you.
 - If a refresh_token and expires_in value are returned with an access token, the example will attempt to refresh the access token automatically, ahead of expiry.
-- Some assembly is required if you wish to control disribution of access tokens to other applications. Examples are provided in [_RouterPubSubTools.ts_](RouterPubSubTools.ts) for setting up an access controlled PubSub topic and in [_Authentication.tsx_](Authentication.tsx) for publishing to that topic. 
+- Some assembly is required if you wish to control disribution of access tokens to other applications. Examples are provided in [_RouterPubSubTools.ts_](RouterPubSubTools.ts) for setting up an access controlled PubSub topic and in [_Authentication.tsx_](Authentication.tsx) for publishing to that topic.
+  - If using this code in a storage adapter `FSBL.Clients.*` references should be replaced with the appropriate imported client.
 
 
 See the [Finsemble Authentication tutorial](https://documentation.finsemble.com/tutorial-Authentication.html) for further details on how to work with Finsemble's authentication support.

@@ -1,5 +1,6 @@
 import { SubscribeCallback, PublishCallback } from "@finsemble/finsemble-core/types/clients/routerClient";
 
+
 /* Utility functions for creating a RouterPubSub topic that is accessed controlled.
  * Access control examples are provided based on criteria such as the component type 
  * name (same as the appId) or the host name from the current URL of the window.
@@ -29,7 +30,7 @@ import { SubscribeCallback, PublishCallback } from "@finsemble/finsemble-core/ty
 
 
 /**
- * Utility function for setting up a router PubSub topic that is accesse controlled 
+ * Utility function for setting up a router PubSub topic that is access controlled 
  * by criteria based on information in the RouterHeader (which can lead you to its
  * conponent type / appId or its current URL).
  * 
