@@ -2,13 +2,14 @@
  * Type representing the authorization details details returned after login.
  * If your auth system  returns different data please update this type to reflect it.
  */
- export interface AuthTokenDetails {
+export interface AuthTokenDetails {
 	access_token: string;
+	refresh_token: string;
 	id_token: string;
 	scope: string;
 	expires_in: number;
 	token_type: string;
-};
+}
 
 /**
  * Type representing an error on attempting to retrieve the access token.
@@ -17,10 +18,10 @@
 interface AuthTokenError {
 	error: string;
 	error_description: string;
-};
+}
 
 type TokenResponse = AuthTokenDetails | AuthTokenError;
-const isTokenError = (tok:TokenResponse): tok is AuthTokenError => {
+const isTokenError = (tok: TokenResponse): tok is AuthTokenError => {
 	return (tok as AuthTokenError).error !== undefined;
 };
 
@@ -35,14 +36,13 @@ const isTokenError = (tok:TokenResponse): tok is AuthTokenError => {
 		scope = "openid email",
 		state = "SU8nskju26XowSCg3bx2LeZq7MwKcwnQ7h6vQY8twd9QJECHRKs14OwXPdpNBI58",
 		redirect_uri = "https://dev-xo6vgelc.eu.auth0.com/authorize",
-		endpoint = "https://dev-xo6vgelc.eu.auth0.com" ,
+		endpoint = "https://dev-xo6vgelc.eu.auth0.com",
 		clientID= "Az8HDa8YLNw0sKApZsPwsonOTMRRyXnl"
   })
    * ```
    */
 export async function authorize(params?: {
 	scope?: string;
-	state?: string;
 	redirectURI?: string;
 	endpoint?: string;
 	clientID?: string;
@@ -123,12 +123,12 @@ export async function authorize(params?: {
    * @example
    * ```javascript
 	 const token =  await getToken({
-									clientID= "Az8HDa8YLNw0sKApZsPwsonOTMRRyXnl"
-									redirect_uri = "https://dev-xo6vgelc.eu.auth0.com/oauth/token",
-									endpoint = "https://dev-xo6vgelc.eu.auth0.com" ,
-								  });
+		 clientID= "Az8HDa8YLNw0sKApZsPwsonOTMRRyXnl",
+		 redirect_uri = "https://dev-xo6vgelc.eu.auth0.com/oauth/token",
+		 endpoint = "https://dev-xo6vgelc.eu.auth0.com" ,
+	 });
   
-	const accessToken = token.access_token;
+	 const accessToken = token.access_token;
    * ```
    */
 export function getToken(params?: {
@@ -150,7 +150,7 @@ export function getToken(params?: {
 			}
 
 			//Retrieve authentication config from Finsemble config to use in token request
-			//This portion may be moved off device to a server you control in order to 
+			//This portion may be moved off device to a server you control in order to
 			//make use of a client secret in addition to PKCE.
 			const { err, data: authConfigData } =
 				await FSBL.Clients.ConfigClient.getValue({
@@ -204,15 +204,16 @@ export function getToken(params?: {
 
 			const token: TokenResponse = await result.json();
 
-			if (isTokenError(token)){
-				const errorMsg = token.error + (token.error_description ? " - " + token.error_description : "");
+			if (isTokenError(token)) {
+				const errorMsg =
+					token.error +
+					(token.error_description ? " - " + token.error_description : "");
 				errorLog("Access token retrieval failed, reason: ", errorMsg);
 				reject(new Error(errorMsg));
 			} else {
-				log("token:", token);
+				debugLog("token:", token);
 				resolve(token);
 			}
-			
 		} catch (err) {
 			errorLog(err);
 			reject(err);
@@ -269,9 +270,148 @@ export async function getUserInfo({
 	});
 
 	const userInfo = await getUserInfo.json();
-	log("userInfo:",userInfo);
+	debugLog("userInfo:", userInfo);
 
 	return userInfo;
+}
+
+/**
+ * Retrieve a new access_token via a refresh_token.
+ * You may specify an optional reduced set of scopes for the refreshed access token,
+ * if not specified most OAuth providers will use the original set of scopes.
+ *
+ * _Note:_ Return data will be specific to your endpoint and may be different from the example below.
+ * Update the type defined at the start of this file to reflect what data your endpoint returns.
+ * 
+ * @example
+ * ```javascript
+   const token =  await refreshToken({
+	   clientID= "Az8HDa8YLNw0sKApZsPwsonOTMRRyXnl",
+	   refreshToken
+   });
+   const accessToken = token.access_token;
+* ```
+*/
+export function refreshToken(params: {
+	clientID?: string;
+	refreshToken: string;
+	scope?: string;
+	endpoint?: string;
+}): Promise<AuthTokenDetails> {
+	return new Promise<AuthTokenDetails>(async (resolve, reject) => {
+		try {
+			//Retrieve authentication config from Finsemble config to use in token request
+			//This portion may be moved off device to a server you control in order to
+			//make use of a client secret in addition to PKCE.
+			const { err, data: authConfigData } =
+				await FSBL.Clients.ConfigClient.getValue({
+					field: "finsemble.authentication.startup",
+				});
+
+			if (err)
+				throw new Error(
+					"Cannot access the config client in authentication component"
+				);
+
+			const endpoint = params?.endpoint ?? authConfigData?.token_url;
+
+			if (!endpoint) {
+				throw new Error(
+					`Data provided to refreshToken (phase 4) is missing an endpoint URL e.g. http://localhost:3375/token`
+				);
+			}
+
+			const formData: Record<string, string> = {
+				grant_type: "refresh_token",
+				client_id: params.clientID ?? authConfigData?.client_id,
+				refresh_token: params.refreshToken,
+			};
+			//if a reduced scope was specified, use it.
+			if (params.scope) {
+				formData.scope = params.scope;
+			}
+
+			// if we are missing values for the data then we want to log and error
+			if (hasMissingValues(formData)) {
+				throw new Error(
+					`Data provided to refreshToken (phase 4) is missing values: ${hasMissingValues(
+						formData
+					)} `
+				);
+			}
+
+			log("PKCE auth phase 4 - Refresh Access Token");
+
+			const body = new URLSearchParams(formData).toString();
+
+			const result = await fetch(endpoint, {
+				mode: "cors",
+				method: "POST",
+				headers: {
+					"Content-Type": "application/x-www-form-urlencoded",
+					Accept: "application/json",
+				},
+				body,
+			});
+
+			const token: TokenResponse = await result.json();
+
+			if (isTokenError(token)) {
+				const errorMsg =
+					token.error +
+					(token.error_description ? " - " + token.error_description : "");
+				errorLog("Access token refresh failed, reason: ", errorMsg);
+				reject(new Error(errorMsg));
+			} else {
+				debugLog("token:", token);
+				resolve(token);
+			}
+		} catch (err) {
+			errorLog(err);
+			reject(err);
+		}
+	});
+}
+
+export function setupAutomatedRefresh(params: {
+		token: AuthTokenDetails,
+		preemptExpirySeconds?: number,
+		retries?: number,
+		retryDelaySeconds?: number
+	},
+	refreshCompleteCallback: (err: string | null, refreshedToken: AuthTokenDetails | null) => void
+) {
+	const preemptExpiryBySecs = params.preemptExpirySeconds ?? 300;
+	const numRetries = params.retries ?? 3;
+	const retryDelaySecs = params.retryDelaySeconds ?? 60;
+
+	if (params.token.expires_in && params.token.refresh_token){
+		//Note expires_in is specified in seconds, convert to millisecs and preempt to allow for retries
+		const doRefreshAfterSeconds = params.token.expires_in - preemptExpiryBySecs;
+		let retryNum = 0;
+
+		log(`Access token expires in ${params.token.expires_in} seconds, setting up automated refresh in ${doRefreshAfterSeconds} seconds`);
+
+		const doRefresh = async () => {
+			try {
+				let refreshedToken = await refreshToken({refreshToken: params.token.refresh_token});
+				refreshCompleteCallback(null, refreshedToken);
+			} catch (err) {
+				if (retryNum < numRetries){
+					retryNum++;
+					log(`Retrying Access token refresh (retry ${retryNum} of ${numRetries}) in ${retryDelaySecs} seconds`);
+					setTimeout(doRefresh, retryDelaySecs*1000);		
+				} else {
+					const failureMessage = "Access token refresh retries exhausted. The access token was NOT refreshed.";
+					refreshCompleteCallback(failureMessage, null);
+				}
+			}
+		};
+		setTimeout(doRefresh, doRefreshAfterSeconds*1000);
+
+	} else {
+		errorLog("Access token did not come with details needed to refresh it");
+	}
 }
 
 /* Helper functions */

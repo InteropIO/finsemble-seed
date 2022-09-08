@@ -13,7 +13,7 @@ import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import { FinsembleProvider } from "@finsemble/finsemble-ui/react/components/FinsembleProvider";
 import { useAuth } from "@finsemble/finsemble-ui/react/hooks";
-import { authorize, getToken, getUserInfo, AuthTokenDetails } from './oAuthPKCE'
+import { authorize, getToken, getUserInfo, AuthTokenDetails, setupAutomatedRefresh } from './oAuthPKCE'
 import "@finsemble/finsemble-ui/react/assets/css/finsemble.css";
 import "@finsemble/finsemble-ui/react/assets/css/dialogs.css";
 import "@finsemble/finsemble-ui/react/assets/css/authentication.css";
@@ -52,15 +52,18 @@ export const Authentication = () => {
 				// check for the authentication code in the search params,
 				// if it doesn't exist then we need to do the authorization step else skip it and continue to get the token
 				if (!authorizationCode) {
-					authorize();
+					//Note that this function accepts arguments for the scope, redirectURI, endpoint and clientID
+					// which can override those set in the configuration (or the default in the case of the scope) 
+					// Often a particular scope, e.g. offline_access, is required in order to receive a refresh_token
+					authorize({scope: "openid profile offline_access"});
 				} else {
-					const token: AuthTokenDetails = await getToken();
+					let token: AuthTokenDetails = await getToken();
 					const accessToken = token.access_token;
 					const userInfo = await getUserInfo({ accessToken });
 					const username = userInfo.sub;
 
-					const credentialsToPublish = { userInfo };
-					const credentialsToProtect = { token };
+					let credentialsToPublish = { userInfo };
+					let credentialsToProtect = { token };
 
 					/*
 					 * Publish any credentials you need to protect via a mechanism that can keep them private.
@@ -75,8 +78,8 @@ export const Authentication = () => {
 					 * setup in a storage adapter if you'll use it there (and remember to replace references to
 					 * Finsemble Clients which have to imported in storage adapters).
 					 */
-					
-					
+
+
 
 					/*
 					 * Calling  publishAuthorization() from the useAuth() hook is the final step of the startup 
@@ -90,10 +93,35 @@ export const Authentication = () => {
 					 */
 					publishAuthorization(username, credentialsToPublish);
 
-					//implement token refresh here
 
+					/*
+					 * Now that we have an access token, we may wish to automatically refresh it before it expires.
+					 * We can do so by examining the expiry period on the token and using a refresh_token to
+					 * renew it, before republishing our credentials.
+					 */
+					const tokenRefreshedHandler = (err: string | null, refreshedToken: AuthTokenDetails | null) => {
+						if (err) {
+							error(err);
+						} else if (!refreshedToken) {
+							error("No token was returned!");
+						} else {
+							token = refreshedToken;
 
+							//republish public credentials
+							credentialsToPublish = { userInfo }; //note this has not been re-retrieved, but could be
+							publishAuthorization(username, credentialsToPublish);
 
+							//republish protected credentials
+							credentialsToProtect = { token };
+							/* e.g. 
+							 * FSBL.Clients.RouterClient.publish("OAuth_Access_Token", credentialsToProtect);
+							 */
+
+							//set up the next refresh
+							setupAutomatedRefresh({token},tokenRefreshedHandler);
+						}
+					}
+					setupAutomatedRefresh({token},tokenRefreshedHandler);
 				}
 			} catch (err) {
 				error(err)
