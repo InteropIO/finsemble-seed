@@ -1,5 +1,13 @@
 import { SubscribeCallback, PublishCallback } from "@finsemble/finsemble-core/types/clients/routerClient";
 
+// if Finsemble API clients are in scope use them, if not require them
+let Clients = FSBL?.Clients;
+if (!Clients) {
+	Clients = require("@finsemble/finsemble-core").Clients;
+}
+const Logger = Clients.Logger;
+const RouterClient = Clients.RouterClient;
+const LauncherClient = Clients.LauncherClient;
 
 /* Utility functions for creating a RouterPubSub topic that is accessed controlled.
  * Access control examples are provided based on criteria such as the component type 
@@ -42,7 +50,7 @@ import { SubscribeCallback, PublishCallback } from "@finsemble/finsemble-core/ty
 export const setUpControlledPubSubTopic = async (topicName: string, initialState: any, subscribeTestFn: HeaderTestFn, publishTestFn: HeaderTestFn) =>{
 	const subscribeCallback: SubscribeCallback = async (error, subscribe) => {
 		if (error) {
-			FSBL.Clients.Logger.error("Router PubSub subscribeCallback error",error);
+			Logger.error("Router PubSub subscribeCallback error",error);
 		} else {
 			//use the subscribeTestFn to check if the subscribing app should be allowed in
 			if (await subscribeTestFn(subscribe.header)){
@@ -54,7 +62,7 @@ export const setUpControlledPubSubTopic = async (topicName: string, initialState
 	}
 	const publishCallback: PublishCallback = async (error: any, publish: any) => {
 		if (error) {
-			FSBL.Clients.Logger.error("Router PubSub publishCallback error",error);
+			Logger.error("Router PubSub publishCallback error",error);
 		} else {
 			//use the publishTestFn to check if the app trying to publish should be allowed to
 			if (await publishTestFn(publish.header)){
@@ -66,7 +74,7 @@ export const setUpControlledPubSubTopic = async (topicName: string, initialState
 			publish.sendNotifyToAllSubscribers(null, publish.data);
 		}
 	}
-	return await FSBL.Clients.RouterClient.addPubSubResponder(
+	return await RouterClient.addPubSubResponder(
 		topicName,
 		initialState,
 		{	subscribeCallback,
@@ -91,7 +99,7 @@ export const hostNameTestFn: HeaderTestFn = async (header) => {
 	const descriptor = await getDescriptorForWindowName(windowName);
 	const url = descriptor.url;
 	if (!url) {
-		FSBL.Clients.Logger.log("Window descriptor did not contain a url. Is it a native component?");
+		Logger.log("Window descriptor did not contain a url. Is it a native component?");
 		return false;
 	}
 	const host = new URL(url).host;
@@ -127,7 +135,7 @@ export const getWindowNameFromRouterOrigin = (origin: string) => {
  *  (will return null for native components). 
  */
 export const getDescriptorForWindowName = async (windowName: string) => {
-	let {err, data: descriptors} = await FSBL.Clients.LauncherClient.getActiveDescriptors();
+	let {err, data: descriptors} = await LauncherClient.getActiveDescriptors();
 	if (err || !descriptors) {
 		throw new Error(`Failed to retrieve active descriptors: ${JSON.stringify(err ? err : descriptors)}`);
 	} else {

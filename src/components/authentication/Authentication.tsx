@@ -75,8 +75,7 @@ export const Authentication = () => {
 					 * 
 					 * For an example of setting up a controlled PubSub topic see RouterPubSubTools.ts
 					 * Note: you'll need to do this before the first access to the topic - hence, do the
-					 * setup in a storage adapter if you'll use it there (and remember to replace references to
-					 * Finsemble Clients which have to imported in storage adapters).
+					 * setup in a storage adapter if you'll use it there.
 					 */
 
 
