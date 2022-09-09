@@ -100,7 +100,8 @@
 			"enabled": false
 		},
 		"logger": {
-			"hotkeyShowCentralLogger": ["ctrl", "shift", "L"]
+			"hotkeyShowCentralLogger": ["ctrl", "shift", "L"],
+			"spawnAs": "process"
 		},
 		"storage": {
 			"defaultStorage": "IndexedDBAdapter",
