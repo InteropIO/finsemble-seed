@@ -1,7 +1,9 @@
 import { SubscribeCallback, PublishCallback } from "@finsemble/finsemble-core/types/clients/routerClient";
 
-// if Finsemble API clients are in scope use them, if not require them
-let Clients = FSBL?.Clients;
+// if Finsemble API clients are in scope use them, if not require them (allows use in a storage adapter)
+// Note: if using this file in a preload don't require it until the FSBLReady event has fired
+//  as the Clients won't be setup until then
+let Clients = window?.FSBL?.Clients;
 if (!Clients) {
 	Clients = require("@finsemble/finsemble-core").Clients;
 }

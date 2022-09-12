@@ -73,6 +73,8 @@ export async function authorize(params?: {
 		const state = randomBase64Generator();
 
 		// save the code verifier in the window session state to save for later
+		//  NOTE: the redirect URI must be on the same domain as the Authentication
+		//  component first running this code or it won't be accessible
 		saveStateAndVerifier(state, codeVerifier);
 
 		const url = new URL(endpoint);
@@ -373,42 +375,52 @@ export function refreshToken(params: {
 	});
 }
 
-export function setupAutomatedRefresh(params: {
-		token: AuthTokenDetails,
-		preemptExpirySeconds?: number,
-		retries?: number,
-		retryDelaySeconds?: number
+export function setupAutomatedRefresh(
+	params: {
+		token: AuthTokenDetails;
+		preemptExpirySeconds?: number;
+		retries?: number;
+		retryDelaySeconds?: number;
 	},
-	refreshCompleteCallback: (err: string | null, refreshedToken: AuthTokenDetails | null) => void
+	refreshCompleteCallback: (
+		err: string | null,
+		refreshedToken: AuthTokenDetails | null
+	) => void
 ) {
 	const preemptExpiryBySecs = params.preemptExpirySeconds ?? 300;
 	const numRetries = params.retries ?? 3;
 	const retryDelaySecs = params.retryDelaySeconds ?? 60;
 
-	if (params.token.expires_in && params.token.refresh_token){
+	if (params.token.expires_in && params.token.refresh_token) {
 		//Note expires_in is specified in seconds, convert to millisecs and preempt to allow for retries
 		const doRefreshAfterSeconds = params.token.expires_in - preemptExpiryBySecs;
 		let retryNum = 0;
 
-		log(`Access token expires in ${params.token.expires_in} seconds, setting up automated refresh in ${doRefreshAfterSeconds} seconds`);
+		log(
+			`Access token expires in ${params.token.expires_in} seconds, setting up automated refresh in ${doRefreshAfterSeconds} seconds`
+		);
 
 		const doRefresh = async () => {
 			try {
-				let refreshedToken = await refreshToken({refreshToken: params.token.refresh_token});
+				let refreshedToken = await refreshToken({
+					refreshToken: params.token.refresh_token,
+				});
 				refreshCompleteCallback(null, refreshedToken);
 			} catch (err) {
-				if (retryNum < numRetries){
+				if (retryNum < numRetries) {
 					retryNum++;
-					log(`Retrying Access token refresh (retry ${retryNum} of ${numRetries}) in ${retryDelaySecs} seconds`);
-					setTimeout(doRefresh, retryDelaySecs*1000);		
+					log(
+						`Retrying Access token refresh (retry ${retryNum} of ${numRetries}) in ${retryDelaySecs} seconds`
+					);
+					setTimeout(doRefresh, retryDelaySecs * 1000);
 				} else {
-					const failureMessage = "Access token refresh retries exhausted. The access token was NOT refreshed.";
+					const failureMessage =
+						"Access token refresh retries exhausted. The access token was NOT refreshed.";
 					refreshCompleteCallback(failureMessage, null);
 				}
 			}
 		};
-		setTimeout(doRefresh, doRefreshAfterSeconds*1000);
-
+		setTimeout(doRefresh, doRefreshAfterSeconds * 1000);
 	} else {
 		errorLog("Access token did not come with details needed to refresh it");
 	}
@@ -447,11 +459,13 @@ function uuid(): string {
 const randomBase64Generator = () => window.btoa(uuid());
 
 function saveStateAndVerifier(state: string, codeVerifier: string) {
-	/*
-	Don't overwrite our saved state if location has the state parameter.
-	This means we got authorization from the AS, and we need to compare them later.
-   */
+	// Don't overwrite our saved state if location has the state parameter.
+	//  This means we got authorization from the AS, and we need to compare
+	//  them later.
 	if (window.location.search.includes("state")) return;
+	// NOTE: the redirect URI (where this data will be accessed) must be on
+	//  the same domain as the Authentication component first running this code
+	//  or it won't be accessible
 	const storage = window.sessionStorage;
 	storage.clear();
 	storage.setItem("state", state);
