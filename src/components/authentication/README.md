@@ -15,7 +15,7 @@ Please note that:
 
 See the [Finsemble Authentication tutorial](https://documentation.finsemble.com/tutorial-Authentication.html) for further details on how to work with Finsemble's authentication support.
 
-**Note:** the recipe is preconfigured for an Auth0 zero account which is used for testing. Test login credentials:
+**Note:** the recipe is preconfigured for an Auth0 account which is used for testing. Test login credentials:
 
 - username: kris+oauthtest@cosaic.io
 - password: testWithAuth0
