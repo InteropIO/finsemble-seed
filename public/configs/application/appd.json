@@ -125,7 +125,12 @@
 				{
 					"name": "ViewChart",
 					"displayName": "View Chart",
-					"contexts": ["fdc3.instrument", "fdc3.instrumentList", "fdc3.position", "fdc3.portfolio"]
+					"contexts": [
+						"fdc3.instrument",
+						"fdc3.instrumentList",
+						"fdc3.position",
+						"fdc3.portfolio"
+					]
 				}
 			]
 		},
@@ -252,6 +257,37 @@
 					"src": "$moduleRoot/ui-components/Tour/take-a-tour.svg"
 				}
 			]
+		},
+		"ScrollbarStyling": {
+			"appId": "ScrollbarStyling",
+			"name": "ScrollbarStyling",
+			"manifest": {
+				"window": {
+					"url": "$applicationRoot/ScrollbarStyling/index.html",
+					"affinity": "workspaceComponents",
+					"options": {
+						"resizable": true,
+						"autoShow": true,
+						"alwaysOnTop": false,
+						"addToWorkspace": true
+					},
+					"top": "center",
+					"left": "center",
+					"width": 800,
+					"height": 600
+				},
+				"component": {
+					"displayName": "ScrollbarStyling",
+					"preload": "$applicationRoot/ScrollbarStylerPreload/index.js"
+				},
+				"foreign": {
+					"components": {
+						"App Launcher": {
+							"launchableByUser": true
+						}
+					}
+				}
+			}
 		}
 	}
 }

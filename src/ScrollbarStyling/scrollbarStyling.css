@@ -1,0 +1,21 @@
+/* Proposed standard for styling scrollbars. Not yet supported in 
+Webkit/Chrome/Electron but will be in the future.*/
+html, body {
+	scrollbar-width: thin;
+	scrollbar-color: var(--scrollbar-color) var(--core-primary)
+}
+
+/* Vendor prefix styles currently supported by Webkit/Chrome/Electron.*/
+html::-webkit-scrollbar,body::-webkit-scrollbar {
+	width: 12px;
+}
+
+html::-webkit-scrollbar-track,body::-webkit-scrollbar-track {
+	background: var(--core-primary);
+}
+
+html::-webkit-scrollbarS-thumb,body::-webkit-scrollbar-thumb {
+	background-color: var(--scrollbar-color);
+	border-radius: 20px;
+	border: 3px solid var(--accent-primary);
+}
