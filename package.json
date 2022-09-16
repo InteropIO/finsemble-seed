@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "adapter": "finsemble adapter",
-    "build": "finsemble build",
+    "build": "finsemble build --watch=false",
     "clean": "finsemble clean",
     "create-app": "finsemble create",
     "dev": "finsemble build --start=true",
@@ -17,6 +17,6 @@
   "author": "Cosaic",
   "license": "SEE LICENSE IN LICENSE",
   "dependencies": {
-    "@finsemble/finsemble-core": "8.0.0-beta.4"
+    "@finsemble/finsemble-core": "8.0.0"
   }
 }
