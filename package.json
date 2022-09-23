@@ -1,11 +1,12 @@
 {
   "name": "finsemble-seed",
-  "version": "8.0.0",
+  "version": "0.0.0",
   "scripts": {
     "adapter": "finsemble adapter",
     "build": "finsemble build --watch=false",
     "clean": "finsemble clean",
-    "create-app": "finsemble create",
+    "create-app": "finsemble create-app",
+    "create-preload": "finsemble create-preload",
     "dev": "finsemble build --start=true",
     "launch": "finsemble launch",
     "makeInstaller": "finsemble makeInstaller",
@@ -17,6 +18,6 @@
   "author": "Cosaic",
   "license": "SEE LICENSE IN LICENSE",
   "dependencies": {
-    "@finsemble/finsemble-core": "8.0.0"
+    "@finsemble/finsemble-core": "8.0.1"
   }
 }
