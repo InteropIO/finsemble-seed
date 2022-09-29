@@ -1,14 +1,16 @@
 {
   "$schema": "../../../node_modules/@finsemble/finsemble-core/configs/schemas/fileBasedSchemas/manifestFile.schema.json",
+  "devtools_port": 9090,
   "startup_app": {
     "requireHandshake": true
   },
+  "splashScreenTimeout": 3000,
   "appAssets": [
     {
-      "src": "https://assets.finsemble.com/releases/8.0.1/assimilation/assimilation.zip",
+      "src": "https://assets.finsemble.com/releases/7.3.5/assimilation/assimilation.zip",
+      "version": "7.3.5",
       "alias": "assimilation",
-      "target": "AssimilationMain.exe",
-      "version": "8.0.1"
+      "target": "AssimilationMain.exe"
     }
   ],
   "finsemble": {
@@ -36,7 +38,7 @@
       "//": "Customer macros definitions must go here (e.g. 'myApplicationRoot' so it can be referenced elsewhere as '$myApplicationRoot'), along with other custom config at this level."
     },
     "importConfig": [
-      "./config.json"
+      "../../configs/application/config.json"
     ]
   },
   "finsemble-electron-adapter": {
