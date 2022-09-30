@@ -5,10 +5,10 @@
   },
   "appAssets": [
     {
-      "src": "https://assets.finsemble.com/releases/8.0.1/assimilation/assimilation.zip",
+      "src": "https://assets.finsemble.com/releases/8.1.0-beta.1/assimilation/assimilation.zip",
       "alias": "assimilation",
       "target": "AssimilationMain.exe",
-      "version": "8.0.1"
+      "version": "8.1.0-beta.1"
     }
   ],
   "finsemble": {
@@ -35,8 +35,9 @@
     "custom": {
       "//": "Customer macros definitions must go here (e.g. 'myApplicationRoot' so it can be referenced elsewhere as '$myApplicationRoot'), along with other custom config at this level."
     },
+    "windowTitleBarUrl": "$applicationRoot/components/windowTitleBar/WindowTitleBar.js",
     "importConfig": [
-      "./config.json"
+      "../../configs/application/config.json"
     ]
   },
   "finsemble-electron-adapter": {
