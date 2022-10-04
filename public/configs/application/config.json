@@ -2,12 +2,6 @@
 	"comment": "Top-level application config for development, adding on top of the core config",
 	"$schema": "../../../node_modules/@finsemble/finsemble-core/configs/schemas/fileBasedSchemas/applicationConfigFile.schema.json",
 	"accessibleLinker": true,
-	"authentication": {
-		"startup": {
-			"adapter": "PASSWORD",
-			"component": "Registration"
-		}
-	},
 	"servicesConfig": {
 		"distributedStore": {
 			"initialStores": [
@@ -32,7 +26,7 @@
 											"appID": "2"
 										},
 										{
-											"name": "Process Monitor",
+											"name": "ProcessMonitor",
 											"appID": "pm"
 										},
 										{
@@ -65,7 +59,7 @@
 		},
 		"launcher": {
 			"staggerPixels": 40,
-			"unknownComponent": "nonConfiguredComponent",
+			"unknownComponent": "NonConfiguredComponent",
 			"defaultPreloads": {
 				"//": "Add preloads that will be injected into each browserView."
 			}
@@ -100,8 +94,7 @@
 			"enabled": false
 		},
 		"logger": {
-			"hotkeyShowCentralLogger": ["ctrl", "shift", "L"],
-			"spawnAs": "process"
+			"hotkeyShowCentralLogger": ["ctrl", "shift", "L"]
 		},
 		"storage": {
 			"defaultStorage": "IndexedDBAdapter",
@@ -111,8 +104,8 @@
 				"finsemble.workspace.cache": "IndexedDBAdapter"
 			},
 			"dataStoreAdapters": {
-				"LocalStorageAdapter": "$applicationRoot/adapters/localStorageAdapter.js",
-				"IndexedDBAdapter": "$applicationRoot/adapters/indexedDBAdapter.js"
+				"LocalStorageAdapter": "$moduleRoot/adapters/localStorageAdapter.js",
+				"IndexedDBAdapter": "$moduleRoot/adapters/indexedDBAdapter.js"
 			}
 		},
 		"workspace": {
@@ -127,13 +120,7 @@
 	"globalHotkeys": {},
 	"//": "this importConfig contains components that are necessary to start Finsemble. All other components are loaded dynamically. See server/auth/test.json",
 	"importConfig": [
-		"$configRoot/application/appd.json",
-		"$configRoot/application/UIComponents.json",
-		"$configRoot/application/components.json",
-		"$configRoot/application/workspaces.json",
-		"$configRoot/application/services.json",
-		"$configRoot/application/securityPolicies.json",
-		"$configRoot/application/dashbarConfig.json",
+		"$configRoot/application/appd.json"
 		"$applicationRoot/services/workspaceDataMigration/config.json",
 		"$applicationRoot/components/workspacemigration/config.json"
 	],
