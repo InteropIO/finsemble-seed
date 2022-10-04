@@ -1,6 +1,0 @@
-{
-    "workspacemigration": {
-        "output": "components/workspacemigration/workspacemigration",
-        "entry": "./src/components/workspacemigration/workspacemigration.js"
-    }
-}

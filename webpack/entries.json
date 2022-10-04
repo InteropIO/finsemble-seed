@@ -1,0 +1,5 @@
+[
+	"./src/services/workspaceDataMigration/workspaceDataMigrationService.js",
+	"./src/components/workspacemigration/workspacemigration.js"
+]
+

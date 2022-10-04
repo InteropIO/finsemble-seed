@@ -120,7 +120,7 @@
 	"globalHotkeys": {},
 	"//": "this importConfig contains components that are necessary to start Finsemble. All other components are loaded dynamically. See server/auth/test.json",
 	"importConfig": [
-		"$configRoot/application/appd.json"
+		"$configRoot/application/appd.json",
 		"$applicationRoot/services/workspaceDataMigration/config.json",
 		"$applicationRoot/components/workspacemigration/config.json"
 	],
