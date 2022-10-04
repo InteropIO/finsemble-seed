@@ -1,0 +1,90 @@
+@import  url('../../../assets/css/_globals.css');
+
+body {
+	margin:0px;
+	font-size: var(--procMonitor-font-size);
+	font-weight: var(--procMonitor-font-weight);
+	font-family: var(--font-family);
+	color: var(--procMonitor-font-color);
+	background-color: var(--procMonitor-background-color);
+}
+
+.hidden {
+	display: none !important;
+}
+
+.warning {
+	color: #f00;
+	font-weight: 400;
+	font-size: 125%;
+	text-align: center;
+}
+
+.container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items:center;
+	padding-left: 15px;
+    padding-right: 15px;
+}
+
+.row {
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-evenly;
+	align-items:center;
+	flex-wrap:wrap
+}
+
+.spacer1 {
+	height: 50px;
+}
+
+.spacer2 {
+	height: 15px;
+}
+
+
+.spacer3 {
+	height: 15px;
+}
+
+.spacer4 {
+	height: 0px;
+}
+
+h1 {
+	font-family: "Open Sans", sans-serif;
+	font-weight: 300;
+}
+
+h2 {
+	font-family: "Open Sans", sans-serif;
+	font-weight: 300;
+}
+
+button {
+	width: 230px;
+    text-align: center !important;
+    margin: 10px;
+    max-width: 2000px;
+    -webkit-appearance:none;
+    background-color: #2068C3;
+    color: #FFF;
+    font-family: "Open Sans", sans-serif;
+	font-weight: 400;
+	font-size: 125%;
+    border: 0px;
+    border-radius: 3px;
+    padding: 10px 15px;
+    vertical-align: middle;
+	transition: all .2s ease;
+
+}
+button:hover {
+	background-color: #039bff;
+	cursor: pointer;
+	transition: all .2s ease;
+}

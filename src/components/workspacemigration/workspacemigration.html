@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Data Migration Assistant</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="workspacemigration.css">
+  <script src="workspacemigration.js"></script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="spacer1"></div>
+    <img src="../../assets/img/finsembleDarkBG_noText.png" id="finsembleLogo" height="100">
+    <div class="spacer2"></div>
+    <h1>Workspace Migration Assistant</h1>
+
+    <div id="migrationWarning" class="migration-needed container">
+      <h2>Your workspace data needs to be migrated.</h2>
+      <p class="warning">If you do not wish to proceed with migration, click "Cancel and shut down" and contact your IT helpdesk.</p>
+      <div class="row">
+        <button id="cancel">Cancel and shut down.</button> 
+        <button id="begin">Begin migration now.</button>
+      </div>
+    </div>
+
+    <div id="migrationNotNeeded" class="hidden migration-not-needed container">
+      <h2>Your workspace data has been migrated. You may dismiss this window.</h2>
+      <button id="close">Close</button> 
+    </div>
+
+    <div id="migrationComplete" class="hidden migration-not-needed container">
+        <h2>Your workspace data has been migrated.</h2>
+        <button id="done">Close</button>
+    </div>
+
+    <div id="migrationError" class="hidden migration-error container">
+        <h2>An error occurred during the migration! Please report this to your IT help desk</h2>
+        <button id="close_on_error">Close</button>
+    </div>
+  </div>
+</body>
+
+</html>
