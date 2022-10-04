@@ -134,7 +134,8 @@
 		"$configRoot/application/services.json",
 		"$configRoot/application/securityPolicies.json",
 		"$configRoot/application/dashbarConfig.json",
-		"$applicationRoot/services/workspaceDataMigration/config.json"
+		"$applicationRoot/services/workspaceDataMigration/config.json",
+		"$applicationRoot/components/workspacemigration/config.json"
 	],
 	"toolbarMenus": {}
 }

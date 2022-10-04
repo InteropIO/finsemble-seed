@@ -1,8 +1,7 @@
-import Finsemble from "@finsemble/finsemble-core";
-import _get from "lodash.get";
-import _set from "lodash.set";
+const Finsemble = require("@finsemble/finsemble-core");
+import _get from "lodash";
+import _set from "lodash";
 
-const BaseService = Finsemble.baseService;
 const {
 	RouterClient,
 	Logger,
@@ -12,9 +11,6 @@ const {
 } = Finsemble.Clients;
 
 Logger.start();
-StorageClient.initialize();
-WorkspaceClient.initialize();
-LauncherClient.initialize();
 
 //Migration config
 const MIGRATION_NAME = "workspace_migration_20200227";
@@ -52,26 +48,24 @@ const MIGRATION_SOURCE_TO_DESTINATION_VALUE_MAP = {
  * the content of the windowData parameter..
  * @param {*} windowData
  */
-const migrationRequired = function(windowData) {
+const migrationRequired = function (windowData) {
 	// TODO: Implement a test  to determine whether a window needs to be migrated here, e.g.
-	let val = _get(windowData,MIGRATION_SOURCE_FIELD);
-	return  val&&
-		(MIGRATION_SOURCE_TO_DESTINATION_VALUE_MAP[val] ? true : false);
-
+	let val = _get(windowData, MIGRATION_SOURCE_FIELD);
+	return val && !!MIGRATION_SOURCE_TO_DESTINATION_VALUE_MAP[val];
 }
 
 /**
  * Migration function applied to each window in the workspace definitions.
  * @param {*} windowData
  */
-const migrateWindow = function(windowData) {
+const migrateWindow = function (windowData) {
 	//check if the MIGRATION_SOURCE_FIELD has a value indicating a migration of the windows config is required
 	if (migrationRequired(windowData)) {
 
 		//TODO: implement your migration function that will update the window data
 		//e.g.: update the window object with a new component type
-		let sourceVal = _get(windowData,MIGRATION_SOURCE_FIELD);
-		let toApply = MIGRATION_SOURCE_TO_DESTINATION_VALUE_MAP[sourceVal];;
+		let sourceVal = _get(windowData, MIGRATION_SOURCE_FIELD);
+		let toApply = MIGRATION_SOURCE_TO_DESTINATION_VALUE_MAP[sourceVal];
 		let destinationFields = Object.keys(toApply);
 		destinationFields.forEach((field) => {
 			_set(windowData, field, toApply[field]);
@@ -96,23 +90,23 @@ const migrateWindow = function(windowData) {
  * @param {*} workspaceName
  * @param {*} workspaceData
  */
-const migrateWorkspace = function(workspaceName, workspaceData) {
+const migrateWorkspace = function (workspaceName, workspaceData) {
 	let madeChanges = false;
 	let workspaceObj = workspaceData[workspaceName];
 
 
 	//migrate each window in the workspace and determine if any changes were made
-	for(let w=0; w<workspaceObj.windows.length; w++){
+	for (let w = 0; w < workspaceObj.windows.length; w++) {
 
 		//lookup the new componentType for the window somehow - probably using the old window name
 		let windowName = workspaceObj.windows[w];
 		let migratedWindow = migrateWindow(workspaceObj.windowData[w]);
-		if (migratedWindow){
+		if (migratedWindow) {
 			workspaceObj.windowData[w] = migratedWindow;
 			madeChanges = true;
 		}
 	}
-	if (madeChanges){
+	if (madeChanges) {
 		workspaceData[workspaceName] = workspaceObj;
 		return workspaceData;
 	} else {
@@ -125,17 +119,17 @@ const migrateWorkspace = function(workspaceName, workspaceData) {
  * Retrieves and migrates all workspaces, saving any changes that are made.
  *
  */
-const runMigration = function() {
+const runMigration = function () {
 	const promiseSet = [];
 
 	let activeWorkspace = "Default Workspace";
 	//getcurrent workspace name
 	WorkspaceClient.getActiveWorkspace((err, response) => {
-		if (response && response.data && response.data.name){
+		if (response && response.data && response.data.name) {
 			activeWorkspace = response.data.name;
 			Logger.log("*** Got active workspace: ", activeWorkspace);
 
-			WorkspaceClient.createWorkspace(MIGRATION_TEMP_WORKSPACE_NAME, {switchAfterCreation: true}, function(err, response) {
+			WorkspaceClient.createWorkspace(MIGRATION_TEMP_WORKSPACE_NAME, {switchAfterCreation: true}, function (err, response) {
 				if (!err) {
 					//get all workspace names
 					WorkspaceClient.getWorkspaces((err, response) => {
@@ -145,24 +139,24 @@ const runMigration = function() {
 							Logger.log("*** migrating " + workspace.name);
 							//export and migrate each workspace
 							promiseSet.push(new Promise((resolve, reject) => {
-								WorkspaceClient.export({'workspaceName': workspace.name}, function(err, workspaceDefinition) {
+								WorkspaceClient.export({'workspaceName': workspace.name}, function (err, workspaceDefinition) {
 									if (err) {
 										reject(new Error(err));
 									} else {
 										//migrate workspace
 										Logger.log(`*** exported workspace definition for '${workspace.name}': `, workspaceDefinition);
 										let migrated = migrateWorkspace(workspace.name, workspaceDefinition);
-										if (migrated){
+										if (migrated) {
 											Logger.log(`*** migrated workspace data for '${workspace.name}'`, migrated);
 											//import back to replace existing workspace
 											WorkspaceClient.import({workspaceJSONDefinition: migrated, force: true})
-											.then(() => {
-												resolve();
-												Logger.log("*** migrated " + workspace.name);
-											})
-											.catch((err2) => {
-												reject(new Error(err2));
-											});
+												.then(() => {
+													resolve();
+													Logger.log("*** migrated " + workspace.name);
+												})
+												.catch((err2) => {
+													reject(new Error(err2));
+												});
 										} else {
 											Logger.log("*** no change from migration of " + workspace.name);
 											resolve();
@@ -174,28 +168,44 @@ const runMigration = function() {
 						});
 
 						Promise.all(promiseSet)
-						.then(() => {
-							completeMigration(activeWorkspace);
-						}).catch((err) => {
+							.then(() => {
+								completeMigration(activeWorkspace);
+							}).catch((err) => {
 							Logger.error("*** Migration error occurred during migration: ", err);
-							StorageClient.save({ topic: "finsemble", key: `${MIGRATION_NAME}_ERROR`, value: "Migration error: error occurred during migration: " + JSON.stringify(err) });
+							StorageClient.save({
+								topic: "finsemble",
+								key: `${MIGRATION_NAME}_ERROR`,
+								value: "Migration error: error occurred during migration: " + JSON.stringify(err)
+							});
 							RouterClient.publish("Migration", "error");
 						});
 					});
 				} else {
 					Logger.error("*** Migration error: error occurred when creating a temporary workspace for the migration", err);
-					StorageClient.save({ topic: "finsemble", key: `${MIGRATION_NAME}_ERROR`, value: "Migration error: error occurred when creating a temporary workspace for the migration: " + JSON.stringify(err) });
+					StorageClient.save({
+						topic: "finsemble",
+						key: `${MIGRATION_NAME}_ERROR`,
+						value: "Migration error: error occurred when creating a temporary workspace for the migration: " + JSON.stringify(err)
+					});
 					RouterClient.publish("Migration", "error");
 				}
 			});
 		} else {
-			if (err){
+			if (err) {
 				Logger.error("*** Migration error: error occurred when retrieving the active workspace", err);
-				StorageClient.save({ topic: "finsemble", key: `${MIGRATION_NAME}_ERROR`, value: "Migration error: " + JSON.stringify(err) });
+				StorageClient.save({
+					topic: "finsemble",
+					key: `${MIGRATION_NAME}_ERROR`,
+					value: "Migration error: " + JSON.stringify(err)
+				});
 				RouterClient.publish("Migration", "error");
 			} else {
 				Logger.error("*** Migration error: Invalid response received when querying active workspace, response: ", response);
-				StorageClient.save({ topic: "finsemble", key: `${MIGRATION_NAME}_ERROR`, value: "Migration error: Invalid response to active workspace query, response: " + JSON.stringify(response) });
+				StorageClient.save({
+					topic: "finsemble",
+					key: `${MIGRATION_NAME}_ERROR`,
+					value: "Migration error: Invalid response to active workspace query, response: " + JSON.stringify(response)
+				});
 				RouterClient.publish("Migration", "error");
 			}
 		}
@@ -205,21 +215,21 @@ const runMigration = function() {
 /**
  * Mark the migration completed.
  */
-const completeMigration = function(activeWorkspace) {
+const completeMigration = function (activeWorkspace) {
 	//complete migration
-	StorageClient.save({ topic: "finsemble", key: `${MIGRATION_NAME}`, value: Date.now() });
+	StorageClient.save({topic: "finsemble", key: `${MIGRATION_NAME}`, value: Date.now()});
 	RouterClient.publish("Migration", "end");
 	Logger.log("*** Migration complete");
 
 	//reload the activeWorkspace
-	WorkspaceClient.switchTo({name: activeWorkspace}, function(err, response) {
-		if (err){
+	WorkspaceClient.switchTo({name: activeWorkspace}, function (err, response) {
+		if (err) {
 			Logger.error("*** Migration error: on final switch to active workspace: ", err);
 		}
 		WorkspaceClient.remove({
 			name: MIGRATION_TEMP_WORKSPACE_NAME
-		}, function(err, response) {
-			if (err){
+		}, function (err, response) {
+			if (err) {
 				Logger.error("*** Migration error: on final removal of temp workspace: ", err);
 			}
 		});
@@ -231,15 +241,15 @@ const completeMigration = function(activeWorkspace) {
  * "migrated_from_<adapter to migrate from>",
  * which in this example is "migrated_from_IndexedDBAdapter".
  */
-const fetchUserStatus = function() {
-	StorageClient.get({ topic: "finsemble", key: `${MIGRATION_NAME}` }, (err, data) => {
+const fetchUserStatus = function () {
+	StorageClient.get({topic: "finsemble", key: `${MIGRATION_NAME}`}, (err, data) => {
 		if (err) {
 			Logger.log(`*** Error fetching the user migration status for migration ${MIGRATION_NAME}.`);
 		}
 
 		if (!data) {
 			// The user should be migrated.
-			RouterClient.addPubSubResponder("Migration", { "State" : "start"}, {
+			RouterClient.addPubSubResponder("Migration", {"State": "start"}, {
 				publishCallback: (err, publish) => {
 					if (err) {
 						Logger.error("*** workspacemigration failed to publish callback", err);
@@ -248,7 +258,7 @@ const fetchUserStatus = function() {
 					if (publish) {
 						publish.sendNotifyToAllSubscribers(null, publish.data);
 
-						if (publish.data == "begin") {
+						if (publish.data === "begin") {
 							Logger.log("*** workspacemigration begin")
 							runMigration();
 						}
@@ -271,33 +281,42 @@ const fetchUserStatus = function() {
  * In this example, IndexedDB data is being migrated to LocalStorage for all internal Finsemble data.
  *
  */
-class WorkspaceDataMigrationService extends BaseService {
-	constructor(args) {
-		super(args);
+class WorkspaceDataMigrationService extends Finsemble.baseService {
+	/**
+	 * Initializes a new instance of the newsService class.
+	 */
+	constructor() {
+		super({
+			// Declare any service dependencies that must be available before your service starts up.
+			startupDependencies: {},
+		});
+
+		this.readyHandler = this.readyHandler.bind(this);
+
+		this.onBaseServiceReady(this.readyHandler);
+	}
+
+	/**
+	 * Fired when the service is ready for initialization
+	 * @param {function} callback
+	 */
+	readyHandler(callback) {
+		let ranMigrationCheck = false; //to make sure we only do this once, as technically auth can be run multiple times
+
+		RouterClient.subscribe("AuthorizationState", function (err, notify) {
+			if (err) {
+				Logger.error("*** workspacemigration failed to auth");
+			} else {
+				if (!ranMigrationCheck && notify.data.state === "done") {
+					ranMigrationCheck = true;
+					fetchUserStatus();
+				}
+			}
+		})
+		callback();
 	}
 }
 
-const dms = new WorkspaceDataMigrationService({
-	startupDependencies: {
-		services: ["authenticationService", "configService", "storageService", "workspaceService"]
-	}
-});
+const serviceInstance = new WorkspaceDataMigrationService();
 
-dms.onBaseServiceReady((callback) => {
-	let ranMigrationCheck = false; //to make sure we only do this once, as technically auth can be run multiple times
-
-	RouterClient.subscribe("AuthorizationState", function(err,notify) {
-		if (err) {
-			Logger.error("*** workspacemigration failed to auth");
-		} else {
-			if (!ranMigrationCheck && notify.data.state == "done") {
-				ranMigrationCheck = true;
-				fetchUserStatus();
-			}
-		}
-	})
-	callback();
-});
-
-dms.start();
-// module.exports = dms;
+serviceInstance.start();

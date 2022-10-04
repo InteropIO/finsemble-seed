@@ -1,11 +1,13 @@
 {
     "services": {
         "workspaceDataMigrationService": {
-            "useWindow": true,
-            "active": true,
-            "name": "workspaceDataMigrationService",
-            "visible": false,
-            "html": "$applicationRoot/services/workspaceDataMigration/workspaceDataMigrationService.html"
+					"bootParams": {
+						"stage": "preuser",
+						"dependencies": []
+					},
+					"name": "workspaceDataMigrationService",
+					"visible": false,
+					"html": "$applicationRoot/services/workspaceDataMigration/workspaceDataMigrationService.html"
         }
     }
 }
