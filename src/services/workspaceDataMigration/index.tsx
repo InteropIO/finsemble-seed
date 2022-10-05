@@ -1,6 +1,8 @@
-const Finsemble = require("@finsemble/finsemble-core");
+// @ts-ignore
+import {StandardError, types, Workspace, WorkspaceImport} from "@finsemble/finsemble-core";
 import {get} from "lodash";
 import {set} from "lodash";
+import {FinsembleWindowData} from "@finsemble/finsemble-core/dist/lib/platform/services/window/types";
 
 const {
 	RouterClient,
@@ -8,7 +10,7 @@ const {
 	StorageClient,
 	WorkspaceClient,
 	LauncherClient
-} = Finsemble.Clients;
+} = FSBL.Clients;
 
 Logger.start();
 
@@ -28,7 +30,7 @@ const MIGRATION_TEMP_WORKSPACE_NAME = "TEMPORARY MIGRATION WORKSPACE";
 //Note: to map data based on the window name field, set to "name"
 const MIGRATION_SOURCE_FIELD = "componentType";
 //map of values of the source field to fields and values to set, which are defined as destination field path:value
-const MIGRATION_SOURCE_TO_DESTINATION_VALUE_MAP = {
+const MIGRATION_SOURCE_TO_DESTINATION_VALUE_MAP:any = {
 	"Welcome Component": {
 		"componentType": "Process Monitor",
 		"customData.component.type": "Process Monitor",
@@ -48,9 +50,9 @@ const MIGRATION_SOURCE_TO_DESTINATION_VALUE_MAP = {
  * the content of the windowData parameter..
  * @param {*} windowData
  */
-const migrationRequired = function (windowData) {
+const migrationRequired = (windowData:FinsembleWindowData) => {
 	// TODO: Implement a test  to determine whether a window needs to be migrated here, e.g.
-	let val = _get(windowData, MIGRATION_SOURCE_FIELD);
+	let val = get(windowData, MIGRATION_SOURCE_FIELD);
 	return val && !!MIGRATION_SOURCE_TO_DESTINATION_VALUE_MAP[val];
 }
 
@@ -58,17 +60,17 @@ const migrationRequired = function (windowData) {
  * Migration function applied to each window in the workspace definitions.
  * @param {*} windowData
  */
-const migrateWindow = function (windowData) {
+const migrateWindow = (windowData:FinsembleWindowData | undefined) => {
 	//check if the MIGRATION_SOURCE_FIELD has a value indicating a migration of the windows config is required
-	if (migrationRequired(windowData)) {
+	if (windowData && migrationRequired(windowData)) {
 
 		//TODO: implement your migration function that will update the window data
 		//e.g.: update the window object with a new component type
-		let sourceVal = _get(windowData, MIGRATION_SOURCE_FIELD);
+		let sourceVal = get(windowData, MIGRATION_SOURCE_FIELD);
 		let toApply = MIGRATION_SOURCE_TO_DESTINATION_VALUE_MAP[sourceVal];
 		let destinationFields = Object.keys(toApply);
 		destinationFields.forEach((field) => {
-			_set(windowData, field, toApply[field]);
+			set(windowData, field, toApply[field]);
 		});
 
 		//N.B. you may also want to override the 'customData' element with the full new configuration of the component (which you could retrieve with the ConfigClient)
@@ -90,7 +92,9 @@ const migrateWindow = function (windowData) {
  * @param {*} workspaceName
  * @param {*} workspaceData
  */
-const migrateWorkspace = function (workspaceName, workspaceData) {
+const migrateWorkspace = (workspaceName:string, workspaceData:{
+	[key: string]: WorkspaceImport;
+}) => {
 	let madeChanges = false;
 	let workspaceObj = workspaceData[workspaceName];
 
@@ -99,9 +103,8 @@ const migrateWorkspace = function (workspaceName, workspaceData) {
 	for (let w = 0; w < workspaceObj.windows.length; w++) {
 
 		//lookup the new componentType for the window somehow - probably using the old window name
-		let windowName = workspaceObj.windows[w];
-		let migratedWindow = migrateWindow(workspaceObj.windowData[w]);
-		if (migratedWindow) {
+		let migratedWindow = migrateWindow(workspaceObj.windowData?.[w]);
+		if (migratedWindow && workspaceObj.windowData) {
 			workspaceObj.windowData[w] = migratedWindow;
 			madeChanges = true;
 		}
@@ -119,29 +122,31 @@ const migrateWorkspace = function (workspaceName, workspaceData) {
  * Retrieves and migrates all workspaces, saving any changes that are made.
  *
  */
-const runMigration = function () {
-	const promiseSet = [];
+const runMigration = () => {
+	const promiseSet:Promise<any>[] = [];
 
-	let activeWorkspace = "Default Workspace";
+	let activeWorkspace:string = "Default Workspace";
 	//getcurrent workspace name
 	WorkspaceClient.getActiveWorkspace((err, response) => {
 		if (response && response.data && response.data.name) {
 			activeWorkspace = response.data.name;
 			Logger.log("*** Got active workspace: ", activeWorkspace);
 
-			WorkspaceClient.createWorkspace(MIGRATION_TEMP_WORKSPACE_NAME, {switchAfterCreation: true}, function (err, response) {
+			WorkspaceClient.createWorkspace(MIGRATION_TEMP_WORKSPACE_NAME, {switchAfterCreation: true}, (err, response) => {
 				if (!err) {
 					//get all workspace names
-					WorkspaceClient.getWorkspaces((err, response) => {
+					WorkspaceClient.getWorkspaces((err: StandardError, response:Workspace[]) => {
 						let workspaces = response;
 						Logger.log("*** Got workspaces", workspaces);
 						workspaces.forEach(workspace => {
 							Logger.log("*** migrating " + workspace.name);
 							//export and migrate each workspace
-							promiseSet.push(new Promise((resolve, reject) => {
-								WorkspaceClient.export({'workspaceName': workspace.name}, function (err, workspaceDefinition) {
+							promiseSet.push(new Promise<void>((resolve, reject) => {
+								WorkspaceClient.export({'workspaceName': workspace.name}, (err:StandardError, workspaceDefinition:{
+									[key: string]: WorkspaceImport;
+								}) => {
 									if (err) {
-										reject(new Error(err));
+										reject(new Error(err as string));
 									} else {
 										//migrate workspace
 										Logger.log(`*** exported workspace definition for '${workspace.name}': `, workspaceDefinition);
@@ -215,20 +220,20 @@ const runMigration = function () {
 /**
  * Mark the migration completed.
  */
-const completeMigration = function (activeWorkspace) {
+const completeMigration = (activeWorkspace:string) => {
 	//complete migration
 	StorageClient.save({topic: "finsemble", key: `${MIGRATION_NAME}`, value: Date.now()});
 	RouterClient.publish("Migration", "end");
 	Logger.log("*** Migration complete");
 
 	//reload the activeWorkspace
-	WorkspaceClient.switchTo({name: activeWorkspace}, function (err, response) {
+	WorkspaceClient.switchTo({name: activeWorkspace}, (err, response) => {
 		if (err) {
 			Logger.error("*** Migration error: on final switch to active workspace: ", err);
 		}
 		WorkspaceClient.remove({
 			name: MIGRATION_TEMP_WORKSPACE_NAME
-		}, function (err, response) {
+		}, (err: StandardError, response:any) => {
 			if (err) {
 				Logger.error("*** Migration error: on final removal of temp workspace: ", err);
 			}
@@ -241,7 +246,7 @@ const completeMigration = function (activeWorkspace) {
  * "migrated_from_<adapter to migrate from>",
  * which in this example is "migrated_from_IndexedDBAdapter".
  */
-const fetchUserStatus = function () {
+const fetchUserStatus = () => {
 	StorageClient.get({topic: "finsemble", key: `${MIGRATION_NAME}`}, (err, data) => {
 		if (err) {
 			Logger.log(`*** Error fetching the user migration status for migration ${MIGRATION_NAME}.`);
@@ -266,7 +271,7 @@ const fetchUserStatus = function () {
 				}
 			});
 
-			LauncherClient.spawn("workspacemigration", {}, () => {
+			LauncherClient.spawn("WorkspaceMigration", {}, () => {
 				RouterClient.publish("Migration", "needed");
 			});
 		} //else skip migration
@@ -274,49 +279,31 @@ const fetchUserStatus = function () {
 }
 
 
-/**
- * class WorkspaceDataMigrationService
- *
- * This class is configurable to migrate data from one storage adapter to another.
- * In this example, IndexedDB data is being migrated to LocalStorage for all internal Finsemble data.
- *
- */
-class WorkspaceDataMigrationService extends Finsemble.baseService {
-	/**
-	 * Initializes a new instance of the newsService class.
-	 */
-	constructor() {
-		super({
-			// Declare any service dependencies that must be available before your service starts up.
-			startupDependencies: {},
-		});
 
-		this.readyHandler = this.readyHandler.bind(this);
 
-		this.onBaseServiceReady(this.readyHandler);
-	}
 
+const main = async () => {
 	/**
 	 * Fired when the service is ready for initialization
 	 * @param {function} callback
 	 */
-	readyHandler(callback) {
-		let ranMigrationCheck = false; //to make sure we only do this once, as technically auth can be run multiple times
+	let ranMigrationCheck = false; //to make sure we only do this once, as technically auth can be run multiple times
 
-		RouterClient.subscribe("AuthorizationState", function (err, notify) {
-			if (err) {
-				Logger.error("*** workspacemigration failed to auth");
-			} else {
-				if (!ranMigrationCheck && notify.data.state === "done") {
-					ranMigrationCheck = true;
-					fetchUserStatus();
-				}
+	RouterClient.subscribe("AuthorizationState", function (err, notify) {
+		if (err) {
+			Logger.error("*** workspacemigration failed to auth");
+		} else {
+			if (!ranMigrationCheck && notify.data.state === "done") {
+				ranMigrationCheck = true;
+				fetchUserStatus();
 			}
-		})
-		callback();
-	}
+		}
+	})
+	FSBL.publishReady();
+};
+
+if (window.FSBL && FSBL.addEventListener) {
+	FSBL.addEventListener("onReady", main);
+} else {
+	window.addEventListener("FSBLReady", main);
 }
-
-const serviceInstance = new WorkspaceDataMigrationService();
-
-serviceInstance.start();

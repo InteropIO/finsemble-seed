@@ -1,5 +1,5 @@
 [
-	"./src/services/workspaceDataMigration/workspaceDataMigrationService.js",
-	"./src/components/workspacemigration/workspacemigration.js"
+	"./src/services/workspaceDataMigration/index.tsx",
+	"./src/components/workspacemigration/workspacemigration.tsx"
 ]
 

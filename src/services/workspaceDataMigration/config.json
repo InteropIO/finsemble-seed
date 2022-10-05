@@ -1,13 +1,22 @@
 {
-    "services": {
-        "workspaceDataMigrationService": {
-					"bootParams": {
-						"stage": "preuser",
-						"dependencies": []
-					},
-					"name": "workspaceDataMigrationService",
-					"visible": false,
-					"html": "$applicationRoot/services/workspaceDataMigration/workspaceDataMigrationService.html"
-        }
-    }
+	"appd": {
+		"workspaceDataMigrationService": {
+			"appId": "workspaceDataMigrationService",
+			"name": "workspaceDataMigrationService",
+			"description": "Test App Service",
+			"manifest": {
+				"bootParams": {
+					"stage": "preuser"
+				},
+				"appService": true,
+				"window": {
+					"url": "$applicationRoot/services/workspaceDataMigration/index.html"
+				}
+			},
+			"version": "1.0.0",
+			"contactEmail": "info@cosaic.io",
+			"supportEmail": "support@finsemble.com",
+			"publisher": "Cosaic"
+		}
+	}
 }

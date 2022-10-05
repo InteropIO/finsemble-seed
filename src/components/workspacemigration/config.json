@@ -1,40 +1,44 @@
 {
-    "components": {
-        "workspacemigration": {
-            "window": {
-                "url": "$applicationRoot/components/workspacemigration/workspacemigration.html",
-                "frame": false,
-                "resizable": true,
-                "autoShow": false,
-                "top": "center",
-                "left": "center",
-                "width": 570,
-                "height": 460,
-                "options": {
-                    "alwaysOnTop":true
-                },
-                "addToWorkspace": false
-            },
-            "component": {
-                "preload": false,
-                "spawnOnStartup": false
-            },
-            "foreign": {
-                "components": {
-                    "App Launcher": {
-                        "launchableByUser": false
-                    },
-                    "Window Manager": {
-                        "alwaysOnTopIcon": false,
-                        "title": "Workspace Migration Assistant",
-                        "FSBLHeader": false,
-                        "persistWindowState": false
-                    },
-                    "Toolbar": {
-                        "iconClass": "workspacemigration"
-                    }
-                }
-            }
-        }
-    }  
+	"appd": {
+		"WorkspaceMigration": {
+			"appId": "WorkspaceMigration",
+			"name": "WorkspaceMigration",
+			"manifest": {
+				"window": {
+					"url": "$applicationRoot/components/workspacemigration/workspacemigration.html",
+					"frame": false,
+					"resizable": true,
+					"autoShow": false,
+					"top": "center",
+					"left": "center",
+					"width": 570,
+					"height": 550,
+					"options": {
+						"alwaysOnTop": true
+					},
+					"addToWorkspace": false
+				},
+				"component": {
+					"preload": false,
+					"spawnOnStartup": false
+				},
+				"foreign": {
+					"components": {
+						"App Launcher": {
+							"launchableByUser": false
+						},
+						"Window Manager": {
+							"alwaysOnTopIcon": false,
+							"title": "Workspace Migration Assistant",
+							"FSBLHeader": false,
+							"persistWindowState": false
+						},
+						"Toolbar": {
+							"iconClass": "workspacemigration"
+						}
+					}
+				}
+			}
+		}
+	}
 }
