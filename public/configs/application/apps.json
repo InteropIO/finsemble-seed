@@ -1,6 +1,266 @@
 {
 	"comment": "AppD component config",
 	"$schema": "../../../node_modules/@finsemble/finsemble-core/configs/schemas/fileBasedSchemas/appsConfigFile.schema.json",
+	"appd": {
+        "Conformance": {
+            "appId": "Conformance1",
+            "name": "Conformance1",
+            "title": "FDC3 1.2 Conformance Framework",
+            "description": "Testing Conformance",
+            "images": [
+                { "src": "https://directory.fdc3.finos.org/assets/app/Conformance1.png" }
+            ],
+            "icons": [
+                { "src": "https://www.scottlogic.com/sites/default/files/scott-logic-favicon.jpg" }
+            ],
+            "version": "1.0.0",
+            "publisher": "Scott Logic",
+            "manifest": {
+                "window": {
+                    "url": "http://localhost:3001/v1.2/app/index.html",
+                    "affinity": "workspaceComponents",
+                    "options": {
+                        "autoShow": true,
+                        "addToWorkspace": true
+                    },
+                    "top": "center",
+                    "left": "0",
+                    "width": 800,
+                    "height": 900
+                },
+                "foreign": {
+                    "components": {
+                        "App Launcher": {
+                            "launchableByUser": true
+                        },
+                        "Window Manager": {
+                            "FSBLHeader": true,
+                            "titlebarType": "injected"
+                        }
+                    }
+                }
+            }
+        },
+        "ChannelsApp": {
+            "appId": "ChannelsAppId",
+            "name": "ChannelsApp",
+            "description": "Testing channels app",
+            "title": "Channels App",
+            "version": "1.0.0",
+            "publisher": "Scott Logic",
+            "manifest": {
+                "window": {
+                    "url": "http://localhost:3001/v1.2/channels",
+                    "affinity": "workspaceComponents",
+                    "options": {
+                        "autoShow": true
+                    },
+                    "top": "center",
+                    "left": "center",
+                    "width": 800,
+                    "height": 600
+                },
+                "component": {
+                    "displayName": "FDC3 Conformance Framework Channels App"
+                },
+                "foreign": {
+                    "components": {
+                        "App Launcher": {
+                            "launchableByUser": false
+                        },
+                        "Window Manager": {
+                            "FSBLHeader": true,
+                            "titlebarType": "injected"
+                        }
+                    }
+                }
+            }
+        },
+        "IntentAppA": {
+            "appId": "IntentAppAId",
+            "name": "IntentAppA",
+            "title": "Intent App A",
+            "description": "Part of the FDC3 1.2 Conformance Tests",
+            "version": "1.0.0",
+            "publisher": "Scott Logic",
+            "intents": [
+                {
+                    "name": "aTestingIntent",
+                    "displayName": "A Testing Intent",
+                    "contexts": ["testContextX", "testContextZ"]
+                },
+                {
+                    "name": "sharedTestingIntent1",
+                    "displayName": "Shared Testing Intent",
+                    "contexts": ["testContextX"]
+                }
+            ],
+            "manifest": {
+                "window": {
+                    "url": "http://localhost:3001/v1.2/intent-a",
+                    "affinity": "workspaceComponents",
+                    "options": {
+                        "autoShow": true
+                    },
+                    "top": "center",
+                    "right": 0,
+                    "width": 600,
+                    "height": 400
+                },
+                "foreign": {
+                    "components": {
+                        "App Launcher": {
+                            "launchableByUser": false
+                        },
+                        "Window Manager": {
+                            "FSBLHeader": true,
+                            "titlebarType": "injected"
+                        }
+                    }
+                }
+            }
+        },
+        "IntentAppB": {
+            "appId": "IntentAppBId",
+            "name": "IntentAppB",
+            "title": "Intent App B",
+            "description": "Part of the FDC3 1.2 Conformance Tests",
+            "version": "1.0.0",
+            "publisher": "Scott Logic",
+            "icons": [
+                {
+                    "src": "http://localhost:3101/scott-logic-icon-256.png"
+                }
+            ],
+            "intents": [
+                {
+                    "name": "bTestingIntent",
+                    "displayName": "B Testing Intent",
+                    "contexts": ["testContextY"]
+                },
+                {
+                    "name": "sharedTestingIntent1",
+                    "displayName": "Shared Testing Intent",
+                    "contexts": ["testContextX", "testContextY"]
+                }
+            ],
+            "manifest": {
+                "window": {
+                    "url": "http://localhost:3001/v1.2/intent-b",
+                    "affinity": "workspaceComponents",
+                    "options": {
+                        "autoShow": true
+                    },
+                    "top": "center",
+                    "right": 0,
+                    "width": 600,
+                    "height": 400
+                },
+                "component": {
+                    "displayName": "FDC3 Conformance Framework Intent App B"
+                },
+                "foreign": {
+                    "components": {
+                        "App Launcher": {
+                            "launchableByUser": false
+                        },
+                        "Window Manager": {
+                            "FSBLHeader": true,
+                            "titlebarType": "injected"
+                        }
+                    }
+                }
+            }
+        },
+        "IntentAppC": {
+            "appId": "IntentAppCId",
+            "name": "IntentAppC",
+            "title": "Intent App C",
+            "description": "Part of the FDC3 1.2 Conformance Tests",
+            "version": "1.0.0",
+            "publisher": "Scott Logic",
+            "icons": [
+                {
+                    "src": "http://localhost:3102/scott-logic-icon-256.png"
+                }
+            ],
+            "intents": [
+                {
+                    "name": "cTestingIntent",
+                    "displayName": "C Testing Intent",
+                    "contexts": ["testContextX"]
+                }
+            ],
+            "manifest": {
+                "window": {
+                    "url": "http://localhost:3001/v1.2/intent-c",
+                    "affinity": "workspaceComponents",
+                    "options": {
+                        "autoShow": true
+                    },
+                    "top": "center",
+                    "right": 0,
+                    "width": 600,
+                    "height": 400
+                },
+                "component": {
+                    "displayName": "FDC3 Conformance Framework Intent App C"
+                },
+                "foreign": {
+                    "services": {
+                        "windowService": {
+                            "allowSnapping": true,
+                            "allowGrouping": true,
+                            "allowTabbing": true,
+                            "allowAutoArrange": true,
+                            "allowMinimize": true
+                        }
+                    },
+                    "components": {
+                        "App Launcher": {
+                            "launchableByUser": false
+                        },
+                        "Window Manager": {
+                            "FSBLHeader": true,
+                            "titlebarType": "injected"
+                        }
+                    }
+                }
+            }
+        },
+        "MockApp": {
+            "appId": "MockAppId",
+            "name": "MockApp",
+            "description": "Mock app used for testing. WARNING: changing this app's property definitions will cause metadata tests to fail",
+            "title": "A generic app directory record example",
+            "version": "1.0.0",
+            "publisher": "Scott Logic",
+            "manifest": {
+                "window": {
+                    "url": "http://localhost:3001/v1.2/general",
+                    "affinity": "workspaceComponents",
+                    "options": {
+                        "autoShow": true
+                    },
+                    "top": "center",
+                    "right": 0,
+                    "width": 600,
+                    "height": 400
+                },
+                "foreign": {
+                    "components": {
+                        "App Launcher": {
+                            "launchableByUser": false
+                        },
+                        "Window Manager": {
+                            "FSBLHeader": true,
+                            "titlebarType": "injected"
+                        }
+                    }
+                }
+            }
+        }
+    },
 	"apps": [
 		{
 			"name": "ChartIQ Example App",
