@@ -12,7 +12,7 @@ declare const FSBL: any
 //make sure both Finsemble and the DOM are ready before we process the form
 let domIsReady = false, fsblIsReady = false;
 document.addEventListener('DOMContentLoaded', domReady);
-if (window.FSBL && FSBL && FSBL.addEventListener) {
+if (!!window?.FSBL?.addEventListener) {
 	FSBL.addEventListener('onReady', fsblReady);
 } else {
 	window.addEventListener('FSBLReady', fsblReady);
