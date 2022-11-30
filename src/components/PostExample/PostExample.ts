@@ -1,11 +1,18 @@
 /**
  * Example of sending POST data to spawn a component
  */
+export {} 
+
+declare global {
+	interface Window { FSBL: any; }
+}
+
+declare const FSBL: any
 
 //make sure both Finsemble and the DOM are ready before we process the form
 let domIsReady = false, fsblIsReady = false;
 document.addEventListener('DOMContentLoaded', domReady);
-if (window.FSBL && FSBL.addEventListener) {
+if (!!window?.FSBL?.addEventListener) {
 	FSBL.addEventListener('onReady', fsblReady);
 } else {
 	window.addEventListener('FSBLReady', fsblReady);
@@ -26,8 +33,8 @@ function domReady() {
 function init() {
 	if (domIsReady && fsblIsReady) {
 		console.log('Initializing form');
-		var form = document.getElementById('theForm');
-		const spawnData = FSBL.Clients.WindowClient.getSpawnData();
+		const form : HTMLFormElement = <HTMLFormElement> document.getElementById('theForm');
+		const spawnData = FSBL?.Clients.WindowClient.getSpawnData();
 		if (spawnData) {
 			Object.keys(spawnData).forEach(key => {
 				if (key == "url") {
@@ -49,22 +56,25 @@ function init() {
 			form.submit();
 		} else {
 			//setup the form for manual testing
-			var urlLabel = document.getElementById('urlLabel');
-			var urlField = document.getElementById('urlField');
+			const urlLabel : HTMLInputElement = <HTMLInputElement> document.getElementById('urlLabel');
+			const urlField : HTMLInputElement = <HTMLInputElement> document.getElementById('urlField');
 
 			//add a data field
-			var input = document.createElement('input');
+			const input = document.createElement('input');
 			input.id = "data"
 			input.name = "data";
-			var label = document.createElement('label');
+			const label = document.createElement('label');
 			label.innerText = "Enter POST data:";
 			label.appendChild(input);
 			form.prepend(label);
 
-			document.getElementById('submitButton').addEventListener('click', () => {
-				form.setAttribute("action", urlField.value);
-				form.submit();
-			});
+			const submitButton = document.getElementById('submitButton');
+			if(submitButton) {
+				submitButton.addEventListener('click', () => {
+					form.setAttribute("action", urlField.value);
+					form.submit();
+				});
+			}
 
 			//make the form visible
 			urlLabel.style.visibility = 'visible';
