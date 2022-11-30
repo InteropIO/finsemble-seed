@@ -34,7 +34,7 @@ function init() {
 	if (domIsReady && fsblIsReady) {
 		console.log('Initializing form');
 		const form : HTMLFormElement = <HTMLFormElement> document.getElementById('theForm');
-		const spawnData = FSBL && FSBL.Clients.WindowClient.getSpawnData();
+		const spawnData = FSBL?.Clients.WindowClient.getSpawnData();
 		if (spawnData) {
 			Object.keys(spawnData).forEach(key => {
 				if (key == "url") {
