@@ -6,313 +6,322 @@
 			"appId": "Conformance1",
 			"name": "Conformance1",
 			"title": "FDC3 1.2 Conformance Framework",
-			"description": "Testing Conformance",
+			"description": "FDC3 1.2 Conformance testing framework - developed for FINOS by Scott Logic",
 			"type": "web",
 			"details": {
-				"url": "http://localhost:3001/v1.2/app/index.html"
+			  "url": "http://localhost:3001/v1.2/app/index.html"
 			},
 			"screenshots": [
-				{
-					"src": "https://directory.fdc3.finos.org/assets/app/Conformance1.png"
-				}
+			  {
+				"src": "https://directory.fdc3.finos.org/assets/app/Conformance1.png"
+			  }
 			],
 			"hostManifests": {
-				"sail": {
-					"inject-api": "1.2"
+			  "sail": {
+				"inject-api": "1.2"
+			  },
+			  "Finsemble": {
+				"window": {
+					"top": "center",
+					"left": "0",
+					"width": 800,
+					"height": 900
 				},
-				"Finsemble": {
-					"window": {
-						"top": "center",
-						"left": "0",
-						"width": 800,
-						"height": 900
-					},
-					"foreign": {
-						"components": {
-							"App Launcher": {
-								"launchableByUser": true
-							},
-							"Window Manager": {
-								"FSBLHeader": true,
-								"titlebarType": "injected"
-							}
+				"foreign": {
+					"components": {
+						"App Launcher": {
+							"launchableByUser": true
+						},
+						"Window Manager": {
+							"FSBLHeader": true,
+							"titlebarType": "injected"
 						}
-					},
-					"interop": {
-						"joinMultipleChannels": false
 					}
+				},
+				"interop": {
+				  "joinMultipleChannels": false
 				}
+			  }
 			},
 			"version": "1.0.0",
-			"publisher": "Scott Logic",
+			"publisher": "FINOS",
 			"icons": [
-				{
-					"src": "https://localhost:3001/finos-icon-256.png"
-				}
+			  {
+				"src": "http://localhost:3001/finos-icon-256.png"
+			  }
 			]
-		},
-		{
+		  },
+		  {
 			"appId": "ChannelsAppId",
 			"name": "ChannelsApp",
 			"title": "Channels App",
-			"description": "Part of the FDC3 1.2 Conformance Tests",
+			"description": "Part of the FDC3 1.2 Conformance Tests - developed for FINOS by Scott Logic",
 			"type": "web",
 			"details": {
-				"url": "http://localhost:3001/v1.2/channels"
+			  "url": "http://localhost:3001/v1.2/channels"
 			},
 			"hostManifests": {
-				"sail": {
-					"inject-api": "1.2",
-					"searchable": false,
-					"forceNewWindow": true
+			  "sail": {
+				"inject-api": "1.2",
+				"searchable": false,
+				"forceNewWindow": true
+			  },
+			  "Finsemble": {
+				"window": {
+					"top": "center",
+					"left": "center",
+					"width": 800,
+					"height": 600
 				},
-				"Finsemble": {
-					"window": {
-						"top": "center",
-						"left": "center",
-						"width": 800,
-						"height": 600
-					},
-					"component": {
-						"displayName": "FDC3 Conformance Framework Channels App"
-					},
-					"foreign": {
-						"components": {
-							"App Launcher": {
-								"launchableByUser": false
-							},
-							"Window Manager": {
-								"FSBLHeader": true,
-								"titlebarType": "injected"
-							}
+				"foreign": {
+					"components": {
+						"App Launcher": {
+							"launchableByUser": false
+						},
+						"Window Manager": {
+							"FSBLHeader": true,
+							"titlebarType": "injected"
 						}
-					},
-					"interop": {
-						"joinMultipleChannels": false
 					}
+				},
+				"interop": {
+				  "joinMultipleChannels": false
 				}
+			  }
 			},
 			"version": "1.0.0",
-			"publisher": "Scott Logic",
+			"publisher": "FINOS",
 			"icons": [
-				{
-					"src": "https://localhost:3001/finos-icon-256.png"
-				}
+			  {
+				"src": "http://localhost:3001/finos-icon-256.png"
+			  }
 			]
-		},
-		{
+		  },
+		  {
 			"appId": "IntentAppAId",
 			"name": "IntentAppA",
 			"title": "Intent App A",
-			"description": "Part of the FDC3 1.2 Conformance Tests",
+			"description": "Part of the FDC3 1.2 Conformance Tests - developed for FINOS by Scott Logic",
 			"type": "web",
 			"details": {
-				"url": "http://localhost:3001/v1.2/intent-a"
+			  "url": "http://localhost:3001/v1.2/intent-a"
 			},
 			"hostManifests": {
-				"sail": {
-					"inject-api": "1.2",
-					"searchable": false,
-					"forceNewWindow": true
+			  "sail": {
+				"inject-api": "1.2",
+				"searchable": false,
+				"forceNewWindow": true
+			  },
+			  "Finsemble": {
+				"window": {
+					"top": "center",
+					"right": 0,
+					"width": 600,
+					"height": 400
 				},
-				"Finsemble": {
-					"window": {
-						"top": "center",
-						"right": 0,
-						"width": 600,
-						"height": 400
-					},
-					"foreign": {
-						"components": {
-							"App Launcher": {
-								"launchableByUser": false
-							},
-							"Window Manager": {
-								"FSBLHeader": true,
-								"titlebarType": "injected"
-							}
+				"foreign": {
+					"components": {
+						"App Launcher": {
+							"launchableByUser": false
+						},
+						"Window Manager": {
+							"FSBLHeader": true,
+							"titlebarType": "injected"
 						}
 					}
 				}
+			  }
 			},
 			"version": "1.0.0",
-			"publisher": "Scott Logic",
+			"publisher": "FINOS",
 			"icons": [
-				{
-					"src": "https://localhost:3001/finos-icon-256.png"
-				}
+			  {
+				"src": "http://localhost:3001/finos-icon-256.png"
+			  }
 			],
 			"interop": {
-				"intents": {
-					"listensFor": {
-						"aTestingIntent": {
-							"displayName": "A Testing Intent",
-							"contexts": ["testContextX", "testContextZ"]
-						},
-						"sharedTestingIntent1": {
-							"displayName": "Shared Testing Intent",
-							"contexts": ["testContextX"]
-						}
-					}
+			  "intents": {
+				"listensFor": {
+				  "aTestingIntent": {
+					"displayName": "A Testing Intent",
+					"contexts": [
+					  "testContextX",
+					  "testContextZ"
+					]
+				  },
+				  "sharedTestingIntent1": {
+					"displayName": "Shared Testing Intent",
+					"contexts": [
+					  "testContextX"
+					]
+				  }
 				}
+			  }
 			}
-		},
-		{
+		  },
+		  {
 			"appId": "IntentAppBId",
 			"name": "IntentAppB",
 			"title": "Intent App B",
-			"description": "Part of the FDC3 1.2 Conformance Tests",
+			"description": "Part of the FDC3 1.2 Conformance Tests - developed for FINOS by Scott Logic",
 			"type": "web",
 			"details": {
-				"url": "http://localhost:3001/v1.2/intent-b"
+			  "url": "http://localhost:3001/v1.2/intent-b"
 			},
 			"hostManifests": {
-				"sail": {
-					"inject-api": "1.2",
-					"searchable": false,
-					"forceNewWindow": true
+			  "sail": {
+				"inject-api": "1.2",
+				"searchable": false,
+				"forceNewWindow": true
+			  },
+			  "Finsemble": {
+				"window": {
+					"top": "center",
+					"right": 0,
+					"width": 600,
+					"height": 400
 				},
-				"Finsemble": {
-					"window": {
-						"top": "center",
-						"right": 0,
-						"width": 600,
-						"height": 400
-					},
-					"foreign": {
-						"components": {
-							"App Launcher": {
-								"launchableByUser": false
-							},
-							"Window Manager": {
-								"FSBLHeader": true,
-								"titlebarType": "injected"
-							}
+				"foreign": {
+					"components": {
+						"App Launcher": {
+							"launchableByUser": false
+						},
+						"Window Manager": {
+							"FSBLHeader": true,
+							"titlebarType": "injected"
 						}
 					}
 				}
+			  }
 			},
 			"version": "1.0.0",
-			"publisher": "Scott Logic",
+			"publisher": "FINOS",
 			"icons": [
-				{
-					"src": "https://localhost:3001/finos-icon-256.png"
-				}
+			  {
+				"src": "http://localhost:3001/finos-icon-256.png"
+			  }
 			],
 			"interop": {
-				"intents": {
-					"listensFor": {
-						"bTestingIntent": {
-							"displayName": "B Testing Intent",
-							"contexts": ["testContextY"]
-						},
-						"sharedTestingIntent1": {
-							"displayName": "Shared Testing Intent",
-							"contexts": ["testContextX", "testContextY"]
-						}
-					}
+			  "intents": {
+				"listensFor": {
+				  "bTestingIntent": {
+					"displayName": "B Testing Intent",
+					"contexts": [
+					  "testContextY"
+					]
+				  },
+				  "sharedTestingIntent1": {
+					"displayName": "Shared Testing Intent",
+					"contexts": [
+					  "testContextX",
+					  "testContextY"
+					]
+				  }
 				}
+			  }
 			}
-		},
-		{
+		  },
+		  {
 			"appId": "IntentAppCId",
 			"name": "IntentAppC",
 			"title": "Intent App C",
-			"description": "Part of the FDC3 1.2 Conformance Tests",
+			"description": "Part of the FDC3 1.2 Conformance Tests - developed for FINOS by Scott Logic",
 			"type": "web",
 			"details": {
-				"url": "http://localhost:3001/v1.2/intent-c"
+			  "url": "http://localhost:3001/v1.2/intent-c"
 			},
 			"hostManifests": {
-				"sail": {
-					"inject-api": "1.2",
-					"searchable": false,
-					"forceNewWindow": true
+			  "sail": {
+				"inject-api": "1.2",
+				"searchable": false,
+				"forceNewWindow": true
+			  },
+			  "Finsemble": {
+				"window": {
+					"top": "center",
+					"right": 0,
+					"width": 600,
+					"height": 400
 				},
-				"Finsemble": {
-					"window": {
-						"top": "center",
-						"right": 0,
-						"width": 600,
-						"height": 400
-					},
-					"foreign": {
-						"components": {
-							"App Launcher": {
-								"launchableByUser": false
-							},
-							"Window Manager": {
-								"FSBLHeader": true,
-								"titlebarType": "injected"
-							}
+				"foreign": {
+					"components": {
+						"App Launcher": {
+							"launchableByUser": false
+						},
+						"Window Manager": {
+							"FSBLHeader": true,
+							"titlebarType": "injected"
 						}
 					}
 				}
+			  }
 			},
 			"version": "1.0.0",
-			"publisher": "Scott Logic",
+			"publisher": "FINOS",
 			"icons": [
-				{
-					"src": "https://localhost:3001/finos-icon-256.png"
-				}
+			  {
+				"src": "http://localhost:3001/finos-icon-256.png"
+			  }
 			],
 			"interop": {
-				"intents": {
-					"listensFor": {
-						"cTestingIntent": {
-							"displayName": "C Testing Intent",
-							"contexts": ["testContextX"]
-						}
-					}
+			  "intents": {
+				"listensFor": {
+				  "cTestingIntent": {
+					"displayName": "C Testing Intent",
+					"contexts": [
+					  "testContextX"
+					]
+				  }
 				}
+			  }
 			}
-		},
-		{
+		  },
+		  {
 			"appId": "MockAppId",
 			"name": "MockApp",
-			"description": "Part of the FDC3 1.2 Conformance Tests",
+			"description": "Part of the FDC3 1.2 Conformance Tests - developed for FINOS by Scott Logic",
 			"details": {
-				"url": "http://localhost:3001/v1.2/general"
+			  "url": "http://localhost:3001/v1.2/general"
 			},
 			"hostManifests": {
-				"sail": {
-					"inject-api": "1.2",
-					"searchable": false,
-					"forceNewWindow": true
+			  "sail": {
+				"inject-api": "1.2",
+				"searchable": false,
+				"forceNewWindow": true
+			  },
+			  "Finsemble": {
+				"window": {
+					"top": "center",
+					"right": 0,
+					"width": 600,
+					"height": 400
 				},
-				"Finsemble": {
-					"window": {
-						"top": "center",
-						"right": 0,
-						"width": 600,
-						"height": 400
-					},
-					"foreign": {
-						"components": {
-							"App Launcher": {
-								"launchableByUser": false
-							},
-							"Window Manager": {
-								"FSBLHeader": true,
-								"titlebarType": "injected"
-							}
+				"foreign": {
+					"components": {
+						"App Launcher": {
+							"launchableByUser": false
+						},
+						"Window Manager": {
+							"FSBLHeader": true,
+							"titlebarType": "injected"
 						}
-					},
-					"interop": {
-						"joinMultipleChannels": false
 					}
+				},
+				"interop": {
+				  "joinMultipleChannels": false
 				}
+			  }
 			},
 			"version": "1.0.0",
-			"publisher": "Scott Logic",
+			"publisher": "FINOS",
 			"type": "web",
 			"icons": [
-				{
-					"src": "https://localhost:3001/finos-icon-256.png"
-				}
+			  {
+				"src": "http://localhost:3001/finos-icon-256.png"
+			  }
 			]
-		},
-		{
+		  },
+		  {
 			"name": "ChartIQ Example App",
 			"appId": "ChartIQ Example App",
 			"type": "web",
