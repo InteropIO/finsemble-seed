@@ -13,7 +13,6 @@
 			"hostManifests": {
 				"Finsemble": {
 					"window": {
-						"affinity": "test",
 						"width": 800,
 						"height": 600,
 						"options": {
@@ -223,7 +222,6 @@
 			"hostManifests": {
 				"Finsemble": {
 					"window": {
-						"affinity": "workspaceComponents",
 						"options": {
 							"resizable": false,
 							"autoShow": true,
