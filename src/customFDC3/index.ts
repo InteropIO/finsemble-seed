@@ -1,6 +1,6 @@
 // This line imports type declarations for Finsemble's globals such as FSBL and fdc3. You can ignore the warning that it is defined but never used.
 // Important! Please use the global FSBL and fdc3 objects. Do not import functionality from finsemble
-import { AppIdentifier, AppIntent, AppMetadata, Channel, Context, ContextHandler, ImplementationMetadata, IntentHandler, IntentResolution, Listener, PrivateChannel, RouterClient, types } from "@finsemble/finsemble-core";
+import { AppIdentifier, AppIntent, AppMetadata, Channel, Context, ContextHandler, ImplementationMetadata, IntentHandler, IntentResolution, joinUserChannel, Listener, PrivateChannel, RouterClient, types } from "@finsemble/finsemble-core";
 import { join } from "path";
 import { isArgumentsObject } from "util/types";
 
@@ -25,7 +25,7 @@ type ChannelListenerHandler =  (context: Context, source: ChannelSource) => void
 
 const GLOBAL_CHANNEL_NAME = "GLOBAL";
 const CONTEXT_MESSAGE_DEBOUNCE_MS = 10;
-const USE_GLOBAL_CHANNEL_WHEN_NOT_LINKED = true;
+const WORKSPACE_STATE_FIELD_NAME = "customFDC3-channels";
 
 const main = async () => {
 	console.log("custom FDC3 preload starting up");
@@ -59,6 +59,9 @@ const main = async () => {
 
 	/** Hashes for recent context messages used to debounce them.  Maps hash to message, first arrival time and sources its been received from. */
 	const recentContextMessages: Record<number,[Context, number, string[]]> = { };
+
+	/** Status flag used to avoid trying to re-save workspace state while its being restored. Do not interact with it directly. */
+	let restoringStateFromWorkspace = false;
 	
 	/** Single handler for state change events - could be changed to an array if necessary */
 	let stateChangeHandler: ((state:Record<string,string>) => void) | null = null;
@@ -66,13 +69,9 @@ const main = async () => {
 	//-------------------------------------------------------------------------
 	//Check for workspace state for adapter (we take over saving channel membership as it has directions)
 	
-	//TODO use state to set up inital channels with calls to linkToChannel(name,direction)
+	//Use workspace state to set up inital channels with calls to linkToChannel(name,direction)
+	loadStateFromWorkspace();
 
-
-
-
-
-	
 	//If not on any channel to start with, join global channel
 	if (Object.keys(currentChannelDirections).length == 0) {
 		joinGlobalChannel();
@@ -111,6 +110,39 @@ const main = async () => {
 			globalChannelDefaultFDC3Listener = null;
 		}
 	};
+
+	/** 
+	 * Reads and restores state of channel memberships from a workspace.
+	 * This function should only be called on start-up to restore state from a workspace load (if present). */
+	async function loadStateFromWorkspace() {
+		
+		const state = await FSBL.Clients.WindowClient.getComponentState({
+			field: WORKSPACE_STATE_FIELD_NAME
+		});
+		if (state.err) {
+			//TODO: reduce to debug level
+			FSBL.Clients.Logger.log("No customFDC3 state in workspace");
+		} else {
+			restoringStateFromWorkspace = true;
+
+			const subscriptionsToRetore = state.data[WORKSPACE_STATE_FIELD_NAME];
+			for (let channel in subscriptionsToRetore) {
+				customFdc3.linkToChannel(channel,subscriptionsToRetore[channel], null, true);
+			}
+
+			restoringStateFromWorkspace = false;
+			//no need to resave stae, its already there or empty
+		}
+	};
+
+	/**
+	 * Saves state (channel subscriptions and directions) to the workspace.
+	 */
+	async function saveStateToWorkspace() {
+		if (!restoringStateFromWorkspace){
+			await FSBL.Clients.WindowClient.setComponentState({ field: WORKSPACE_STATE_FIELD_NAME, value: currentChannelDirections});
+		}
+	}
 
 	/** Handler used to receive context messages and then route them based on channel direction, subscribed listeners etc. 
 	 *  
@@ -226,11 +258,21 @@ const main = async () => {
 					.then((listener) => { currentChannelDefaultFDC3Listeners[channelName] = listener });
 				}
 
+				saveStateToWorkspace();
 				if(stateChangeHandler) { stateChangeHandler(currentChannelDirections) }
 
 				return getLinkState();
 			}
 		},
+
+		/** Standard FDC3 function, adapted to work with preload. */
+		joinUserChannel: (channelId: string) : Promise<void> => {
+			customFdc3.linkToChannel(channelId, Direction.Both, null, true);
+			return Promise.resolve();
+		},
+		/** Standard FDC3 function, adapted to work with preload. */
+		joinChannel: (channelId: string) : Promise<void> => joinUserChannel(channelId),
+
 		 
 		/**
 		 * Changed signature to match behavior (so code compiles in TS, will make no difference to use in JS)
@@ -274,15 +316,48 @@ const main = async () => {
 					joinGlobalChannel();
 				}
 
+				saveStateToWorkspace();
 				if(stateChangeHandler) { stateChangeHandler(currentChannelDirections) };
 			}
 		},
+
+		/** Standard FDC3 function, adapted to work with preload. Leaves all channels. */
+		leaveCurrentChannel: () : Promise<void> => {
+			for (let channel in currentChannelDirections) {
+				customFdc3.unlinkFromChannel(channel, null, true);
+			}
+			return Promise.resolve();
+		},
+		/** Finsemble specific FDC3 function, adapted to work with preload. Returns all channels. */
+		leaveChannel: (channelId: string) : Promise<void> => {
+			customFdc3.unlinkFromChannel(channelId, null, true);
+			return Promise.resolve();
+		},
+		
 		 
 		/**
 		 * Non standard name/return type version of getCurrentChannels(), which is itself non-standard.
 		 */
 		getLinkedChannels: (): Array<string> => {
 			return Object.keys(currentChannelDirections);
+		},
+		/** Standard FDC3 function, adapted to work with preload. Returns the first channel it sees. */
+		getCurrentChannel: () : Promise<Channel | null> => {
+			const linkedChannels = customFdc3.getLinkedChannels();
+			if (linkedChannels.length > 0){
+				return Promise.resolve(null);
+			} else {
+				return defaultFdc3.getOrCreateChannel(linkedChannels[0]);
+			}
+		},
+		/** Finsemble specific FDC3 function, adapted to work with preload. Returns all channels. */
+		getCurrentChannels: () : Promise<Channel[] | null> => {
+			const linkedChannels = customFdc3.getLinkedChannels();
+			if (linkedChannels.length > 0){
+				return Promise.resolve(null);
+			} else {
+				return Promise.all(linkedChannels.map((channelId)=>defaultFdc3.getOrCreateChannel(channelId)));
+			}
 		},
 		
 		/**
@@ -422,7 +497,7 @@ const main = async () => {
 		getAppMetadata: (app: AppIdentifier): Promise<AppMetadata> => logAndCall<Promise<AppMetadata>>(defaultFdc3.getAppMetadata,[app]),
 	  
 		// context
-		//addContextListener: (contextType: string | null, handler: ContextHandler): Promise<Listener> => logAndCall<Promise<Listener>>(defaultFdc3.addContextListener, [contextType, handler]),
+		//custom implementation above
 	  
 		// intents
 		findIntent: (intent: string, context?: Context, resultType?: string): Promise<AppIntent> => logAndCall<Promise<AppIntent>>(defaultFdc3.findIntent,[intent, context, resultType]),
@@ -435,18 +510,15 @@ const main = async () => {
 		getOrCreateChannel: (channelId: string): Promise<Channel> => logAndCall<Promise<Channel>>(defaultFdc3.getOrCreateChannel,[channelId]),
 		createPrivateChannel: (): Promise<PrivateChannel> => logAndCall<Promise<PrivateChannel>>(defaultFdc3.createPrivateChannel,[]),
 		getUserChannels: (): Promise<Array<Channel>> => logAndCall<Promise<Array<Channel>>>(defaultFdc3.getUserChannels,[]),
-	  
-		// OPTIONAL channel management functions
-		joinUserChannel: (channelId: string) : Promise<void> => logAndCall<Promise<void>>(defaultFdc3.joinUserChannel,[channelId]),
-		getCurrentChannel: () : Promise<Channel | null> => logAndCall<Promise<Channel | null>>(defaultFdc3.getCurrentChannel,[]),
-		leaveCurrentChannel: () : Promise<void> => logAndCall<Promise<void>>(defaultFdc3.leaveCurrentChannel,[]),
-	  
+
+		// User channel management functions must use custom implementations above
+
 		//implementation info
 		getInfo: (): Promise<ImplementationMetadata> => logAndCall<Promise<ImplementationMetadata>>(defaultFdc3.getInfo,[]),
 	  
 		//Deprecated functions
 		getSystemChannels: (): Promise<Array<Channel>> => logAndCall<Promise<Array<Channel>>>(defaultFdc3.getSystemChannels,[]),
-		joinChannel: (channelId: string) : Promise<void> => logAndCall<Promise<void>>(defaultFdc3.joinChannel,[channelId]),
+
 	};
 
 	//-------------------------------------------------------------------------
