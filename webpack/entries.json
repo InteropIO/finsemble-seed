@@ -1,3 +1,4 @@
 [
-	"./src/customFDC3/index.ts"
+	"./src/customFDC3/index.ts",
+	"./src/customFDC3Example/index.tsx"
 ]

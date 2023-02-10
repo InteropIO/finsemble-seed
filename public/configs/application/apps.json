@@ -270,6 +270,43 @@
 					"src": "$moduleRoot/ui-components/Tour/take-a-tour.svg"
 				}
 			]
+		},
+		{
+			"appId": "customFDC3Example",
+			"name": "customFDC3Example",
+			"type": "web",
+			"details": {
+				"url": "$applicationRoot/customFDC3Example/index.html"
+			},
+			"description": "Test app for the customFDC3 prload",
+			"hostManifests": {
+				"Finsemble": {
+					"window": {
+						"addToWorkspace": true,
+						"width": 800,
+						"height": 900,
+						"options": {
+							"minWidth": 150,
+							"minHeight": 150
+						}
+					},
+					"component": {
+						"preload": ["$applicationRoot/customFDC3/index.js"]
+					},
+					"foreign": {
+						"components": {
+							"App Launcher": { "launchableByUser": true },
+							"Window Manager": { "FSBLHeader": true, "persistWindowState": true }
+						}
+					},
+					"interop": {}
+				}
+			},
+			"version": "1.0.0",
+			"categories": ["developer tools", "testing"],
+			"contactEmail": "kris@finsemble.com",
+			"supportEmail": "support@finsemble.com",
+			"publisher": "Finsemble"
 		}
 	]
 }
