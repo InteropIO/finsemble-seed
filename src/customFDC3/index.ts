@@ -1,13 +1,12 @@
 // This line imports type declarations for Finsemble's globals such as FSBL and fdc3. You can ignore the warning that it is defined but never used.
 // Important! Please use the global FSBL and fdc3 objects. Do not import functionality from finsemble
-import { AppIdentifier, AppIntent, AppMetadata, Channel, Context, ContextHandler, ImplementationMetadata, IntentHandler, IntentResolution, joinUserChannel, Listener, PrivateChannel, RouterClient, types } from "@finsemble/finsemble-core";
-import { join } from "path";
-import { isArgumentsObject } from "util/types";
+import { AppIdentifier, AppIntent, AppMetadata, Channel, Context, ContextHandler, ImplementationMetadata, IntentHandler, IntentResolution, joinUserChannel, Listener, PrivateChannel, StoreModel } from "@finsemble/finsemble-core";
 
 //Types used in the custom FDC3 APIs - not the overlap on Channel, currently assuming it matches FDC3 2.0, but it may not. If so alias' will need to be used to differentiate the types and some adaption added.
 type LinkState = {
 	channels: Array<Channel>,
-	allChannels: Array<Channel>
+	allChannels: Array<Channel>,
+	channelDirections: Record<string,string>
 };
 
 type ChannelSource = {
@@ -28,6 +27,10 @@ const CONTEXT_MESSAGE_DEBOUNCE_MS = 25;
 const NAME_PREFIX = "customFDC3";
 const WORKSPACE_STATE_FIELD_NAME = NAME_PREFIX+ "-channels";
 const STATE_DISTRIBUTED_STORE_NAME = NAME_PREFIX + "-channel-store";
+const STATE_DISTRIBUTED_STORE_FIELD = "channelStates";
+const STATE_DISTRIBUTED_STORE_CHECKTIME = "lastChecked";
+const STATE_CLEAN_CHECK_FREQUENCY = 15000;
+const STATE_CLEAN_CHECK_VARIANCE = 0.3;
 
 
 
@@ -38,6 +41,10 @@ const main = async () => {
 	//Setup internal state for adapter
 	/** Default FDC3 implementation, which we need to retain a reference to before monkey patching */
 	const defaultFdc3 = window.fdc3;
+	
+	/** This window's name. */
+	const myWindowName = FSBL.Clients.WindowClient.getWindowIdentifier().windowName;
+	const myComponentType = FSBL.Clients.WindowClient.getWindowIdentifier().componentType;
 	
 	/** Local cache of user channels used for sync responses. */
 	const allChannels = await defaultFdc3.getUserChannels();
@@ -68,8 +75,65 @@ const main = async () => {
 	let restoringStateFromWorkspace = false;
 	
 	/** Single handler for state change events - could be changed to an array if necessary */
-	let stateChangeHandler: ((state:Record<string,string>) => void) | null = null;
+	let stateChangeHandler: ((err, state: LinkState) => void) | null = null;
 
+	/** DistributedStore containing state for all windows, used to provide synchronus responses
+	 *  to linkToChannel calls and provide state updates for menus.
+	 */
+	let remoteStateStore: StoreModel;
+	/** Local cache of the remote state, maintained to permit synchronous responses to linkToChannel. */
+	let remoteStateCache: Record<string,Record<string,string>> = {};
+	/** Time at which the state of the store was last checked for dead windows */
+	let remoteStateCheckTime: number = Date.now();
+	
+	//Create store and setup sync to local cache
+	const storeUpdateHandler = (err, data: {field: string, value: Record<string,any>}) => {
+		if (err) {
+			errorLog(`Received error from remote state store (${STATE_DISTRIBUTED_STORE_NAME})`,err);
+		} else {
+			remoteStateCache = data?.value?.values as Record<string, Record<string,string>>;
+		}
+	};
+	const checktimeUpdateHandler = (err, data: {field: string, value: number}) => {
+		if (err) {
+			errorLog(`Received error from remote state store (${STATE_DISTRIBUTED_STORE_CHECKTIME})`,err);
+		} else {
+			remoteStateCheckTime = data?.value as number;
+		}
+	};
+	FSBL.Clients.DistributedStoreClient.createStore({
+		store: STATE_DISTRIBUTED_STORE_NAME,
+		global: true,
+		persist: false,
+		values: {STATE_DISTRIBUTED_STORE_FIELD: {}}
+	}, (err, storeObject) => {
+		const setHandlers = (storeObj: StoreModel) => {
+			remoteStateStore = storeObj;
+			remoteStateStore.addListeners([
+				{field: STATE_DISTRIBUTED_STORE_FIELD, listener: storeUpdateHandler},
+				{field: STATE_DISTRIBUTED_STORE_CHECKTIME, listener: checktimeUpdateHandler}
+			], ()=>{});
+			debug(`DistributedStore ${STATE_DISTRIBUTED_STORE_NAME} connected`);
+		};
+		if (err || !storeObject) {
+			debug(`DistributedStore ${STATE_DISTRIBUTED_STORE_NAME} may already exist, attempting to retrieve`, err);
+			FSBL.Clients.DistributedStoreClient.getStore({
+				store: STATE_DISTRIBUTED_STORE_NAME,
+				global: true
+			},
+			(err2, storeObject2) => {
+				if (err2 || !storeObject2) {
+					errorLog(`DistributedStore ${STATE_DISTRIBUTED_STORE_NAME} could not be retrieved`, err2);
+				} else {
+					setHandlers(storeObject2);
+				}
+			});
+		} else {
+			setHandlers(storeObject);
+		}
+	});
+	
+	
 	
 	//-------------------------------------------------------------------------
 	// Util functions
@@ -107,6 +171,7 @@ const main = async () => {
 		return JSON.stringify(obj).split('').reduce((s, c) => Math.imul(31, s) + c.charCodeAt(0) | 0, 0) ;
 	};
 
+
 	function joinGlobalChannel() {
 		//if we're not on any channel now, subscribe to global channel
 		globalChannel.addContextListener(null, (context) => defaultContextHandler(GLOBAL_CHANNEL_NAME, context))
@@ -122,9 +187,14 @@ const main = async () => {
 		}
 	};
 
+	function isOnGlobalChannel() {
+		return !!globalChannelDefaultFDC3Listener;
+	}
+
 	/** 
 	 * Reads and restores state of channel memberships from a workspace.
-	 * This function should only be called on start-up to restore state from a workspace load (if present). */
+	 * This function should only be called on start-up to restore state from a workspace load (if present). 
+	 */
 	async function loadStateFromWorkspace() {
 		debug("Loading channel state from workspace...");
 
@@ -135,6 +205,7 @@ const main = async () => {
 			//TODO: reduce to debug level
 			log("No customFDC3 state in workspace");
 		} else if (state?.data ) {
+			//disable state processing until complete
 			restoringStateFromWorkspace = true;
 
 			const subscriptionsToRetore = state.data;
@@ -144,8 +215,9 @@ const main = async () => {
 
 			log("Restored channel state from workspace", currentChannelDirections);
 			restoringStateFromWorkspace = false;
-			//no need to resave state, its already there or empty
-			transmitState();
+			
+			//now process the updated state
+			processStateChange();
 		}
 	};
 
@@ -153,30 +225,64 @@ const main = async () => {
 	 * Saves state (channel subscriptions and directions) to the workspace.
 	 */
 	async function saveStateToWorkspace() {
-		if (!restoringStateFromWorkspace){
-			debug("Saving channel state to workspace...", currentChannelDirections);
-			await FSBL.Clients.WindowClient.setComponentState({ field: WORKSPACE_STATE_FIELD_NAME, value: currentChannelDirections});
+		debug("Saving channel state to workspace...", currentChannelDirections);
+		await FSBL.Clients.WindowClient.setComponentState({ field: WORKSPACE_STATE_FIELD_NAME, value: currentChannelDirections});
+	}
+
+	/**
+	 * Sends the current state to distributedStore, which can be used to update the state of a linker menu when changes occur
+	 * and to provide synchronus responses to linkToChannel calls.
+	 */
+	function publishState() {
+		remoteStateStore.set([STATE_DISTRIBUTED_STORE_FIELD, myWindowName],currentChannelDirections);
+		//store listener will update our local state cache, but we might not want to wait if updating it in checkAndCleanState
+		remoteStateCache[myWindowName] = currentChannelDirections; 
+	}
+
+	/**
+	 * Periodically check for dead state in the DistributedStore and clear it out (so that we don't have to have either 
+	 * a separate service that does so or ensure that every window close is caught and cleaned up in the store.
+	 * 
+	 * The store is only used for shared state tracking in linkToChannel and a menu UI, hence, this is just clean-up as 
+	 * dead state won't cause any harm until it hits thousands of dead records in a session.
+	 */
+	function checkAndCleanState() {
+		//use some randomness to stop all windows trying to do this at once after a workspace load (when all are publishing updates)
+		if ((Date.now() - remoteStateCheckTime) - Math.floor(Math.random() * (STATE_CLEAN_CHECK_FREQUENCY * STATE_CLEAN_CHECK_VARIANCE)) > STATE_CLEAN_CHECK_FREQUENCY) {
+			FSBL.Clients.AppsClient.getActiveDescriptors().then(({err, data}) => {
+				if (err || !data) {errorLog(`Received error from AppsClient.getActiveDescriptors`, err);}
+				else {
+					let madeChanges = false;
+					for (let windowName in remoteStateCache) {
+						if (!data[windowName]) {
+							debug(`Removing cached state for inactive windowName: ${windowName}`);
+							delete remoteStateCache[windowName];
+							madeChanges = true;
+						}
+					}
+					if (madeChanges) {
+						remoteStateStore.setMultiple([
+							{field: [STATE_DISTRIBUTED_STORE_FIELD], value: remoteStateCache},
+							{field: [STATE_DISTRIBUTED_STORE_CHECKTIME], value: Date.now()}
+						]);
+					}
+				}
+			});
 		}
 	}
 
 	/**
-	 * Sends the current state to a router topic. Can be used to update the state of a linker menu when changes occur.
-	 * This could also be implemented via a pubsub topic or distrbuted store, however, a service will be required
-	 * to ensure that state is cleared when windows are closed / the workspace is switched.
-	 * 
-	 * A state transmit can also be requested via the requestState topic and then this topic used to update:
-	 * ```
-	 * FSBL.Clients.RouterClient.addListener(getTopicOrResponderName("state"),(err,response)=>handleChannels(response.data));
-	 * FSBL.Clients.RouterClient.transmit(getTopicOrResponderName("requestState"),{});
-	 * ```
-	 * 
-	 * We use a separate topic to avoid handling messages from ourselves (which may be necessary if listener used in a UI component).
+	 * Performs each of the actions that is required each time the channel link state is changed.
 	 */
-	function transmitState() {
-		FSBL.Clients.RouterClient.transmit(getRouterTopicName("state"), currentChannelDirections);
+	function processStateChange() {
+		if (!restoringStateFromWorkspace) {
+			publishState();
+			saveStateToWorkspace();
+			if(stateChangeHandler) { stateChangeHandler(null,getLinkState()); }
+			checkAndCleanState();
+		}
 	}
 	
-
 	/** Handler used to receive context messages and then route them based on channel direction, subscribed listeners etc. 
 	 *  
 	 *  Handles multiple channel membership; Finsemble will normally ensure that, if send and receiver are on more than one 
@@ -205,35 +311,104 @@ const main = async () => {
 
 	/** Routes context messages to their handlers, after checking the direction of channel membership.  */
 	function defaultContextRouter(context: Context, channels: string[]) {
-		//debounce should have collected up multiple channels if it arrived on multiple here
-		const source: ChannelSource = { channels: channels, allChannels: allChannels };
-
 		//Route onwards to all normal channel listeners, ignoring direction
 		if (currentContextHandlers["null"]) { currentContextHandlers["null"].map((handler) => {handler.apply(defaultFdc3, [context]);}) }
 		if (currentContextHandlers[context.type]) { currentContextHandlers[context.type].map((handler) => {handler.apply(defaultFdc3, [context]);}) }
 
+		//Global channel only applies to default addContextListener and broadcast functions
+		if (!isOnGlobalChannel()){
+			//Route onwards to ChannelListeners, after filtering by direction
+			//debounce should have collected up multiple channels if it arrived on multiple here
+			const filteredChannels: string[] = [];
+			channels.map((channelId) => { 
+				if (currentChannelDirections[channelId] == Direction.Both ||
+						currentChannelDirections[channelId] == Direction.Listen){
+					filteredChannels.push(channelId);
+				}
+			});
 
-		//Route onwards to ChannelListeners, after filtering by direction (B.b. Global is always both directions)
-		let isListening = false;
-		source.channels.map((channelId) => { 
-			if (currentChannelDirections[channelId] == Direction.Both ||
-				currentChannelDirections[channelId] == Direction.Listen ||
-				channelId == GLOBAL_CHANNEL_NAME){
-				isListening = true;
+			if (filteredChannels.length > 0){	
+				const source: ChannelSource = { channels: filteredChannels, allChannels: allChannels };
+				if (currentChannelHandlers["null"]) { currentChannelHandlers["null"].map((handler) => {handler.apply(defaultFdc3, [context, source]);}) }
+				if (currentChannelHandlers[context.type]) { currentChannelHandlers[context.type].map((handler) => {handler.apply(defaultFdc3, [context, source]);}) }
 			}
-		});
-		if (isListening && currentChannelHandlers["null"]) { currentChannelHandlers["null"].map((handler) => {handler.apply(defaultFdc3, [context, source]);}) }
-		if (isListening && currentChannelHandlers[context.type]) { currentChannelHandlers[context.type].map((handler) => {handler.apply(defaultFdc3, [context, source]);}) }
+		}
 	}
 
-	/** Util for returning a LinkState (sued as a return from linkToChannel. */
-	function getLinkState(channelIds?): LinkState {
-		const _channelIds: string[] = channelIds ?? Object.keys(currentChannelDirections);
+	/** Util for returning a LinkState (used as a return from linkToChannel. */
+	function getLinkState(channelDirections?: Record<string,string>): LinkState {
+		const _directions: Record<string,string> = channelDirections ?? currentChannelDirections;
+		const _channelIds: string[] = Object.keys(_directions);
 		return {
 			channels: _channelIds.map((channelId: string) => channelIdToChannel[channelId]),
-			allChannels: allChannels
+			allChannels: allChannels,
+			channelDirections: _directions
 		};
 	}
+
+	/** Typing used by utility for displaying link dialog*/
+	type LinkParams = {channelName: string, direction?: Direction, doNotApplyAgain: true};
+
+	/** Utility function for displaying dialog to apply channel link changes to other apps of the same type.
+	 */
+	function maybeDisplayLinkOtherAppsDialog(applyChange: (windowName:string) => void): void {
+
+		//first check if there are any other instances of this app!
+		let otherInstances = false;
+		FSBL.Clients.AppsClient.getActiveDescriptors().then(({err, data}) => {
+			if (err || !data) {errorLog(`Received error from AppsClient.getActiveDescriptors`, err);}
+			else {
+				for (let windowName in data) {
+					if (data[windowName].componentType == myComponentType) {
+						otherInstances = true;
+						break;
+					}
+				}
+			}
+		});
+
+		if (otherInstances) {
+			log("Showing dialog to ask user if they wish to link other chaannels...");
+			
+			//show dialog and handle requests to link other instances of the same app
+			//dialog will persist after this function returns!
+			FSBL.Clients.DialogManager.open(
+				"YesNoDialog",
+				{
+					title: "Apply Channel Confirmation",
+					question: "Do you want to apply the same channel change on all open windows of this app?",
+					negativeResponseLabel: "No",
+					cancelResponseLabel: "Unsure",
+					affirmativeResponseLabel: "Yes",
+					showNegativeButton: true,
+					showAffirmativeButton: true,
+					showCancelButton: false
+				},
+				(err, response) => {
+					console.log('response', response);
+					// TODO: Switch on response.choice
+					if (response.choice == "affirmative") {
+						FSBL.Clients.AppsClient.getActiveDescriptors().then(({err, data}) => {
+							if (err || !data) {errorLog(`Received error from AppsClient.getActiveDescriptors`, err);}
+							else {
+								for (let windowName in data) {
+									if (data[windowName].componentType == myComponentType) {
+										applyChange(windowName);
+									}
+								}
+								
+							}
+						});
+					} else {
+						debug("User rejected adding other apps to same channel.");
+					}
+				}
+			);	
+		} else {
+			log(`Skipping dialog to ask user if they wish to link other channels as this is the only instance of ${myComponentType}`);
+		}
+	};
+
 
 	//-------------------------------------------------------------------------
 	//Custom FDC3 API implementation
@@ -242,27 +417,27 @@ const main = async () => {
 		//provide custom FDC3 functions
 
 		/**
-		 * Note that all instances popup is not implemented (yet)
+		 * Link an app to a specified channel, with a specified direction. Can be used on a local or remote component.
 		 * 
 		 * //original docs:
 		 * The default direction is "Both"
 		 * The method is executed either on the supplied windowName or on the current Finsemble window name.
 		 * If more than one instance of the same application is launched, displays a prompt asking the user 
 		 * if they would like to link all instances of the application to the target channel.
-		 * @param channelName 
-		 * @param direction 
-		 * @param windowName 
-		 * @param doNotApplyAgain no idea what this parameter does...
+		 * 
+		 * @param channelName The channel name to link to.
+		 * @param direction The direction to link in, valid values include "Both", "Listen", "Broadcast" and control whether messages are sent or received by `publishToChannel` and `addChannelListener`.
+		 * @param windowName The windowName to apply the change to, will target local window if falsey.
+		 * @param doNotApplyAgain If false, prompt the user to add other apps of teh same type to the channel
 		 * @returns LinkState for the current window.
 		 */
-		linkToChannel: (channelName: string, direction: string = Direction.Both, windowName: string | null | undefined, doNotApplyAgain: boolean): LinkState => {
+		linkToChannel: (channelName: string, direction: Direction = Direction.Both, windowName: string | null | undefined, doNotApplyAgain: boolean): LinkState => {
 			//check args
 			if (!Object.values<string>(Direction).includes(direction)) {
 				const errMsg = `Unrecognized direction '${direction}', valid directions: ${Object.values(Direction)}`;
 				errorLog(errMsg);
 				return getLinkState();
 			} else {
-				const myWindowName = finsembleWindow.windowName;
 				if (windowName && myWindowName !== windowName) {
 					log(`linkToChannel setting channel state for remote window '${windowName}', channel '${channelName}', direction '${direction}', doNotApplyAgain '${doNotApplyAgain}'`);
 					
@@ -271,16 +446,18 @@ const main = async () => {
 						getRouterTopicName("linkToChannel",windowName),
 						{channelName, direction, doNotApplyAgain}
 					);
-
-					// Note that the LinkState for a remote is NOT currently returned
-					// when the windowName is specified, the local state is. 
-
-					//to return remote link state synchronously is nearly impossible
+					
+					//to return remote link state synchronously is difficult
 					//  to do so, a pubsub or distributed store is needed that syncs all known window's state
 					//  to a local variable, take the current state for the remote window apply this change to 
 					//  it and return
-
-					return getLinkState(/* channelIds */); 
+					if(remoteStateCache[windowName]){
+						remoteStateCache[windowName][channelName] = direction;
+						return getLinkState(remoteStateCache[windowName]);
+					} else {
+						warn(`Cached channel state was not available for ${windowName}, returning local LinkState instead`);
+						return getLinkState();
+					} 
 				} else {
 
 					//drop off the global channel if on it
@@ -295,9 +472,20 @@ const main = async () => {
 						.then((listener) => { currentChannelDefaultFDC3Listeners[channelName] = listener });
 					}
 
-					transmitState();
-					saveStateToWorkspace();
-					if(stateChangeHandler) { stateChangeHandler(currentChannelDirections) }
+					processStateChange();
+
+					if (!doNotApplyAgain) {
+						//Apply change to other components of teh same type
+						const linkParams: LinkParams = {channelName, direction, doNotApplyAgain: true /* don't prompt user on each  one */};
+						const applyChange = (windowName) => {
+							log(`Linking ${windowName} to channel '${channelName}', direction '${direction}'`);
+							FSBL.Clients.RouterClient.transmit(
+								getRouterTopicName("linkToChannel",windowName),
+								linkParams//{channelName, direction, true /* don't prompt user on each  one */}
+							);
+						};
+						maybeDisplayLinkOtherAppsDialog(applyChange);
+					}
 
 					return getLinkState();
 				}
@@ -314,18 +502,19 @@ const main = async () => {
 
 		 
 		/**
+		 * Unlink an app from a specified channel. Can be used on a local or remote component.
 		 * Changed signature to match behavior (so code compiles in TS, will make no difference to use in JS)
 		 * 
 		 * //original docs:
 		 * contrary to its signature, this method always returns undefined.
 		 * The method is executed either on the supplied windowName or on the current Finsemble window name.
 		 * If more than one instance of the same application is launched, displays a prompt asking the user if they would like to unlink all instances of the application from the target channel.
-		 * @param channelName 
-		 * @param windowName 
-		 * @param doNotApplyAgain 
+		 * 
+		 * @param channelName The channel name to unlink from.
+		 * @param windowName The windowName to apply the change to, will target local window if falsey.
+		 * @param doNotApplyAgain If false, prompt the user to add other apps of teh same type to the channel
 		 */
 		unlinkFromChannel: (channelName: string, windowName: string | null | undefined, doNotApplyAgain: boolean): void => {
-			const myWindowName = finsembleWindow.windowName;
 			if (windowName && myWindowName !== windowName) {
 				//Use a router transmit to tell the named window to make this call then return
 				FSBL.Clients.RouterClient.transmit(
@@ -335,7 +524,9 @@ const main = async () => {
 				
 			} else {
 				//clear membership direction
-				delete currentChannelDirections[channelName];
+				if(currentChannelDirections[channelName]) {
+					delete currentChannelDirections[channelName];
+				}
 
 				//unsubscribe default FDC3 subscription for context
 				if (currentChannelDefaultFDC3Listeners[channelName]) {
@@ -347,9 +538,20 @@ const main = async () => {
 					joinGlobalChannel();
 				}
 
-				transmitState();
-				saveStateToWorkspace();
-				if(stateChangeHandler) { stateChangeHandler(currentChannelDirections) };
+				processStateChange();
+
+				if (!doNotApplyAgain) {
+					//Apply change to other components of teh same type
+					const linkParams: LinkParams = {channelName, doNotApplyAgain: true /* don't prompt user on each  one */};
+					const applyChange = (windowName) => {
+						log(`Unlinking ${windowName} from channel '${channelName}''`);
+						FSBL.Clients.RouterClient.transmit(
+							getRouterTopicName("unlinkFromChannel",windowName),
+							linkParams 
+						);
+					};
+					maybeDisplayLinkOtherAppsDialog(applyChange);
+				}
 			}
 		},
 
@@ -400,8 +602,7 @@ const main = async () => {
 		 * the current LinkerClient state and channel directions.
 		 * @param cb 
 		 */
-		onStateChange: (cb: (state: Record<string, string>) => void): void => {
-			//TODO: get an example of the state from current implementation to make sure we're doing this right
+		onStateChange: (cb: (err, state: LinkState) => void): void => {
 			stateChangeHandler = cb;
 		},
 		
@@ -483,14 +684,11 @@ const main = async () => {
 		 */
 		broadcast: (context: Context): Promise<void> => {
 			//broadcast to global or other channels we're currently linked to
-			if (Object.keys(currentChannelDirections).length == 0) {
+			if (isOnGlobalChannel()) {
 				globalChannel.broadcast(context);
 			} else {
 				for (let channelId in currentChannelDirections) {
-					if (currentChannelDirections[channelId] == Direction.Broadcast ||
-							currentChannelDirections[channelId] == Direction.Both){
-						channelIdToChannel[channelId].broadcast(context);
-					}
+					channelIdToChannel[channelId].broadcast(context);
 				}
 			}
 
@@ -504,18 +702,16 @@ const main = async () => {
 		 */
 		publishToChannel: (context?: Context): void => {
 			//TODO: figure out why context can be optional...
-			//TODO: figure out if a direction applies to the global channel - currently does not
 			if (context) {
-				if (Object.keys(currentChannelDirections).length == 0) {
-					//always both directions on global channel
-					globalChannel.broadcast(context);
+				if (isOnGlobalChannel()) {
+					debug(`Ignoring publishToChannel as we're only on the ${GLOBAL_CHANNEL_NAME} channel`);
 				} else {
 					for (let channelId in currentChannelDirections) {
 						if (currentChannelDirections[channelId] == Direction.Both ||
 							currentChannelDirections[channelId] == Direction.Broadcast) {
 								channelIdToChannel[channelId].broadcast(context);
 						} else {
-							debug(`ignoring context broadcast for channel ${channelId} as its set to Listen only`);
+							debug(`ignoring publishToChannel for channel ${channelId} as its set to Listen only`);
 						}
 					}
 				}
@@ -531,8 +727,7 @@ const main = async () => {
 		findInstances: (app: AppIdentifier): Promise<Array<AppIdentifier>> => logAndCall<Promise<Array<AppIdentifier>>>(defaultFdc3.findInstances, [app]),
 		getAppMetadata: (app: AppIdentifier): Promise<AppMetadata> => logAndCall<Promise<AppMetadata>>(defaultFdc3.getAppMetadata,[app]),
 	  
-		// context
-		//custom implementation above
+		// context listening must use custom implementation above
 	  
 		// intents
 		findIntent: (intent: string, context?: Context, resultType?: string): Promise<AppIntent> => logAndCall<Promise<AppIntent>>(defaultFdc3.findIntent,[intent, context, resultType]),
@@ -566,7 +761,6 @@ const main = async () => {
 		} else if (response?.data) {
 			const { channelName, direction, doNotApplyAgain } = response.data;
 			const linkState = customFdc3.linkToChannel(channelName, direction, undefined, doNotApplyAgain);
-			// this will cause our state to be transmitted, which the requestor can listen for to return a LinkState
 		}
 	});
 
@@ -576,17 +770,9 @@ const main = async () => {
 		} else if (response?.data) {
 			const { channelName, doNotApplyAgain } = response.data;
 			customFdc3.unlinkFromChannel(channelName, undefined, doNotApplyAgain);
-			// this will cause our state to be transmitted, which the requestor can listen for to return a LinkState
 		}
 	});
 
-	FSBL.Clients.RouterClient.addListener(getRouterTopicName("requestState"), (error, response) => {
-		if (error) {
-			errorLog('addListener for requestState failed: ' + JSON.stringify(error));
-		} else {
-			transmitState();
-		}
-	});
 
 	//-------------------------------------------------------------------------
 	//Check for workspace state for adapter (we take over saving channel membership as it has directions)
