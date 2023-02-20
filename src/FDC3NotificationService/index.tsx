@@ -133,9 +133,6 @@ const main = () => {
 				}
 			});
 
-			/**
-			 * @TODO: Regex
-			 */
 			if (Object.keys(notification).length) {
 				filter.include?.push(notification);
 			}
