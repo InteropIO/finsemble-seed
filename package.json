@@ -19,6 +19,7 @@
 	"author": "Cosaic",
 	"license": "SEE LICENSE IN LICENSE",
 	"dependencies": {
-		"@finsemble/finsemble-core": "8.4.1"
+		"@finsemble/finsemble-core": "8.4.1",
+		"uuid-random": "^1.3.2"
 	}
 }

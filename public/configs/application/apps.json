@@ -3,6 +3,58 @@
 	"$schema": "../../../node_modules/@finsemble/finsemble-core/configs/schemas/fileBasedSchemas/appsConfigFile.schema.json",
 	"apps": [
 		{
+			"appId": "FDC3NotificationService",
+			"name": "FDC3NotificationService",
+			"description": "FDC3NotificationService",
+			"type": "web",
+			"details": {
+				"url": "$applicationRoot/FDC3NotificationService/index.html"
+			},
+			"hostManifests": {
+				"Finsemble": {
+					"component": {
+						"category": "system",
+						"showDevConsoleOnVisible": false
+					},
+					"bootParams": {
+						"stage": "preuser",
+						"dependencies": []
+					},
+					"appService": true,
+					"waitForInitialization": false,
+					"window": {
+						"affinity": "systemComponents",
+						"url": "$applicationRoot/FDC3NotificationService/index.html"
+					}
+				}
+			},
+			"version": "1.0.0",
+			"contactEmail": "info@finsemble.com",
+			"supportEmail": "support@finsemble.com",
+			"publisher": "Finsemble",
+			"interop": {
+				"intents": {
+					"listensFor": {
+						"CreateNotification": {
+							"displayName": "Create Notification",
+							"contexts": ["fdc3.notification"],
+							"resultType": "fdc3.notification"
+						},
+						"UpdateNotification": {
+							"displayName": "Update Notification",
+							"contexts": ["fdc3.notification"],
+							"resultType": "fdc3.notification"
+						},
+						"GetNotifications": {
+							"displayName": "Get Notifications",
+							"contexts": ["fdc3.notification.filter"],
+							"resultType": "channel<fdc3.notification>"
+						}
+					}
+				}
+			}
+		},
+		{
 			"appId": "ChartIQ Example App",
 			"name": "ChartIQ Example App",
 			"type": "web",
