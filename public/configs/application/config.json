@@ -8,7 +8,10 @@
 					"preferPreviousState": true,
 					"foundation": {
 						"appFolders": {
-							"list": ["Advanced App Launcher", "Favorites"],
+							"list": [
+								"Advanced App Launcher",
+								"Favorites"
+							],
 							"folders": {
 								"Advanced App Launcher": {
 									"icon": "ff-component",
@@ -89,7 +92,11 @@
 			"enabled": false
 		},
 		"logger": {
-			"hotkeyShowCentralLogger": ["ctrl", "shift", "L"]
+			"hotkeyShowCentralLogger": [
+				"ctrl",
+				"shift",
+				"L"
+			]
 		},
 		"storage": {
 			"defaultStorage": "IndexedDBAdapter",
@@ -113,6 +120,41 @@
 		"floatingTitlebarComponent": "Floating Titlebar"
 	},
 	"globalHotkeys": {},
-	"importConfig": ["$configRoot/application/appd.json", "$configRoot/application/apps.json"],
-	"toolbarMenus": {}
+	"importConfig": [
+		"$configRoot/application/appd.json",
+		"$configRoot/application/apps.json"
+	],
+	"toolbarMenus": {},
+	"components": {
+		"CustomFDC3Service": {
+			"appService": true,
+			"bootParams": {
+				"stage": "preuser"
+			},
+			"window": {
+				"url": "$applicationRoot/customFDC3Service/index.html",
+				"options": { "autoShow": false}
+			},
+			"component": {
+				"spawnOnStartup": true
+			}
+		},
+		"CustomFDC3Linker": {
+			"uiComponent": true,
+			"bootParams": {
+				"stage": "earlyuser"
+			},
+			"window": {
+				"url": "$applicationRoot/customFDC3Linker/index.html",
+				"top": "center",
+				"left": "center",
+				"width": 133,
+				"height": 254
+			},
+			"component": {
+				"spawnOnStartup": true
+			}
+		}
+	},
+	"windowTitleBarUrl": "$applicationRoot/WindowTitleBar/"
 }

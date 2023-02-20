@@ -1,4 +1,7 @@
 [
 	"./src/customFDC3/index.ts",
-	"./src/customFDC3Example/index.tsx"
+	"./src/customFDC3Linker/index.tsx",
+	"./src/customFDC3Example/index.tsx",
+	"./src/WindowTitleBar/index.tsx",
+	"./src/customFDC3Service/index.tsx"
 ]

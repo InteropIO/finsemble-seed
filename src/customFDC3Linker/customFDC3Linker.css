@@ -1,0 +1,47 @@
+
+body {
+	margin: 0;
+	border: 0;
+	font-size: var(--menu-font-size);
+	font-weight: var(--font-weight);
+	overflow: hidden;
+}
+
+.menuContainer {
+	width: 290px;
+	padding: 0;
+	height: 234px;
+	overflow: hidden;
+	display: flex;
+	flex-direction: row;
+}
+
+.linkerContainer {
+	width: 133px;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+}
+
+.directionContainer {
+	width: 157px;
+	display: flex;
+	flex-direction: column;
+}
+
+.directionWrapper {
+	height: 78px;
+	width: 157px;
+	padding: 0;
+	margin: 0;
+}
+
+.directionIcon {
+	height: 78px;
+	width: 157px;
+	margin: 0;
+}
+
+.directionIcon .active {
+	background-color: #3b3b3b;
+}
