@@ -7,7 +7,6 @@ This is a service that augments Finsemble's own notification capabilities and ke
 
 #### Video of the demonstration the proposed FDC3 intent & context based interface to notifications
 
-<video src="https://user-images.githubusercontent.com/1701764/201643126-f8766d05-d080-42ab-86d1-e2afdd23d317.mp4"/>
 
 
 
