@@ -283,8 +283,8 @@
 				"Finsemble": {
 					"window": {
 						"addToWorkspace": true,
-						"width": 800,
-						"height": 900,
+						"width": 500,
+						"height": 500,
 						"options": {
 							"minWidth": 150,
 							"minHeight": 150

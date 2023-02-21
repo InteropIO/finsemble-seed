@@ -1,0 +1,46 @@
+html {
+	height: 100%;
+	width: 100%;
+	padding: 0;
+}
+
+body {
+	display: flex;
+	overflow: auto;
+	height: 100%;
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+#container {
+	color: #FFFFFF;
+	display: flex;
+	flex-direction: column;
+	margin: 0;
+	justify-content:space-around;
+	align-items: center;
+	cursor: pointer;
+	user-select: none;
+	flex: 1;
+	padding: 10px;
+}
+
+button {
+	font-size: large;
+	font-weight: bold;
+}
+
+hr {
+	width: 80%
+}
+
+label {
+	width: 80%
+}
+
+textarea {
+	height: 100px;
+	width: 100%
+}
