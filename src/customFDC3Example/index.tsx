@@ -74,7 +74,7 @@ const CustomFDC3Example: React.FunctionComponent<{ title?: string }> = ({
 	);
 };
 
-//some small delay is required for the preload to run. This may be covered by waiting for Finsemble clients with the usual ready pattern/
+//some small delay is required for the preload to run. This should be covered by waiting for Finsemble clients with the usual ready pattern
 const main = () => {
 	ReactDOM.render(
 		<CustomFDC3Example />,

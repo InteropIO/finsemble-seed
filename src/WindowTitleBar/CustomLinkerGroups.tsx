@@ -50,35 +50,46 @@ export const LinkerGroups: React.FunctionComponent = () => {
 	const channelStateHandler: ListenerFunction<Record<string,Direction>> = (err, response) => {
 		setChannelDirections(response.value);
 	};
-	const allChannelsHandler = (err: StandardError, values: Record<string, DisplayMetadata>) => {
-		//listeners and get retrun values in slightly different places
-		log("CustomLinkerGroups: Received all channels:", values);
-		setAllChannels(values);
-	};
 
 	/** Retrieve the distributed store used for state communication. */
-	const getDistributedStore = async () => {
-		const setHandlers = (storeObj: StoreModel) => {
-			distribStoreObj = storeObj;
-			//only listen to this window's state
-			distribStoreObj.addListener([STATE_DISTRIBUTED_STORE_STATE_FIELD, myWindowName],channelStateHandler);
-			
-			//just retrieve the channels, we need the initial state and it should not change
-			distribStoreObj.get([STATE_DISTRIBUTED_STORE_ALLCHANNELS_FIELD], allChannelsHandler);
-
-			debug(`DistributedStore ${STATE_DISTRIBUTED_STORE_NAME} connected`);
-		};
-		FEAGlobals.FSBL.Clients.DistributedStoreClient.getStore({
-			store: STATE_DISTRIBUTED_STORE_NAME,
-			global: true
-		},
-		(err, storeObject) => {
+	const getDistributedStore = async (): Promise<void> => {
+		return new Promise(async (resolve, reject)=>{
+			const setHandlers = async (storeObj: StoreModel) => {
+				distribStoreObj = storeObj;
+				
+				//just retrieve the channels, we need the initial state and it should not change
+				const {err, data} = await distribStoreObj.get<Record<string, DisplayMetadata>>([STATE_DISTRIBUTED_STORE_ALLCHANNELS_FIELD]);
+				if (err || !data) { errorLog("Failed to retrieve all channels!"); }
+				else {
+					setAllChannels(data);
+					debug("CustomLinkerGroups: Received all channels:", data);
+				}
+				
+				//now retrieve this window's state
+				const {err: err2, data: data2} = await distribStoreObj.get<Record<string, Direction>>([STATE_DISTRIBUTED_STORE_STATE_FIELD, myWindowName]);
+				if (err2 || !data2) { debug("Failed to retrieve all channels! It may not have been setup yet, deferring to listener."); }
+				else {
+					setChannelDirections(data2);
+					debug("CustomLinkerGroups: Received channel directions:", data2);
+				}
+				//now listen to this window's state for changes
+				distribStoreObj.addListener([STATE_DISTRIBUTED_STORE_STATE_FIELD, myWindowName], channelStateHandler);
+				
+				debug(`DistributedStore ${STATE_DISTRIBUTED_STORE_NAME} connected`);
+			};
+			const {err,data: storeObject} = await FEAGlobals.FSBL.Clients.DistributedStoreClient.getStore({
+				store: STATE_DISTRIBUTED_STORE_NAME,
+				global: true
+			});
 			if (err || !storeObject) {
 				errorLog(`DistributedStore ${STATE_DISTRIBUTED_STORE_NAME} could not be retrieved`, err);
+				reject(`DistributedStore ${STATE_DISTRIBUTED_STORE_NAME} could not be retrieved, see log for details`);
 			} else {
-				setHandlers(storeObject);
+				await setHandlers(storeObject);
+				resolve()
 			}
 		});
+		
 	};
 
 	const unsubscribeDistributedStore = () => {

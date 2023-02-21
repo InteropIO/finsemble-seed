@@ -370,7 +370,8 @@ class CustomFdc3 implements ICustomFdc3 {
 			if (err || !data) {errorLog(`Received error from AppsClient.getActiveDescriptors`, err);}
 			else {
 				for (let windowName in data) {
-					if (data[windowName].componentType == this.myComponentType) {
+					if (data[windowName].componentType == this.myComponentType
+						&& windowName !== this.myWindowName) {
 						otherInstances = true;
 						break;
 					}

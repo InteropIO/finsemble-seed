@@ -459,9 +459,9 @@ const CustomLinkerElement: React.FunctionComponent<{ title?: string }> = ({
 				className="directionContainer"
 			>	
 				<div className="directionTitle">Channel Direction</div>
-				{directionElement(Direction.Both, Object.keys(allChannels).length+1)}
-				{directionElement(Direction.Listen, Object.keys(allChannels).length+2)}
-				{directionElement(Direction.Broadcast, Object.keys(allChannels).length+3)}
+				{directionElement(Direction.Both, Object.keys(allChannels).length)}
+				{directionElement(Direction.Listen, Object.keys(allChannels).length+1)}
+				{directionElement(Direction.Broadcast, Object.keys(allChannels).length+2)}
 			</div>
 		</div>
 	);
