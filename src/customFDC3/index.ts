@@ -1,14 +1,12 @@
-// This line imports type declarations for Finsemble's globals such as FSBL and fdc3. You can ignore the warning that it is defined but never used.
-// Important! Please use the global FSBL and fdc3 objects. Do not import functionality from finsemble
-import { AppIdentifier, AppIntent, AppMetadata, Channel, Context, ContextHandler, DesktopAgent, DisplayMetadata, ImplementationMetadata, IntentHandler, IntentResolution, joinUserChannel, Listener, PrivateChannel, StoreModel, System } from "@finsemble/finsemble-core";
+import { AppIdentifier, AppIntent, AppMetadata, Channel, Context, ContextHandler, DesktopAgent, ImplementationMetadata, IntentHandler, IntentResolution, joinUserChannel, Listener, PrivateChannel, StoreModel, System } from "@finsemble/finsemble-core";
 import { STATE_DISTRIBUTED_STORE_NAME, STATE_DISTRIBUTED_STORE_CHECKTIME_FIELD, STATE_DISTRIBUTED_STORE_STATE_FIELD, WORKSPACE_STATE_FIELD_NAME, GLOBAL_CHANNEL_NAME, STATE_CLEAN_CHECK_FREQUENCY, STATE_CLEAN_CHECK_VARIANCE, CONTEXT_MESSAGE_DEBOUNCE_MS } from "./constants";
 import { errorLog, debug, log, objectHash, getRouterTopicName, warn } from "./utils";
 import { Direction, ChannelListenerHandler, LinkState, ChannelSource, LinkParams, ICustomFdc3 } from "./types";
 
 /** Custom GSP FDC3 API implementation, intended to allow GSP apps to migrate to a later Finsemble
-		 *  version and to communicate/interoperate with applications working with the default FDC3 
-		 *  implementation.
-		 */
+ *  version and to communicate/interoperate with applications working with the default FDC3 
+ *  implementation.
+ */
 class CustomFdc3 implements ICustomFdc3 {
 	private initialized: boolean = false;
 	/** The original FDC3 implementation that we are patching */
@@ -397,8 +395,8 @@ class CustomFdc3 implements ICustomFdc3 {
 						showCancelButton: false
 					},
 					(err, response) => {
-						console.log('response', response);
-						// TODO: Switch on response.choice
+						log('Apply Channel dialog response', response);
+
 						if (response.choice == "affirmative") {
 							FSBL.Clients.AppsClient.getActiveDescriptors().then(({err, data}) => {
 								if (err || !data) {errorLog(`Received error from AppsClient.getActiveDescriptors`, err);}
@@ -572,7 +570,7 @@ class CustomFdc3 implements ICustomFdc3 {
 		return Promise.resolve();
 	}
 
-	/** Finsemble specific FDC3 function, adapted to work with preload. Returns all channels. */
+	/** Finsemble specific FDC3 function, adapted to work with preload. Leave a specific channel. */
 	leaveChannel(channelId: string) : Promise<void> {
 		this.unlinkFromChannel(channelId, null, true);
 		return Promise.resolve();
@@ -621,7 +619,6 @@ class CustomFdc3 implements ICustomFdc3 {
 	 * Returns the window's linked channels and their directions.
 	 */
 	getChannelDirections (): Record<string, string> {
-		//TODO: check if Global channel membership should be returned or not, currently not
 		return this.currentChannelDirections;
 	}
 
@@ -713,7 +710,6 @@ class CustomFdc3 implements ICustomFdc3 {
 	* @param context 
 	*/
 	publishToChannel (context?: Context): void {
-		//TODO: figure out why context can be optional...
 		if (context) {
 			if (this.isOnGlobalChannel()) {
 				debug(`Ignoring publishToChannel as we're only on the ${GLOBAL_CHANNEL_NAME} channel`);
@@ -795,11 +791,7 @@ const main = async () => {
 			await (window.fdc3 as ICustomFdc3).initialize();
 		};
 
-		// if (window.fdc3) {
-		// 	monkeyPatch();
-		// } else {
-		// 	window.addEventListener("FSBLReady", monkeyPatch);
-		// }
+		//We need to wait for FSBL and fdc3 to be created before we can use and/or patch them
 		if (window.FSBL && FSBL.addEventListener) {
 			FSBL.addEventListener("onReady", monkeyPatch);
 		} else {
@@ -808,13 +800,6 @@ const main = async () => {
 	}
 };
 
-//execute immediately, do not wait for Finsemble Client init
+//execute immediately, we wait for Finsemble Client init inside main
 main();
-// /**
-//  * This initialization pattern is required in preloads. Do not call FSBL or fdc3 without waiting for this pattern.
-//  */
-// if (window.FSBL && FSBL.addEventListener) {
-// 	FSBL.addEventListener("onReady", main);
-// } else {
-// 	window.addEventListener("FSBLReady", main);
-// }
+
