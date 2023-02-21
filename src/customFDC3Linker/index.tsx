@@ -190,14 +190,6 @@ const CustomLinkerElement: React.FunctionComponent<{ title?: string }> = ({
 		};
 	}, []);
 
-	const moveFocus = (newIndex: number) => {
-		setFocusedMenuIndex(newIndex);
-		const elements = containerElement.current?.querySelectorAll(
-			"[role='menuitemcheckbox']"
-		) as NodeListOf<HTMLDivElement>;
-		elements?.[newIndex].focus();
-	};
-
 	const hideWindow = () => {
 		// Must blur or you end up having to click twice to show the window.
 		// If you just hide, the first time the user clicks
@@ -283,7 +275,7 @@ const CustomLinkerElement: React.FunctionComponent<{ title?: string }> = ({
 
 	const channelElements =
 		activeWindowName &&
-		Object.keys(allChannels).map((channelId) => {
+		Object.keys(allChannels).map((channelId, index) => {
 			const stateForWindow: Record<string, Direction> | null =
 				windowChannelDirections[activeWindowName];
 			const active: boolean = stateForWindow && !!stateForWindow[channelId];
@@ -297,7 +289,7 @@ const CustomLinkerElement: React.FunctionComponent<{ title?: string }> = ({
 					className={`channel-wrapper`} // Note Finsemble uses CSS classes here so borders can differ/provide shadow
 					onClick={() => toggleChannel(channelId)}
 					onMouseEnter={(e) => {onMouseEnterChannel(channelId, e)}}
-					tabIndex={-1}
+					tabIndex={index}
 					role="menuitemcheckbox"
 					aria-checked={!!active}
 				>
@@ -322,7 +314,7 @@ const CustomLinkerElement: React.FunctionComponent<{ title?: string }> = ({
 	 * @param direction Arrow direction
 	 * @returns Styled spawn element
 	 */
-	const directionElement = (direction: Direction) => {
+	const directionElement = (direction: Direction, tabIndex: number) => {
 		const hexColor = activeChannelId ? allChannels[activeChannelId]?.color : null ?? "#000000";
 		let style = {
 			textShadow: `1px 0px 0px ${hexColor}`,//.replace('#A21EBC', '#c760dc'), //optimization group1 color bad visual effects under dark theme
@@ -338,36 +330,98 @@ const CustomLinkerElement: React.FunctionComponent<{ title?: string }> = ({
 		const active: boolean = !!activeWindowName && !!activeChannelId && windowChannelDirections?.[activeWindowName]?.[activeChannelId] == direction;
 		return <div className="directionWrapper"
 				onClick={() => toggleChannel(activeChannelId, direction)}
-				tabIndex={-1}
+				tabIndex={tabIndex}
 				role="menuitemcheckbox"
 				aria-checked={active}
 			>
 				<div
 					key={`${direction}`}
 					tabIndex={-1}
-					className={`directionIcon${active ? " active": ""}`}
+					className={`directionIcon${active ? " activeDirection": ""}`}
 					title={`${activeChannelId} ${direction}`}
+					style={style}
 				>
-					<span style={style}>{theChar} {direction}</span>
+					{theChar} {direction}
 				</div>
 			</div>
 	};
 
+	const moveFocus = (newIndex: number) => {
+		setFocusedMenuIndex(newIndex);
+		const elements = containerElement.current?.querySelectorAll(
+			"[role='menuitemcheckbox']"
+		) as NodeListOf<HTMLDivElement>;
+		elements?.[newIndex].focus();
+		log("move, newIndex", newIndex);
+		if (newIndex < Object.keys(allChannels).length) {
+			const newChannel = Object.keys(allChannels)[newIndex];
+			onMouseEnterChannel(newChannel, null);
+		} 
+	};
+
+	/** Keyboard navigation needs adjustement - it should support moving left/right 
+	 *  and should set the active
+	*/
 	const manageKeyboardNavigation = (
 		evt: React.KeyboardEvent<HTMLDivElement>
 	) => {
-		const lastChannelIndex =
-			Object.keys(allChannels).length + 3 /*directions*/ - 1;
-		if (evt.key === "ArrowDown") {
-			moveFocus(
-				focusedMenuIndex >= lastChannelIndex ? 0 : focusedMenuIndex + 1
-			);
+		const lastChannelIndex = Object.keys(allChannels).length - 1;
+		const lastDirectionIndex = lastChannelIndex + 3;
+
+		let focusDirections = focusedMenuIndex > lastChannelIndex;
+
+		if (evt.key === "Tab" || evt.key === "ArrowDown") {
+			evt.preventDefault();
+			if (focusDirections) {
+				moveFocus(
+					focusedMenuIndex >= lastDirectionIndex ? lastChannelIndex+1 : focusedMenuIndex + 1
+				);
+			} else {
+				moveFocus(
+					focusedMenuIndex >= lastChannelIndex ? 0 : focusedMenuIndex + 1
+				);
+			}
 		} else if (evt.key === "ArrowUp") {
-			moveFocus(
-				focusedMenuIndex <= 0 ? lastChannelIndex : focusedMenuIndex - 1
-			);
+			if (focusDirections) {
+				moveFocus(
+					focusedMenuIndex <= lastChannelIndex+1 ? lastDirectionIndex : focusedMenuIndex - 1
+				);
+			} else {
+				moveFocus(
+					focusedMenuIndex <= 0 ? lastChannelIndex : focusedMenuIndex - 1
+				);
+			}
+			
+		} else if (evt.key === "ArrowRight") {
+			if (!focusDirections) {
+				moveFocus(
+					lastChannelIndex + 1 //highlight first direction
+				);
+			}
+		} else if (evt.key === "ArrowLeft") {
+			if (focusDirections) {
+				moveFocus(
+					0 //highlight first channel
+				);
+			}
 		} else if (evt.key === "Enter") {
-			toggleChannel(Object.keys(allChannels)[focusedMenuIndex]);
+			if (focusedMenuIndex <= lastChannelIndex) {
+				toggleChannel(Object.keys(allChannels)[focusedMenuIndex]);
+			} else {
+				switch (focusedMenuIndex-lastChannelIndex) {
+					case 1:
+						toggleChannel(activeChannelId, Direction.Both);
+						break;
+					case 2:
+						toggleChannel(activeChannelId, Direction.Listen);
+						break;
+					case 3:
+						toggleChannel(activeChannelId, Direction.Broadcast);
+						break;
+					default:
+						errorLog("Unknown focusedMenuIndex ", focusedMenuIndex, "lastChannelIndex", lastChannelIndex, "lastDirecitonIndex", lastDirectionIndex);
+				}
+			}
 		} else if (evt.key === "Escape") {
 			hideWindow();
 		}
@@ -382,6 +436,7 @@ const CustomLinkerElement: React.FunctionComponent<{ title?: string }> = ({
 		}
 	}
 	const onMouseEnterChannel = async (channelId, e) => {
+		log("spoon");
 		let {err, data: bounds} = await finsembleWindow.getBounds();
 		if (bounds && bounds.width != 290) {
 			bounds.width = 290
@@ -393,7 +448,7 @@ const CustomLinkerElement: React.FunctionComponent<{ title?: string }> = ({
 	return (
 		<div
 			className="menuContainer"
-			tabIndex={0}
+			tabIndex={-1}
 			role="menu"
 			ref={containerElement}
 			onKeyDown={manageKeyboardNavigation}
@@ -402,10 +457,11 @@ const CustomLinkerElement: React.FunctionComponent<{ title?: string }> = ({
 			<div className="linkerContainer">{channelElements}</div>
 			<div
 				className="directionContainer"
-			>
-				{directionElement(Direction.Both)}
-				{directionElement(Direction.Listen)}
-				{directionElement(Direction.Broadcast)}
+			>	
+				<div className="directionTitle">Channel Direction</div>
+				{directionElement(Direction.Both, Object.keys(allChannels).length+1)}
+				{directionElement(Direction.Listen, Object.keys(allChannels).length+2)}
+				{directionElement(Direction.Broadcast, Object.keys(allChannels).length+3)}
 			</div>
 		</div>
 	);

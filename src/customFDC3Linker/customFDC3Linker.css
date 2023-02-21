@@ -29,19 +29,36 @@ body {
 	flex-direction: column;
 }
 
+.directionTitle {
+	width: 157px;
+	height: 42px;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	justify-content: center;
+    align-items: center;
+	border-bottom: #FFFFFF 1px solid;
+}
+
 .directionWrapper {
-	height: 78px;
+	height: 64px;
 	width: 157px;
 	padding: 0;
 	margin: 0;
+
 }
 
 .directionIcon {
-	height: 78px;
-	width: 157px;
+	height: 100%;
+	width: 100%;
 	margin: 0;
+	display: flex;
+	justify-content: center;
+    align-items: center;
+	cursor: pointer;
+	user-select: none;
 }
 
-.directionIcon .active {
-	background-color: #3b3b3b;
+.activeDirection {
+	background-color: #5c5c5c;
 }
