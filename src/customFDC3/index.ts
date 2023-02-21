@@ -747,7 +747,7 @@ class CustomFdc3 implements ICustomFdc3 {
 	raiseIntent(intent: string, context: Context, app?: AppIdentifier): Promise<IntentResolution>;
 	raiseIntent (intent: string, context: Context, app?: unknown): Promise<IntentResolution> { return this.logAndCall<Promise<IntentResolution>>(this.defaultFdc3.raiseIntent,[intent, context, app]) }
 	
-	raiseIntentForContext(context: Context, name?: string): Promise<IntentResolution>;
+	raiseIntentForContext(context: Context, name?: String): Promise<IntentResolution>;
 	raiseIntentForContext(context: Context, app?: AppIdentifier): Promise<IntentResolution>;
 	raiseIntentForContext (context: Context, app?: unknown): Promise<IntentResolution> { return this.logAndCall<Promise<IntentResolution>>(this.defaultFdc3.raiseIntentForContext,[context, app]) }
 	
