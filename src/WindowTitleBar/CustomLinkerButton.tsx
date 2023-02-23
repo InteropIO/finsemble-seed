@@ -86,7 +86,7 @@ const CustomLinkerBtn: React.FunctionComponent<LinkerButtonProps> = ({
 
 	const showLinkerWindow = async () => {
 		if (!distribStoreObj){
-			errorLog(`Unable to aopen custom Linker window due to no connection to DistributedStore ${STATE_DISTRIBUTED_STORE_NAME}`);
+			errorLog(`Unable to open the custom Linker window due to no connection to DistributedStore ${STATE_DISTRIBUTED_STORE_NAME}`);
 		} else {
 			//set active window so menu updates itself
 			await distribStoreObj.set([STATE_DISTRIBUTED_STORE_ACTIVEWINDOWNAME_FIELD], myWindowName);

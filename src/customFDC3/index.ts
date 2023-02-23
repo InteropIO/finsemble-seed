@@ -48,12 +48,12 @@ class CustomFdc3 implements ICustomFdc3 {
 
 	/**
 	 * Constructor for custom FDC3 DesktopAgent
-	 * @param fdc3 Reference to the default FDC3 implementation that we will be patching.
+	 * @param _fdc3 Reference to the default FDC3 implementation that we will be patching.
 	 */
-	constructor(fdc3: DesktopAgent) {
+	constructor(_fdc3: DesktopAgent) {
 		//---------------------------------------------------------------------
 		//State variables
-		this.defaultFdc3 = fdc3;
+		this.defaultFdc3 = _fdc3;
 		this.myWindowName = System.Window.getCurrent().name;
 		this.myComponentType = "";
 		this.allChannels = [];
@@ -133,7 +133,7 @@ class CustomFdc3 implements ICustomFdc3 {
 			//  and we don't want to handle removing them on workspace switches
 			FSBL.Clients.RouterClient.addListener(getRouterTopicName("linkToChannel"), (error, response) => {
 				if (error) {
-					errorLog('addResponder from linkToChannel failed: ' + JSON.stringify(error));
+					errorLog('addListener from linkToChannel failed: ' + JSON.stringify(error));
 				} else if (response?.data) {
 					const { channelName, direction, doNotApplyAgain } = response.data;
 					this.linkToChannel(channelName, direction, undefined, doNotApplyAgain);
@@ -142,7 +142,7 @@ class CustomFdc3 implements ICustomFdc3 {
 
 			FSBL.Clients.RouterClient.addListener(getRouterTopicName("unlinkFromChannel"), (error, response) => {
 				if (error) {
-					errorLog('addResponder for unlinkFromChannel failed: ' + JSON.stringify(error));
+					errorLog('addListener for unlinkFromChannel failed: ' + JSON.stringify(error));
 				} else if (response?.data) {
 					const { channelName, doNotApplyAgain } = response.data;
 					this.unlinkFromChannel(channelName, undefined, doNotApplyAgain);
@@ -436,7 +436,7 @@ class CustomFdc3 implements ICustomFdc3 {
 	 * @param channelName The channel name to link to.
 	 * @param direction The direction to link in, valid values include "Both", "Listen", "Broadcast" and control whether messages are sent or received by `publishToChannel` and `addChannelListener`.
 	 * @param windowName The windowName to apply the change to, will target local window if falsey.
-	 * @param doNotApplyAgain If false, prompt the user to add other apps of teh same type to the channel
+	 * @param doNotApplyAgain If false, prompt the user to add other apps of the same type to the channel
 	 * @returns LinkState for the current window.
 	 */
 	linkToChannel(channelName: string, direction: Direction = Direction.Both, windowName: string | null | undefined, doNotApplyAgain: boolean) : LinkState {
@@ -507,7 +507,7 @@ class CustomFdc3 implements ICustomFdc3 {
 	}
 
 	/** Standard FDC3 function, adapted to work with preload. */
-	joinChannel (channelId: string) : Promise<void> { return joinUserChannel(channelId); }
+	joinChannel (channelId: string) : Promise<void> { return this.joinUserChannel(channelId); }
 	
 	/**
 	 * Unlink an app from a specified channel. Can be used on a local or remote component.
