@@ -13,7 +13,8 @@
 					"component": {
 						"category": "system"
 					},
-					"appService": true
+					"appService": true,
+					"waitForInitialization": true
 				}
 			},
 			"interop": {
