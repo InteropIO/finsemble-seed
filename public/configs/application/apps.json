@@ -4,8 +4,6 @@
 	"apps": [
 		{
 			"appId": "FDC3NotificationService",
-			"name": "FDC3NotificationService",
-			"description": "FDC3NotificationService",
 			"type": "web",
 			"details": {
 				"url": "$applicationRoot/FDC3NotificationService/index.html"
@@ -13,25 +11,11 @@
 			"hostManifests": {
 				"Finsemble": {
 					"component": {
-						"category": "system",
-						"showDevConsoleOnVisible": false
+						"category": "system"
 					},
-					"bootParams": {
-						"stage": "preuser",
-						"dependencies": []
-					},
-					"appService": true,
-					"waitForInitialization": false,
-					"window": {
-						"affinity": "systemComponents",
-						"url": "$applicationRoot/FDC3NotificationService/index.html"
-					}
+					"appService": true
 				}
 			},
-			"version": "1.0.0",
-			"contactEmail": "info@finsemble.com",
-			"supportEmail": "support@finsemble.com",
-			"publisher": "Finsemble",
 			"interop": {
 				"intents": {
 					"listensFor": {
