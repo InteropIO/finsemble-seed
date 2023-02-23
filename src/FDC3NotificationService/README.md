@@ -77,7 +77,7 @@ await fdc3.raiseIntent("UpdateNotification", submittedNotification);
 
 ### Receiving notifications
 
-It's possible to get a stream of notifications by raising a `GetNotifications` intent. It's possible to listen to for a subset or all of the notifications.
+It's possible to get a stream of notifications by raising a `GetNotifications` intent. It's possible to listen to a subset or all of the notifications.
 
 
 ##### Listening for all notifications
