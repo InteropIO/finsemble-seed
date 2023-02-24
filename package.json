@@ -1,6 +1,6 @@
 {
 	"name": "finsemble-seed",
-	"version": "8.4.1",
+	"version": "7.3.10",
 	"scripts": {
 		"adapter": "finsemble adapter",
 		"build": "finsemble build --watch=false",
@@ -19,6 +19,6 @@
 	"author": "Cosaic",
 	"license": "SEE LICENSE IN LICENSE",
 	"dependencies": {
-		"@finsemble/finsemble-core": "8.4.1"
+		"@finsemble/finsemble-core": "7.3.10"
 	}
 }
