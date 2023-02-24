@@ -194,7 +194,10 @@
 					"foreign": {
 						"components": {
 							"App Launcher": { "launchableByUser": true },
-							"Window Manager": { "FSBLHeader": true, "persistWindowState": true }
+							"Window Manager": {
+								"FSBLHeader": true,
+								"persistWindowState": true
+							}
 						}
 					},
 					"interop": {}
@@ -217,7 +220,7 @@
 			"name": "Tour",
 			"type": "web",
 			"details": {
-				"url": "$moduleRoot/ui-components/Tour/tour.html"
+				"url": "$applicationRoot/DependencyChecker/Client/index.html"
 			},
 			"hostManifests": {
 				"Finsemble": {
@@ -232,6 +235,19 @@
 						"left": "center",
 						"width": 800,
 						"height": 600
+					},
+					"custom": {
+						"dependencies": [
+							{
+								"appId": "CustomServiceA",
+								"retries": 2,
+								"waitForInitialization": true,
+								"shutdownTimeout": 10000,
+								"critical": true,
+								"initializationTimeout": 5000
+							}
+						],
+						"appUrl": "$moduleRoot/ui-components/Tour/tour.html"
 					},
 					"component": {
 						"displayName": "Take a Tour",
@@ -270,6 +286,126 @@
 					"src": "$moduleRoot/ui-components/Tour/take-a-tour.svg"
 				}
 			]
+		},
+		{
+			"appId": "DependencyCheckerService",
+			"name": "DependencyCheckerService",
+			"type": "web",
+			"details": {
+				"url": "$applicationRoot/DependencyChecker/Service/index.html"
+			},
+			"hostManifests": {
+				"Finsemble": {
+					"appService": true,
+					"waitForInitialization": true
+				}
+			}
+		},
+		{
+			"appId": "CustomServiceA",
+			"name": "CustomServiceA",
+			"type": "web",
+			"details": {
+				"url": "$applicationRoot/CustomServiceA/index.html"
+			},
+			"hostManifests": {
+				"Finsemble": {
+					"bootParams": {
+						"autoStart": false
+					},
+					"appService": true,
+					"waitForInitialization": true
+				}
+			}
+		},
+		{
+			"appId": "WPFExampleCore",
+			"name": "WPFExampleCore",
+			"type": "web",
+			"details": {
+				"url": "$applicationRoot/DependencyChecker/Client/index.html"
+			},
+			"interop": {
+				"intents": {
+					"listensFor": {
+						"ViewChart": {
+							"displayName": "View Chart",
+							"contexts": ["fdc3.instrument"]
+						}
+					}
+				}
+			},
+			"hostManifests": {
+				"Finsemble": {
+					"signatureKey": {
+						"e": "AQAB",
+						"ext": true,
+						"key_ops": ["verify"],
+						"kty": "RSA",
+						"n": "zPOxYfLiAd3rM7KOLDBIeLl0kjQ7fk43mTTc1Nm9BDaSNVWqvOshSMCHmqOrKZX_WwA67Y6CQxWI5rZ6WNzoLHQU3PyqOvAdB7RgXCHlSeVYZ2haTcbWRjAXQ89H1WfnW96VwAbZn5nccxQGYlZIl3AMcwNRqV4hmiKtJVq4-2OzA-zs9Yg4Pfs6TbKR1XbNKz6EAPHDev0-7Xdnb6x1-qr4uL2Bq0ZwgfnyKQIRLc3zhD5kwqiJ5N7uZAZomLRkMFMXwy1UftD6fQUlFT2yoISn403RwN7YHEL8KoA9X7Jgs-dtlBh8c38QzQ1vbdMBzPuyRb07GMMKb6bdjdBV1w"
+					},
+					"window": {
+						"minHeight": 300,
+						"minWidth": 300
+					},
+					"custom": {
+						"dependencies": [
+							{
+								"appId": "CustomServiceA",
+								"retries": 2,
+								"waitForInitialization": true,
+								"critical": true
+							},
+							{
+								"appId": "FDC3 workbench",
+								"retries": 2
+							}
+						],
+						"appPath": "$pathToWPFExampleCoreApp/WPFExampleCore.exe"
+					},
+					"foreign": {
+						"components": {
+							"App Launcher": {
+								"launchableByUser": true
+							}
+						}
+					}
+				}
+			},
+			"version": "1.0.0",
+			"publisher": "Cosaic"
+		},
+		{
+			"appId": "DependencyManager",
+			"name": "DependencyManager",
+			"type": "web",
+			"details": {
+				"url": "$applicationRoot/DependencyChecker/Manager/index.html"
+			},
+			"hostManifests": {
+				"Finsemble": {
+					"component": {
+						"singleton": true
+					}
+				}
+			}
+		},
+		{
+			"appId": "WindowlessExample",
+			"name": "WindowlessExample",
+			"type": "native",
+			"details": {
+				"path": "$pathToWindowlessExample/WindowlessExample.exe"
+			},
+			"hostManifests": {
+				"Finsemble": {
+					"window": {
+						"windowType": "native"
+					}
+				}
+			},
+			"version": "1.0.0",
+			"publisher": "Cosaic"
 		}
 	]
 }

@@ -1,0 +1,6 @@
+[
+	"./src/CustomServiceA/index.tsx",
+	"./src/DependencyChecker/Service/index.tsx",
+	"./src/DependencyChecker/Client/index.tsx",
+	"./src/DependencyChecker/Manager/index.tsx"
+]

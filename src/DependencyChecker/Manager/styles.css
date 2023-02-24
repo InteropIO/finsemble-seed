@@ -1,0 +1,22 @@
+.parent {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+
+.center {
+  justify-content: center;
+}
+
+.child-wrapper {
+  display: flex;
+}
+  
+.child {
+  flex: 1 0 21%;
+  margin: 3px;
+  padding: 0 5px;
+  background-color: var(--core-primary-2);
+  display: flex;
+  align-items: center;
+}
