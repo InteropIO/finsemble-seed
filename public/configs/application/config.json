@@ -8,10 +8,7 @@
 					"preferPreviousState": true,
 					"foundation": {
 						"appFolders": {
-							"list": [
-								"Advanced App Launcher",
-								"Favorites"
-							],
+							"list": ["Advanced App Launcher", "Favorites"],
 							"folders": {
 								"Advanced App Launcher": {
 									"icon": "ff-component",
@@ -92,11 +89,7 @@
 			"enabled": false
 		},
 		"logger": {
-			"hotkeyShowCentralLogger": [
-				"ctrl",
-				"shift",
-				"L"
-			]
+			"hotkeyShowCentralLogger": ["ctrl", "shift", "L"]
 		},
 		"storage": {
 			"defaultStorage": "IndexedDBAdapter",
@@ -120,10 +113,7 @@
 		"floatingTitlebarComponent": "Floating Titlebar"
 	},
 	"globalHotkeys": {},
-	"importConfig": [
-		"$configRoot/application/appd.json",
-		"$configRoot/application/apps.json"
-	],
+	"importConfig": ["$configRoot/application/appd.json", "$configRoot/application/apps.json"],
 	"toolbarMenus": {},
 	"components": {
 		"Authentication": {
