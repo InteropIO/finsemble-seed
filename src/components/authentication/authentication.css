@@ -1,0 +1,85 @@
+/*!
+ * authentication.css
+ * Copyright 2017 - 2020 by ChartIQ, Inc.
+ * All rights reserved.
+ */
+.fsbl-company-logo {
+	content: url("./cosaic-banner-100x20.png");
+	width: 100px;
+	height: 20px;
+	margin-left: 20px;
+}
+
+h1 {
+	text-align: center;
+}
+
+.fsbl-auth-logo {
+	content: url("./finsembleDarkBG_Solo@1.5x.png");
+	width: 154px;
+	height: 173px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+.fsbl-auth-wrapper {
+	padding-top: 10px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+/* Override defaults from dialogs.css which assumes flex placement */
+body.authentication .fsbl-button {
+	margin: 20px 0;
+	display: block;
+	flex-direction: initial;
+	line-height: 0px;
+}
+
+body.authentication .fsbl-auth-top {
+	display: flex;
+	justify-content: space-between;
+	padding: 10px 10px 5px 0;
+	width: 95%;
+}
+
+body.authentication .fsbl-close {
+	cursor: pointer;
+	display: flex;
+	justify-content: flex-end;
+	align-items: flex-start;
+	flex-direction: column;
+	height: 100%;
+}
+
+body.authentication .ff-close:hover {
+	color: var(--content-close-hover-color);
+}
+
+/* Override default body.dialog settings */
+body.authentication .fsbl-auth-input {
+	padding: 6px 0;
+	margin-top: 3px;
+}
+
+body.authentication form {
+	width: 65%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.fsbl-input-error-message {
+	color: var(--dialog-input-border-error-color);
+	font-size: small;
+}
+
+body.authentication {
+	background: var(--dialog-background-color);
+}
+
+/* stylelint-disable-next-line selector-no-vendor-prefix */
+::-webkit-input-placeholder {
+	text-align: left;
+}

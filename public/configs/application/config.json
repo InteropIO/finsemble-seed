@@ -8,7 +8,10 @@
 					"preferPreviousState": true,
 					"foundation": {
 						"appFolders": {
-							"list": ["Advanced App Launcher", "Favorites"],
+							"list": [
+								"Advanced App Launcher",
+								"Favorites"
+							],
 							"folders": {
 								"Advanced App Launcher": {
 									"icon": "ff-component",
@@ -89,7 +92,11 @@
 			"enabled": false
 		},
 		"logger": {
-			"hotkeyShowCentralLogger": ["ctrl", "shift", "L"]
+			"hotkeyShowCentralLogger": [
+				"ctrl",
+				"shift",
+				"L"
+			]
 		},
 		"storage": {
 			"defaultStorage": "IndexedDBAdapter",
@@ -113,6 +120,37 @@
 		"floatingTitlebarComponent": "Floating Titlebar"
 	},
 	"globalHotkeys": {},
-	"importConfig": ["$configRoot/application/appd.json", "$configRoot/application/apps.json"],
-	"toolbarMenus": {}
+	"importConfig": [
+		"$configRoot/application/appd.json",
+		"$configRoot/application/apps.json"
+	],
+	"toolbarMenus": {},
+	"components": {
+		"Authentication": {
+			"//": "Dummy component for internal testing of Authentication",
+			"uiComponent": true,
+			"window": {
+				"url": "$applicationRoot/components/authentication/index.html",
+				"top": "center",
+				"left": "center",
+				"width": 358,
+				"height": 460,
+				"ephemeral": true,
+				"options": {
+					"autoShow": true
+				}
+			}
+		}
+	},
+	"authentication": {
+		"startup": {
+			"adapter": "PASSWORD",
+			"component": "Authentication",
+			"client_id": "iLYjYGyc8Ix9Z5RQgqBitHzLJKH3CGZ0",
+			"redirect_uri": "http://localhost:3375/build/components/authentication/Authentication.html",
+			"authorization_url": "https://dev-l6qsa4rd.us.auth0.com/authorize",
+			"token_url": "https://dev-l6qsa4rd.us.auth0.com/oauth/token",
+			"user_info_url": "https://dev-l6qsa4rd.us.auth0.com/userinfo"
+		}
+	}
 }
