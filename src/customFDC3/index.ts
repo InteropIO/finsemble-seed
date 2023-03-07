@@ -6,6 +6,12 @@ import { Direction, ChannelListenerHandler, LinkState, ChannelSource, LinkParams
 /** Custom GSP FDC3 API implementation, intended to allow GSP apps to migrate to a later Finsemble
  *  version and to communicate/interoperate with applications working with the default FDC3 
  *  implementation.
+ * 
+ *  Note that fdc3.broadcast and fdc3.addContextListener work as per FDC3 1.0: via a single global channel only.
+ *  Whereas the custom functions fdc3.publishToChannel and fdc3.addChannelListener work with channels
+ *  that are selected via a custom linker menu, which can join each channel in both directions, or 
+ *  just a single direction (listen or broadcast). These custom functions use FDC3 user channels
+ *  and will integrate with other applications using the default Finsemble FDC3 implementation.
  */
 class CustomFdc3 implements ICustomFdc3 {
 	private initialized: boolean = false;
@@ -25,7 +31,7 @@ class CustomFdc3 implements ICustomFdc3 {
 	private currentChannelDirections: Record<string, Direction>;
 	/** Local store of unfiltered context Listeners that have been set up on each channel (used to remove them when not needed). */
 	private currentChannelDefaultFDC3Listeners: Record<string, Listener>;
-	/** Unfiltered context Listeners for the global channel (used to remove it when not needed). */
+	/** Unfiltered context Listeners for the global channel (could be used to remove it, although this is not currently needed). */
 	private globalChannelDefaultFDC3Listener: Listener | null;
 	/** Local state for context listeners registered, which are manually hooked to channels to enable gathering of source information etc. */
 	private currentContextHandlers: Record<string, ContextHandler[]>;
@@ -71,6 +77,7 @@ class CustomFdc3 implements ICustomFdc3 {
 		this.remoteStateCache = {};
 		this.remoteStateCheckTime = Date.now();
 
+		this.globalContextHandler = this.globalContextHandler.bind(this);
 	}
 
 	/** Async initializer function */
@@ -82,12 +89,15 @@ class CustomFdc3 implements ICustomFdc3 {
 				log(`Got componentType ${this.myComponentType} for window name ${this.myWindowName}`);
 			});
 			
-			
+			//used with broadcast/addContextListner FDC3 1.0 style
+			this.globalChannel = await this.defaultFdc3.getOrCreateChannel(GLOBAL_CHANNEL_NAME);
+			//as theres only one to lsitener to, we can add our general purpose context listener here
+			this.globalChannelDefaultFDC3Listener = await this.globalChannel.addContextListener(null, this.globalContextHandler);
+
+			//used with channel listeners
 			this.allChannels = await this.defaultFdc3.getUserChannels();
 			this.allChannels.map((channel) => this.channelIdToChannel[channel.id] = channel);
 
-			this.globalChannel = await this.defaultFdc3.getOrCreateChannel(GLOBAL_CHANNEL_NAME);
-			
 			//Retrieve and connect distributed store, which is created by customFDC3Service
 			const {err,data: storeObject} = await FSBL.Clients.DistributedStoreClient.getStore({
 				store: STATE_DISTRIBUTED_STORE_NAME,
@@ -154,10 +164,7 @@ class CustomFdc3 implements ICustomFdc3 {
 			
 			//Use workspace state to set up inital channels with calls to linkToChannel(name,direction)
 			await this.loadStateFromWorkspace()
-			//If not on any channel to start with, join global channel
-			if (Object.keys(this.currentChannelDirections).length == 0) {
-				this.joinGlobalChannel();
-			}
+
 		} else {
 			errorLog("CustomFDC3 is already initialized!");
 		}
@@ -172,24 +179,8 @@ class CustomFdc3 implements ICustomFdc3 {
 		return fn.apply(this.defaultFdc3, args);
 	}
 
-	private joinGlobalChannel() {
-		//if we're not on any channel now, subscribe to global channel
-		if (!this.globalChannel) { errorLog("Used before initialization!"); return; }
-		this.globalChannel.addContextListener(null, (context) => this.defaultContextHandler(GLOBAL_CHANNEL_NAME, context))
-		.then((listener) => {
-			this.globalChannelDefaultFDC3Listener = listener;
-		});
-	}
-
-	private leaveGlobalChannel() {
-		if (this.globalChannelDefaultFDC3Listener) {
-			this.globalChannelDefaultFDC3Listener.unsubscribe();
-			this.globalChannelDefaultFDC3Listener = null;
-		}
-	}
-
-	private isOnGlobalChannel() {
-		return !!this.globalChannelDefaultFDC3Listener;
+	private isOnAnyChannel() {
+		return Object.keys(this.currentChannelDirections).length !== 0;
 	}
 
 	/** 
@@ -297,6 +288,16 @@ class CustomFdc3 implements ICustomFdc3 {
 			this.checkAndCleanState();
 		}
 	}
+
+	/** Handler used to receive context messages sent on the global channel - this is only used
+	 *  by fdc3.addContextListener and fdc3.broadcast.
+	 */
+	private globalContextHandler(context: Context) {
+		if (context.type) { //ignored malformed context with no type field!
+			if (this.currentContextHandlers["null"]) { this.currentContextHandlers["null"].map((handler) => {handler.apply(this.defaultFdc3, [context]);}) }
+			if (this.currentContextHandlers[context.type]) { this.currentContextHandlers[context.type].map((handler) => {handler.apply(this.defaultFdc3, [context]);}) }
+		} 
+	}
 	
 	/** Handler used to receive context messages and then route them based on channel direction, subscribed listeners etc. 
 	 *  
@@ -326,12 +327,9 @@ class CustomFdc3 implements ICustomFdc3 {
 
 	/** Routes context messages to their handlers, after checking the direction of channel membership.  */
 	private defaultContextRouter(context: Context, channels: string[]) {
-		//Route onwards to all normal channel listeners, ignoring direction
-		if (this.currentContextHandlers["null"]) { this.currentContextHandlers["null"].map((handler) => {handler.apply(this.defaultFdc3, [context]);}) }
-		if (this.currentContextHandlers[context.type]) { this.currentContextHandlers[context.type].map((handler) => {handler.apply(this.defaultFdc3, [context]);}) }
+		//DO not route to standard context listeners as they only work with the global channel (FDC3 1.0 style)
 
-		//Global channel only applies to default addContextListener and broadcast functions
-		if (!this.isOnGlobalChannel()){
+		if (this.isOnAnyChannel()){
 			//Route onwards to ChannelListeners, after filtering by direction
 			//debounce should have collected up multiple channels if it arrived on multiple here
 			const filteredChannels: string[] = [];
@@ -468,9 +466,6 @@ class CustomFdc3 implements ICustomFdc3 {
 				} 
 			} else {
 
-				//drop off the global channel if on it
-				this.leaveGlobalChannel();
-
 				//set membership direction
 				this.currentChannelDirections[channelName] = direction;
 
@@ -540,10 +535,6 @@ class CustomFdc3 implements ICustomFdc3 {
 			if (this.currentChannelDefaultFDC3Listeners[channelName]) {
 				this.currentChannelDefaultFDC3Listeners[channelName].unsubscribe();
 				delete this.currentChannelDefaultFDC3Listeners[channelName];
-			}
-
-			if (Object.keys(this.currentChannelDirections).length == 0) {
-				this.joinGlobalChannel();
 			}
 
 			this.processStateChange();
@@ -693,15 +684,8 @@ class CustomFdc3 implements ICustomFdc3 {
 	 */
 	broadcast (context: Context): Promise<void> {
 		if (!this.globalChannel) { return Promise.reject("Used before initialization!"); }
-		//broadcast to global or other channels we're currently linked to
-		if (this.isOnGlobalChannel()) {
-			this.globalChannel.broadcast(context);
-		} else {
-			for (let channelId in this.currentChannelDirections) {
-				this.channelIdToChannel[channelId].broadcast(context);
-			}
-		}
-
+		//broadcast to global channel as thats the only one we support here (FDC3 1.0 style)
+		this.globalChannel.broadcast(context);
 		return Promise.resolve();
 	}
 	
@@ -712,8 +696,8 @@ class CustomFdc3 implements ICustomFdc3 {
 	*/
 	publishToChannel (context?: Context): void {
 		if (context) {
-			if (this.isOnGlobalChannel()) {
-				debug(`Ignoring publishToChannel as we're only on the ${GLOBAL_CHANNEL_NAME} channel`);
+			if (!this.isOnAnyChannel()) {
+				debug(`Ignoring publishToChannel as we're not on any channels`);
 			} else {
 				for (let channelId in this.currentChannelDirections) {
 					if (this.currentChannelDirections[channelId] == Direction.Both ||
