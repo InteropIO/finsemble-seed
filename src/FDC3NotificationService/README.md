@@ -55,6 +55,7 @@ let resolution = await fdc3.raiseIntent("CreateNotification", notification);
 
 //Receive an updated notification context - An ID and various status will be set if not provided
 let submittedNotification = await resolution.getResult();
+console.log(submittedNotification);
 
 ```
 
@@ -123,3 +124,8 @@ channel2.addContextListener(
 )
 
 ```
+
+
+#### Video Demo of Recipe
+
+<video src="https://user-images.githubusercontent.com/1701764/201643126-f8766d05-d080-42ab-86d1-e2afdd23d317.mp4"></video>
