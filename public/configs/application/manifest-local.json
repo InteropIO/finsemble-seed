@@ -5,7 +5,7 @@
 	},
 	"appAssets": [
 		{
-			"src": "https://assets.finsemble.com/releases/8.3.0-beta.2/assimilation/assimilation.zip",
+			"src": "https://assets.finsemble.com/releases/8.5.0/assimilation/assimilation.zip",
 			"alias": "assimilation",
 			"target": "AssimilationMain.exe"
 		}
@@ -28,8 +28,12 @@
 				"FinsembleTransport": {
 					"serverAddress": "ws://127.0.0.1:3376"
 				}
-			},
-			"promptBeforeAllowingExternalApps": false
+			}
+		},
+		"logger": {
+			"logToDiskLevels": [
+				"error"
+			]
 		},
 		"custom": {
 			"//": "Customer macros definitions must go here (e.g. 'myApplicationRoot' so it can be referenced elsewhere as '$myApplicationRoot'), along with other custom config at this level."

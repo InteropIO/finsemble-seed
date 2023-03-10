@@ -1,7 +1,5 @@
 {
-	"comment": "Top-level application config for development, adding on top of the core config",
 	"$schema": "../../../node_modules/@finsemble/finsemble-core/configs/schemas/fileBasedSchemas/applicationConfigFile.schema.json",
-	"accessibleLinker": true,
 	"servicesConfig": {
 		"distributedStore": {
 			"initialStores": [
@@ -59,10 +57,7 @@
 		},
 		"launcher": {
 			"staggerPixels": 40,
-			"unknownComponent": "NonConfiguredComponent",
-			"defaultPreloads": {
-				"//": "Add preloads that will be injected into each browserView."
-			}
+			"unknownComponent": "NonConfiguredComponent"
 		},
 		"assimilation": {
 			"useFeaSpawn": false,
@@ -118,7 +113,6 @@
 		"floatingTitlebarComponent": "Floating Titlebar"
 	},
 	"globalHotkeys": {},
-	"//": "this importConfig contains components that are necessary to start Finsemble. All other components are loaded dynamically. See server/auth/test.json",
-	"importConfig": ["$configRoot/application/apps.json"],
+	"importConfig": ["$configRoot/application/appd.json", "$configRoot/application/apps.json"],
 	"toolbarMenus": {}
 }

@@ -1194,14 +1194,6 @@
   optionalDependencies:
     global-agent "^3.0.0"
 
-"@electron/notarize@^1.2.3":
-  version "1.2.3"
-  resolved "https://registry.yarnpkg.com/@electron/notarize/-/notarize-1.2.3.tgz#38056a629e5a0b5fd56c975c4828c0f74285b644"
-  integrity sha512-9oRzT56rKh5bspk3KpAVF8lPKHYQrBnRwcgiOeR0hdilVEQmszDaAu0IPCPrwwzJN0ugNs0rRboTreHMt/6mBQ==
-  dependencies:
-    debug "^4.1.1"
-    fs-extra "^9.0.1"
-
 "@electron/osx-sign@^1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@electron/osx-sign/-/osx-sign-1.0.1.tgz#ab4fceded7fed9f2f18c25650f46c1e3a6f17054"
@@ -1232,14 +1224,14 @@
   resolved "https://registry.yarnpkg.com/@finos/fdc3/-/fdc3-2.0.0-beta.2.tgz#0980999cf4c67f187c9f81c7200e7a51f9474387"
   integrity sha512-/6jGG2zbFs4R/mCZ5U5cgRaexwLtz0PpJbeGp/gmfJvUCmtJr4rhZo6p12NXewN7NWyhf2p1PcJrzmSggfsbOg==
 
-"@finsemble/finsemble-core@8.3.0-beta.3":
-  version "8.3.0-beta.3"
-  resolved "https://registry.yarnpkg.com/@finsemble/finsemble-core/-/finsemble-core-8.3.0-beta.3.tgz#7d58be83f4f51fb244cabff5cadd259ab343f937"
-  integrity sha512-4/LkKqFmCnASUJ2qeF39fXy9h3Te3QdvHKVgqj+YMXqg6Kq79pogCEsnJ+z3mMdVZyLPTIwUzLv9GguTuwHD2Q==
+"@finsemble/finsemble-core@0.0.0":
+  version "0.0.0"
+  resolved "https://registry.yarnpkg.com/@finsemble/finsemble-core/-/finsemble-core-0.0.0.tgz#1c5379eb3c3acf7bcbbc2c65fcddff7d886129e3"
+  integrity sha512-bDKU1NmMQwXsnQO+J/HwZmwynKFTSD6Gt7YbJt/y+uxf2ED2BtOQQt+pRTHjOWqVf2ZYu/O2ClNm+YGglTlLEQ==
   dependencies:
     "@apollo/client" "3.6.9"
     "@finos/fdc3" "2.0.0-beta.2"
-    "@finsemble/finsemble-electron-adapter" "8.3.0-beta.3"
+    "@finsemble/finsemble-electron-adapter" "0.0.0"
     "@q42/floating-focus-a11y" "1.3.3"
     "@reduxjs/toolkit" "1.7.1"
     "@svgr/webpack" "6.2.1"
@@ -1276,10 +1268,10 @@
     uuid-random "1.3.2"
     webpack "5.73.0"
 
-"@finsemble/finsemble-electron-adapter@8.3.0-beta.3":
-  version "8.3.0-beta.3"
-  resolved "https://registry.yarnpkg.com/@finsemble/finsemble-electron-adapter/-/finsemble-electron-adapter-8.3.0-beta.3.tgz#61f192964f377e072e01414f9c5d598d908c6a7b"
-  integrity sha512-ry5j2g18fNCGugetATm5RTIZM/sBcMsSRyJ2gHnzcLnh9FP+Mb6wwK56Hd1+LmZQNKNe4k0VMOUq8ME9Z+6Ugg==
+"@finsemble/finsemble-electron-adapter@0.0.0":
+  version "0.0.0"
+  resolved "https://registry.yarnpkg.com/@finsemble/finsemble-electron-adapter/-/finsemble-electron-adapter-0.0.0.tgz#9b88092950ea05a422aadef1e4c3281047487930"
+  integrity sha512-G/6d+tXkuv+ht4SsxTOBBzrHSgc5KZI3AiKweFtLaQ1oiFNwyrqeIO3xOZhdw0CqDq9GhiLNTjG43MFb6mIERA==
   dependencies:
     "@types/electron-installer-dmg" "3.0.1"
     "@types/lodash" "4.14.175"
@@ -1288,8 +1280,10 @@
     "@types/unzipper" "0.10.5"
     electron "21.2.3"
     electron-installer-dmg "4.0.0"
-    electron-packager "17.1.1"
+    electron-ipc-mock "0.0.3"
+    electron-packager "17.0.0"
     electron-winstaller "5.0.0"
+    image-size "1.0.2"
 
 "@graphql-typed-document-node/core@^3.1.1":
   version "3.1.1"
@@ -2600,18 +2594,26 @@ electron-ipc-mock@0.0.3:
   resolved "https://registry.yarnpkg.com/electron-ipc-mock/-/electron-ipc-mock-0.0.3.tgz#eec117c5510eeca7da68291a8a41bfc7868d3e03"
   integrity sha512-cBLvtm9hJUvHY5qSQbzFR5p5NDZeEUaFYwDUhqTTc6rR6zt5bq3jJ2JAJRKA/KlNanN9zFjZQzOg4DKB9xuizw==
 
-electron-packager@17.1.1:
-  version "17.1.1"
-  resolved "https://registry.yarnpkg.com/electron-packager/-/electron-packager-17.1.1.tgz#f156fc63d3a66f4e902e4b42992550a172982d59"
-  integrity sha512-r1NDtlajsq7gf2EXgjRfblCVPquvD2yeg+6XGErOKblvxOpDi0iulZLVhgYDP4AEF1P5/HgbX/vwjlkEv7PEIQ==
+electron-notarize@^1.1.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/electron-notarize/-/electron-notarize-1.2.1.tgz#347c18eca8e29dddadadee511b870c13d4008baf"
+  integrity sha512-u/ECWhIrhkSQpZM4cJzVZ5TsmkaqrRo5LDC/KMbGF0sPkm53Ng59+M0zp8QVaql0obfJy9vlVT+4iOkAi2UDlA==
+  dependencies:
+    debug "^4.1.1"
+    fs-extra "^9.0.1"
+
+electron-packager@17.0.0:
+  version "17.0.0"
+  resolved "https://registry.yarnpkg.com/electron-packager/-/electron-packager-17.0.0.tgz#09e86734da51049de08b14cee8fc6b2d424efeec"
+  integrity sha512-dDy/gMR7Zl9t5AOFNIDjX+7T0d6GEifh1o/ciDUUf/fnHpVVNjDG92HsWgToGN/H9CZi5NEdlHWUQ49Wj7TN5g==
   dependencies:
     "@electron/asar" "^3.2.1"
     "@electron/get" "^2.0.0"
-    "@electron/notarize" "^1.2.3"
     "@electron/osx-sign" "^1.0.1"
     "@electron/universal" "^1.3.2"
     cross-spawn-windows-exe "^1.2.0"
     debug "^4.0.1"
+    electron-notarize "^1.1.1"
     extract-zip "^2.0.0"
     filenamify "^4.1.0"
     fs-extra "^10.1.0"
@@ -3198,9 +3200,9 @@ htmlparser2@^6.1.0:
     entities "^2.0.0"
 
 http-cache-semantics@^4.0.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/http-cache-semantics/-/http-cache-semantics-4.1.0.tgz#49e91c5cbf36c9b94bcfcd71c23d5249ec74e390"
-  integrity sha512-carPklcUh7ROWRK7Cv27RPtdhYhUsela/ue5/jKzjegVvXDqM2ILE9Q2BGn9JZJh1g87cp56su/FgQSzcWS8cQ==
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/http-cache-semantics/-/http-cache-semantics-4.1.1.tgz#abe02fcb2985460bf0323be664436ec3476a6d5a"
+  integrity sha512-er295DKPVsV82j5kw1Gjt+ADA/XYHsajl82cGNQG2eyoPkvgUhX+nDIyelzhIWbbsXP39EHcI6l5tYs2FYqYXQ==
 
 http2-wrapper@^1.0.0-beta.5.2:
   version "1.0.3"
@@ -3431,9 +3433,9 @@ json-stringify-safe@^5.0.1:
   integrity sha1-Epai1Y/UXxmg9s4B1lcB4sc1tus=
 
 json5@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/json5/-/json5-1.0.1.tgz#779fb0018604fa854eacbf6252180d83543e3dbe"
-  integrity sha512-aKS4WQjPenRxiQsC93MNfjx+nbF4PAdYzmd/1JIj8HYzqfbu86beTuNgXDzPknWk0n0uARlyewZo4s++ES36Ow==
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/json5/-/json5-1.0.2.tgz#63d98d60f21b313b77c4d6da18bfa69d80e1d593"
+  integrity sha512-g1MWMLBiz8FKi1e4w0UyVL3w+iJceWAFBAaBnnGKOpNa5f8TLktkbre1+s6oICydWAm+HRUGTmI+//xv2hvXYA==
   dependencies:
     minimist "^1.2.0"
 
@@ -3661,9 +3663,9 @@ minimatch@^3.0.4:
     brace-expansion "^1.1.7"
 
 minimist@^1.1.1, minimist@^1.1.3, minimist@^1.2.0, minimist@^1.2.5, minimist@^1.2.6:
-  version "1.2.6"
-  resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.6.tgz#8637a5b759ea0d6e98702cfb3a9283323c93af44"
-  integrity sha512-Jsjnk4bw3YJqYzbdyBiNsPWHPfO++UGG749Cxs6peCu5Xg4nrena6OVxOYxrQTqww0Jmwt+Ref8rggumkTLz9Q==
+  version "1.2.7"
+  resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.7.tgz#daa1c4d91f507390437c6a8bc01078e7000c4d18"
+  integrity sha512-bzfL1YUZsP41gmu/qjrEk0Q6i2ix/cVeAhbCbqH9u3zYutS1cLg00qhrD0M2MVdCcx4Sc0UpP2eBWo9rotpq6g==
 
 mkdirp@^0.5.1:
   version "0.5.5"

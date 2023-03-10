@@ -1,0 +1,4 @@
+{
+	"comment": "Deprecated AppD config for apps -- use apps.json instead",
+	"appd": {}
+}

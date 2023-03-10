@@ -325,11 +325,13 @@
 			"name": "ChartIQ Example App",
 			"appId": "ChartIQ Example App",
 			"type": "web",
+			"details": {
+				"url": "https://salesdemo-v6.finsemble.com/production/ChartIQ/Finsemble-SD-ChartIQ/technical-analysis-chart.html"
+			},
 			"description": "Visualize market data in the leading FDC3 compliant technical chart.",
 			"hostManifests": {
 				"Finsemble": {
 					"window": {
-						"affinity": "test",
 						"width": 800,
 						"height": 600,
 						"options": {
@@ -364,9 +366,6 @@
 					}
 				}
 			},
-			"details": {
-				"url": "https://salesdemo-v6.finsemble.com/production/ChartIQ/Finsemble-SD-ChartIQ/technical-analysis-chart.html"
-			},
 			"version": "1.0.0",
 			"tooltip": "ChartIQ Technical Chart",
 			"icons": [
@@ -374,7 +373,7 @@
 					"src": "https://i.imgur.com/10C3LdH.png"
 				}
 			],
-			"tags": ["charts", "market data", "visualization", "graphics", "fdc3"],
+			"categories": ["analytics", "charts", "market data", "visualisation"],
 			"contactEmail": "info@cosaic.io",
 			"supportEmail": "support@finsemble.com",
 			"publisher": "Cosaic",
@@ -393,6 +392,9 @@
 			"appId": "Getting Started Tutorial",
 			"name": "Getting Started Tutorial",
 			"type": "web",
+			"details": {
+				"url": "https://documentation.finsemble.com/tutorial-gettingStarted.html"
+			},
 			"hostManifests": {
 				"Finsemble": {
 					"window": {
@@ -420,15 +422,15 @@
 						}
 					}
 				}
-			},
-			"details": {
-				"url": "https://documentation.finsemble.com/tutorial-gettingStarted.html"
 			}
 		},
 		{
 			"appId": "Finsemble Documentation",
 			"name": "Finsemble Documentation",
 			"type": "web",
+			"details": {
+				"url": "http://documentation.chartiq.com/finsemble"
+			},
 			"hostManifests": {
 				"Finsemble": {
 					"window": {
@@ -456,15 +458,15 @@
 						}
 					}
 				}
-			},
-			"details": {
-				"url": "http://documentation.chartiq.com/finsemble"
 			}
 		},
 		{
 			"appId": "AG-Grid Example Blotter",
 			"name": "AG-Grid Example Blotter",
 			"type": "web",
+			"details": {
+				"url": "https://salesdemo-v6.finsemble.com/production/ChartIQ/Finsemble-SD-Blotter/index.html"
+			},
 			"hostManifests": {
 				"Finsemble": {
 					"interop": {
@@ -489,15 +491,15 @@
 						}
 					}
 				}
-			},
-			"details": {
-				"url": "https://salesdemo-v6.finsemble.com/production/ChartIQ/Finsemble-SD-Blotter/index.html"
 			}
 		},
 		{
 			"appId": "FDC3 workbench",
 			"name": "FDC3 workbench",
 			"type": "web",
+			"details": {
+				"url": "http://fdc3.finos.org/toolbox/fdc3-workbench"
+			},
 			"description": "Development and test tool for FDC3 desktop agents and apps",
 			"hostManifests": {
 				"Finsemble": {
@@ -515,31 +517,30 @@
 						}
 					},
 					"interop": {}
-				},
-				"version": "1.0.0",
-				"tooltip": "FDC3 Workbench",
-				"tags": ["fdc3", "interop", "interoperabilty", "developer tool"],
-				"contactEmail": "info@cosaic.io",
-				"supportEmail": "support@finsemble.com",
-				"publisher": "Cosaic",
-				"icons": [
-					{
-						"src": "http://fdc3.finos.org/toolbox/fdc3-workbench/fdc3-icon-256.png"
-					}
-				]
+				}
 			},
-			"details": {
-				"url": "http://fdc3.finos.org/toolbox/fdc3-workbench"
-			}
+			"version": "1.0.0",
+			"tooltip": "FDC3 Workbench",
+			"categories": ["developer tools", "training"],
+			"contactEmail": "info@cosaic.io",
+			"supportEmail": "support@finsemble.com",
+			"publisher": "Cosaic",
+			"icons": [
+				{
+					"src": "http://fdc3.finos.org/toolbox/fdc3-workbench/fdc3-icon-256.png"
+				}
+			]
 		},
 		{
 			"appId": "Tour",
 			"name": "Tour",
 			"type": "web",
+			"details": {
+				"url": "$moduleRoot/ui-components/Tour/tour.html"
+			},
 			"hostManifests": {
 				"Finsemble": {
 					"window": {
-						"affinity": "workspaceComponents",
 						"options": {
 							"resizable": false,
 							"autoShow": true,
@@ -579,18 +580,15 @@
 							}
 						}
 					}
-				},
-				"version": "1.0.0",
-				"publisher": "Cosaic",
-				"icons": [
-					{
-						"src": "$moduleRoot/ui-components/Tour/take-a-tour.svg"
-					}
-				]
+				}
 			},
-			"details": {
-				"url": "$moduleRoot/ui-components/Tour/tour.html"
-			}
+			"version": "1.0.0",
+			"publisher": "Cosaic",
+			"icons": [
+				{
+					"src": "$moduleRoot/ui-components/Tour/take-a-tour.svg"
+				}
+			]
 		}
 	]
 }
