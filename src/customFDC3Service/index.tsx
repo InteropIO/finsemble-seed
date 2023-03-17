@@ -33,9 +33,11 @@ const main = () => {
 			//fail over to retrieval - should not be needed, but defensive anyway
 			debug(`DistributedStore ${STATE_DISTRIBUTED_STORE_NAME} could not be created!`, err);
 		} else {
+			//Let the SystemManager know we are ready
+			FSBL.publishReady();
 			//Not needed anymore so might as well close
 			//yeild to allow SystemManagerClient to log startup properly
-			setTimeout(()=> { window.close(); }, 500);
+			setTimeout(()=> { window.close(); }, 10000);
 		}
 	});	
 };

@@ -140,6 +140,7 @@
 			"hostManifests": {
 				"Finsemble": {
 					"appService": true,
+					"waitForInitialization": true,
 					"window": {
 						"url": "$applicationRoot/customFDC3Service/index.html"
 					}
