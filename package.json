@@ -20,5 +20,8 @@
 	"license": "SEE LICENSE IN LICENSE",
 	"dependencies": {
 		"@finsemble/finsemble-core": "8.5.0"
+	},
+	"resolutions": {
+		"webpack": "5.76.2"
 	}
 }
