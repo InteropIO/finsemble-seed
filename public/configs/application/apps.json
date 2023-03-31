@@ -39,7 +39,8 @@
 					}
 				},
 				"interop": {
-				  "joinMultipleChannels": false
+				  "joinMultipleChannels": false,
+				  "fdc3_1_2_compatibility": true
 				}
 			  }
 			},
@@ -85,7 +86,8 @@
 					}
 				},
 				"interop": {
-				  "joinMultipleChannels": false
+				  "joinMultipleChannels": false,
+				  "fdc3_1_2_compatibility": true
 				}
 			  }
 			},
@@ -129,6 +131,10 @@
 							"titlebarType": "injected"
 						}
 					}
+				},
+				"interop": {
+				  "joinMultipleChannels": false,
+				  "fdc3_1_2_compatibility": true
 				}
 			  }
 			},
@@ -191,6 +197,10 @@
 							"titlebarType": "injected"
 						}
 					}
+				},
+				"interop": {
+				  "joinMultipleChannels": false,
+				  "fdc3_1_2_compatibility": true
 				}
 			  }
 			},
@@ -253,6 +263,10 @@
 							"titlebarType": "injected"
 						}
 					}
+				},
+				"interop": {
+				  "joinMultipleChannels": false,
+				  "fdc3_1_2_compatibility": true
 				}
 			  }
 			},
@@ -308,7 +322,8 @@
 					}
 				},
 				"interop": {
-				  "joinMultipleChannels": false
+				  "joinMultipleChannels": false,
+				  "fdc3_1_2_compatibility": true
 				}
 			  }
 			},
