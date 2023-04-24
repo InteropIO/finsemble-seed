@@ -13,6 +13,7 @@
 			"hostManifests": {
 				"Finsemble": {
 					"window": {
+						"affinity": "test",
 						"width": 800,
 						"height": 600,
 						"options": {
@@ -110,7 +111,7 @@
 			"name": "Finsemble Documentation",
 			"type": "web",
 			"details": {
-				"url": "http://documentation.finsemble.com"
+				"url": "http://documentation.chartiq.com/finsemble"
 			},
 			"hostManifests": {
 				"Finsemble": {
@@ -222,6 +223,7 @@
 			"hostManifests": {
 				"Finsemble": {
 					"window": {
+						"affinity": "workspaceComponents",
 						"options": {
 							"resizable": false,
 							"autoShow": true,
