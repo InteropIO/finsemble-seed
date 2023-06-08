@@ -284,7 +284,6 @@ const runZoomHandler = () => {
 
 	// Create hot keys for zooming.
 	FSBL.Clients.HotkeyClient.addBrowserHotkey(["ctrl", "="], zoomIn);
-	//TODO: enable when finsemble supports mapping + key
 	FSBL.Clients.HotkeyClient.addBrowserHotkey(["ctrl", "+"], zoomIn);
 	FSBL.Clients.HotkeyClient.addBrowserHotkey(["ctrl", "-"], zoomOut);
 	FSBL.Clients.HotkeyClient.addBrowserHotkey(["ctrl", "0"], resetZoom);
@@ -297,8 +296,6 @@ const runZoomHandler = () => {
 		passive: false,
 	});
 };
-
-// TODO, catch and recall scroll position
 
 // Startup pattern for preload. Preloads can come in any order, so we need to wait on either the window event or the
 // FSBL event

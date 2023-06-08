@@ -3,7 +3,7 @@
  * Copyright 2017 - 2020 by ChartIQ, Inc.
  * All rights reserved.
  */
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { FinsembleProvider } from "@finsemble/finsemble-ui/react/components/FinsembleProvider";
 import {
@@ -14,7 +14,7 @@ import {
 	Notifications,
 } from "@finsemble/finsemble-ui/react/components/userPreferences";
 import "@finsemble/finsemble-ui/react/assets/css/finsemble.css";
-import "../../../assets/css/theme.css";
+import "../../../public/assets/css/theme.css";
 
 /*
  * Put your customized preference menu components here and pass this object as a prop to the UserPreferences component.

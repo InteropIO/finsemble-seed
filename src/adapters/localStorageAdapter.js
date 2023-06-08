@@ -84,9 +84,6 @@ const LocalStorageAdapter = function (uuid) {
 	 * @param {*} cb An optional callback that will be passed any errors that occurred and the found keys.
 	 */
 	this.keys = function (params, cb) {
-		/**
-		 * Daniel H. 1/3/2019 - Validate.args is still broken, so I'm doing it ad-hoc here.
-		 * @TODO Replace ad-hoc validation with Validate.args. */
 		let errMessage;
 		if (!params) {
 			errMessage = "You must pass params to localStorageAdapter.keys";

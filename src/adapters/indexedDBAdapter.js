@@ -144,19 +144,14 @@ const IndexedDBAdapter = function (uuid) {
 	 */
 	this.getKeyPreface = (params) => {
 		const keyPrefix = "keyPrefix" in params ? params.keyPrefix : "";
-		const preface = `${this.getUserPreface()}:${params.topic}:${keyPrefix}`;
-
-		return preface;
+		return `${this.getUserPreface()}:${params.topic}:${keyPrefix}`;
 	};
 
 	/**
 	 * Get prefix for all the users stored data.
 	 * @private
 	 */
-	this.getUserPreface = () => {
-		const preface = `${this.baseName}:${this.userName}`;
-		return preface;
-	};
+	this.getUserPreface = () => `${this.baseName}:${this.userName}`;
 
 	/**
 	 * Process the commands queued for execution after the IndexedDB connection is established.
