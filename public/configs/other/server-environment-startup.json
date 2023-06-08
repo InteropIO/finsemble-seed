@@ -1,8 +1,8 @@
 {
 	"development": {
-		"//serverPort": "Port number for your server.",
+		"//serverPort": "Used for local development only. Port number for the server started for local development when running yarn dev and related scripts.",
 		"serverPort": 3375,
-		"//serverConfig": "Url for your application's manifest.",
+		"//serverConfig": "The URL that your application's manifest will be retrieved from. For local development work, make sure to use the the same port number as specified in serverPort",
 		"serverConfig": "http://localhost:3375/configs/application/manifest-local.json",
 		"//electronDebug": "Whether to start the finsemble-electron-adapter in debug mode. Default: true.",
 		"electronDebug": true,
@@ -10,12 +10,13 @@
 		"breakpointOnStart": false,
 		"//socketCertificate": "Uncomment the two lines below to provide custom socket certificate files for FinsembleTransport. Paths must be relative to the finsemble-seed directory.",
 		"//socketCertificateKey": "example.key",
-		"//socketCertificateCert": "example.crt"
+		"//socketCertificateCert": "example.crt",
+		"//args": "The command line arguments to be passed to Finsemble - example: ['--arg1=value1', '--arg2=value2']"
 	},
 	"production": {
-		"//serverPort": "Port number for your server.",
+		"//serverPort": "Used for local development only. Port number for the server started for local development when running yarn dev and related scripts.",
 		"serverPort": 3375,
-		"//serverConfig": "Url for your application's manifest.",
+		"//serverConfig": "The URL that your application's manifest will be retrieved from. For local development work, make sure to use the the same port number as specified in serverPort",
 		"serverConfig": "http://localhost:3375/configs/application/manifest-local.json",
 		"//electronDebug": "Whether to start the finsemble-electron-adapter in debug mode. Default: true.",
 		"electronDebug": true,
@@ -29,6 +30,7 @@
 		},
 		"//socketCertificate": "Uncomment the two lines below to provide custom socket certificate files for FinsembleTransport. Paths must be relative to the finsemble-seed directory.",
 		"//socketCertificateKey": "example.key",
-		"//socketCertificateCert": "example.crt"
+		"//socketCertificateCert": "example.crt",
+		"//args": "The command line arguments to be passed to Finsemble - example: ['--arg1=value1', '--arg2=value2']"
 	}
 }

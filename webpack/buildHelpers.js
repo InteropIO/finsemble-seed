@@ -26,6 +26,31 @@ const logToTerminal = (msg, color = "white", bgcolor = "bgBlack") => {
 	console.log(`[${new Date().toLocaleTimeString()}] ${chalk[color][bgcolor](msg)}.`);
 };
 
+/**
+ * Node's default maximum heap size is 2gb (as of Node 17) but webpack can require more
+ * memory when building a large number of components. Here, the `--max-old-space-size`
+ * flag is used to increase the heap size to 4gb.
+ *
+ * An error of `Ineffective mark-compacts near heap limit Allocation failed - JavaScript heap out of memory`
+ * will indicate that the heap size has been exceeded. Check the maxMemory variable if this occurs and
+ * adjust --max-old-space-size as necessary.
+ */
+env.NODE_OPTIONS = "--max-old-space-size=4096";
+
+let stopTrackingMemory = false;
+let maxMemory = 0;
+
+const printMB = (value) => `${Math.round(parseInt(value) / 1024000)} mb`;
+
+const trackMemoryUsage = (bundleName) => {
+	const { heapTotal } = process.memoryUsage();
+	const currentMemory = parseInt(heapTotal);
+	if (currentMemory > maxMemory) maxMemory = currentMemory;
+	setTimeout(() => {
+		if (!stopTrackingMemory) trackMemoryUsage(bundleName);
+	}, 250);
+};
+
 const runWebpackAndCallback = (configPath, watch, bundleName, callback) => {
 	const config = require(configPath);
 	if (!config) return callback();
@@ -42,7 +67,11 @@ const runWebpackAndCallback = (configPath, watch, bundleName, callback) => {
 			callback = undefined;
 		}
 	};
+	trackMemoryUsage(bundleName);
 	webpack(config, (err, stats) => {
+		stopTrackingMemory = true;
+		const mbUsed = printMB(maxMemory);
+
 		// err is a fatal webpack error. stats.hasErrors represents compilation errors,
 		// which are not fatal. Exit on fatal errors.
 		if (err) {
@@ -53,7 +82,7 @@ const runWebpackAndCallback = (configPath, watch, bundleName, callback) => {
 			return finish(err);
 		}
 
-		let msg = `Finished building ${bundleName}`;
+		let msg = `Finished building ${bundleName} (Max mem = ${mbUsed})`;
 		//first run, add nice timer.
 		if (callback) {
 			let end = process.hrtime(startTime);

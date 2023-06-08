@@ -1,19 +1,19 @@
 {
 	"$schema": "../../../node_modules/@finsemble/finsemble-core/configs/schemas/fileBasedSchemas/securityPoliciesFile.schema.json",
 	"securityPolicies": {
-		"//trusted": "By default, the trusted policy allows access to every API endpoint.",
 		"trusted": {},
 		"untrusted": {
 			"System": {
 				"clearCache": false,
+				"deleteAssets": false,
 				"exit": false,
-				"launchExternalProcess": false
+				"launchExternalProcess": false,
+				"getHostSpecs": false,
+				"getProcessList": false
 			},
 			"Window": {
 				"executeJavaScript": false,
-				"webPreferences": {
-					"preload": false
-				}
+				"webPreferences": {}
 			}
 		}
 	},
