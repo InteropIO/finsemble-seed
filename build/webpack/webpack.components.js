@@ -67,11 +67,14 @@ listOfWebpackEntryFiles.forEach((filename) => {
 	if (Array.isArray(entries)) {
 		// Process arrays (finsemble.webpack.json files) by automatically building the output & entry fields that webpack needs
 		entries.forEach((assetName) => {
-			const outputPath = path.relative(srcPath, path.dirname(filename));
+			const dirName = path.dirname(filename);
+			const outputPath = path.relative(srcPath, dirName);
 			const assetNoSuffix = assetName.replace(/\.[^/.]+$/, ""); // Remove the .js or .jsx extension
-			const entryPath = path.relative(__homename, path.dirname(filename));
-			additionalComponents[assetNoSuffix] = {
-				output: path.join(outputPath, assetNoSuffix).replace(/\\/g, "/"),
+			const entryPath = path.relative(__homename, dirName);
+			const output = path.join(outputPath, assetNoSuffix).replace(/\\/g, "/");
+			//ensure key is unique
+			additionalComponents[output] = {
+				output: output,
 				entry: `.${path.sep}${path.join(entryPath, assetName)}`.replace(/\\/g, "/"),
 			};
 		});
@@ -95,20 +98,49 @@ for (let key in componentsToBuild) {
 let webpackConfig = generateDefaultConfig();
 webpackConfig.entry = entries;
 
+/**
+ * Recursively gets all of the files in a folder.
+ * @param {string} dirPath
+ * @param {Array} arrayOfFiles
+ */
+const getAllFiles = (dirPath, arrayOfFiles) => {
+	const files = fs.readdirSync(dirPath);
+
+	arrayOfFiles = arrayOfFiles || [];
+
+	files.forEach((file) => {
+		const filePath = path.join(dirPath, file);
+		if (fs.statSync(filePath).isDirectory()) {
+			arrayOfFiles = getAllFiles(filePath, arrayOfFiles);
+		} else {
+			arrayOfFiles.push(path.join(__dirname, filePath));
+		}
+	});
+
+	return arrayOfFiles;
+};
+
 // This function iterates through src, building a list of all the directories but eliminating duplicates.
 function collapseBuiltInFiles() {
-	var srcList = {}; // contains the final compressed list
-	let componentSrcPath = path.join(__homename, "src/components"); // path to src components
+	const srcList = {}; // contains the final compressed list
+	const componentSrcPath = path.join(__homename, "src", "components"); // path to src components
 
 	// Now put all the src items into our combined list. If there's a dup, then it will override the built in
-	var srcItems = fs.readdirSync(componentSrcPath);
+	const srcItems = fs.readdirSync(componentSrcPath);
 	for (let i = 0; i < srcItems.length; i++) {
-		let folder = srcItems[i];
+		const folder = srcItems[i];
 		if (folder === ".gitignore") {
 			// Don't copy a .gitignore folder.
 			continue;
 		}
-		srcList[folder] = path.join(componentSrcPath, folder);
+
+		// Don't copy empty folders
+		const folderPath = path.join(componentSrcPath, folder);
+		const folderItems = getAllFiles(folderPath);
+
+		if (folderItems.length > 0) {
+			srcList[folder] = folderPath;
+		}
 	}
 	return srcList;
 }

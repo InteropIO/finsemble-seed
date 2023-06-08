@@ -10,5 +10,9 @@
 	"pdfJsNativeOverrides": {
 		"output": "preloads/pdfJsNativeOverrides",
 		"entry": "./src/components/pdfJs/pdfJsNativeOverrides.js"
+	},
+	"registration": {
+		"output": "preloads/registration",
+		"entry": "./src/preloads/registration.js"
 	}
 }

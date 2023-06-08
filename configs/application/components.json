@@ -195,20 +195,22 @@
 		},
 		"Registration": {
 			"window": {
-				"url": "$applicationRoot/components/registration/registration.html",
+				"url": "https://share.hsforms.com/1AKJh9VQWQVe7avNRsD-sHw53bla",
 				"top": "center",
 				"left": "center",
-				"width": 400,
-				"height": 500,
+				"width": 855,
+				"height": 715,
 				"ephemeral": true,
 				"alwaysOnTop": true,
 				"options": {
-					"autoShow": false
+					"autoShow": false,
+					"securityPolicy": "trusted"
 				}
 			},
 			"component": {
 				"neededClients": ["LauncherClient", "AuthenticationClient", "StorageClient"],
-				"category": "system"
+				"category": "system",
+				"preload": "$applicationRoot/preloads/registration.js"
 			},
 			"foreign": {
 				"services": {
