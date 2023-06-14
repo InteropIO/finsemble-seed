@@ -41,12 +41,12 @@ window.open = function (urlToOpen, name, specs, replace) {
 	}
 }
 
-const handlePdfUrl = function(urlToOpen, name, specs, replace) {
+const handlePdfUrl = function (urlToOpen, name, specs, replace) {
 	FSBL.Clients.Logger.log("Handling PDF URL via PDF.js: " + urlToOpen);
 	//check if we're linked to a PDF viewer - if so just send a linker share (if target != _blank)
-	let linkedComps = FSBL.Clients.LinkerClient.getLinkedComponents({componentTypes: ["pdfJs","viewerJs"]});
+	let linkedComps = FSBL.Clients.LinkerClient.getLinkedComponents({componentTypes: ["pdfJs", "viewerJs"]});
 	let useLinker = linkedComps && linkedComps.length > 0;
-	if (useLinker && (!name || name !="_blank")) {
+	if (useLinker && (!name || name !== "_blank")) {
 		FSBL.Clients.Logger.log("Publishing PDF URL to linked PDF viewer component: " + urlToOpen);
 		FSBL.Clients.LinkerClient.publish({dataType: "url", data: urlToOpen});
 	} else {
@@ -79,7 +79,7 @@ const handlePdfUrl = function(urlToOpen, name, specs, replace) {
 	}
 }
 
-const handleOtherUrl = function(urlToOpen, name, specs, replace) {
+const handleOtherUrl = function (urlToOpen, name, specs, replace) {
 	var params = {};
 	if (specs) {
 		let paramList = specs.split(",");
