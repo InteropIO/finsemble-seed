@@ -1,7 +1,7 @@
-@import  url('../../../assets/css/_globals.css');
+@import  url('../../build/finsemble/assets/css/finsemble.css');
 
 body {
-	margin:0px;
+	margin:0;
 	font-size: var(--procMonitor-font-size);
 	font-weight: var(--procMonitor-font-weight);
 	font-family: var(--font-family);

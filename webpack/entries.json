@@ -1,0 +1,14 @@
+[
+	{
+		"filename": "pdfJs/pdfJs.js",
+		"import": "./src/pdfJs/pdfJs.js"
+	},
+	{
+		"filename": "pdfJs/pdfJsNativeOverrides.js",
+		"import": "./src/pdfJs/pdfJsNativeOverrides.js"
+	},
+	{
+		"filename": "pdfTester/pdfTester.js",
+		"import": "./src/pdfTester/pdfTester.js"
+	}
+]

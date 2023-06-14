@@ -3,6 +3,34 @@
 	"$schema": "../../../node_modules/@finsemble/finsemble-core/configs/schemas/fileBasedSchemas/appsConfigFile.schema.json",
 	"apps": [
 		{
+			"appId": "pdfJs",
+			"type": "web",
+			"details": {
+				"url": "$documentRoot/preBuiltPdfJs/web/viewer.html?file="
+			},
+			"hostManifests": {
+				"Finsemble": {
+					"component": {
+						"preload": "$applicationRoot/pdfJs/pdfjs.js"
+					}
+				}
+			}
+		},
+		{
+			"appId": "pdfTester",
+			"type": "web",
+			"details": {
+				"url": "$applicationRoot/pdfTester/pdfTester.html"
+			},
+			"hostManifests": {
+				"Finsemble": {
+					"component": {
+						"preload": "$applicationRoot/pdfJs/pdfJsNativeOverrides.js"
+					}
+				}
+			}
+		},
+		{
 			"appId": "ChartIQ Example App",
 			"name": "ChartIQ Example App",
 			"type": "web",

@@ -2,14 +2,12 @@
 <html>
 
 <head>
-    <script src="../../vendor.bundle.js"></script>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>PDF Tester</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="pdfTester.css">
-    <script src="../../vendor.bundle.js"></script>
     <script src="pdfTester.js"></script>
 </head>
 
@@ -17,7 +15,7 @@
     <div id="container">
         <div id="bounds"></div>
         <div class="spacer1"></div>
-        <img src="../../assets/img/finsembleDarkBG_noText.png" id="finsembleLogo" height="100">
+        <img src="../../assets/img/finsembleDarkBG_Solo@1.5x.png" id="finsembleLogo" height="100">
         <div class="spacer2"></div>
         <h1>PDF Viewer</h1>
         <h2>Test Component</h2>
@@ -26,26 +24,14 @@
         <h3>Programmatic launch</h3>
         <span class="center">(n.b. select a linker channel first to setup linker sharing automatically)</span>
         <div class="spacer3"></div>
-        <button class="button" id="launchPDFJs" onclick="launchPDFJs('https://csa-iot.org/wp-content/uploads/2023/05/22-27349-002_matter-1-1-core-specification.pdf')">
+        <button class="button" onclick="launchPDFJs('https://csa-iot.org/wp-content/uploads/2023/05/22-27349-002_matter-1-1-core-specification.pdf')">
             Launch PDF.js
-        </button>
-        <div class="spacer3"></div>
-        <button class="button" id="launchViewerJs" onclick="launchViewerJs('https://csa-iot.org/wp-content/uploads/2023/05/22-27349-002_matter-1-1-core-specification.pdf')">
-            Launch Viewer.js
         </button>
 
         <div class="spacer2"></div>
-        <h3>Linker Sharing</h3>
-        <button class="button" id="launchPDFJs" onclick="linkerShare('https://cdn2.hubspot.net/hubfs/2246990/_ChartingLibrary/Library_DataSheet_7_26_17.pdf')">
+        <h3>FDC3 Broadcast</h3>
+        <button class="button" onclick="linkerShare('https://cdn2.hubspot.net/hubfs/2246990/_ChartingLibrary/Library_DataSheet_7_26_17.pdf')">
             Charting datasheet
-        </button>
-        <div class="spacer3"></div>
-        <button class="button" id="launchPDFJs" onclick="linkerShare('https://csa-iot.org/wp-content/uploads/2023/05/22-27349-002_matter-1-1-core-specification.pdf')">
-            Finsemble datasheet
-        </button>
-        <div class="spacer3"></div>
-        <button class="button" id="launchPDFJs" onclick="linkerShare('https://csa-iot.org/wp-content/uploads/2023/05/22-27349-002_matter-1-1-core-specification.pdf')">
-            CryptoIQ datasheet
         </button>
 
         <div class="spacer2"></div>
@@ -53,12 +39,6 @@
         <a onclick="window.open('https://csa-iot.org/wp-content/uploads/2023/05/22-27349-002_matter-1-1-core-specification.pdf')" href="#">Charting datasheet</a>
         (always opens in a new viewer)
         <a onclick="window.open('https:news.bbc.co.uk')" href="#">Not a PDF</a>
-
-        <div class="spacer2"></div>
-        <h3>Drag and Drop</h3>
-        <span class="center">(use the drag and drop icon in the title bar <br> to learn about trading from the chart)</span>
-
-        <div class="spacer4"></div>
     </div>
 </body>
 
