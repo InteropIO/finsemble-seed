@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>PDF Tester</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="pdfTester.css">
+    <script src="pdfTester.js"></script>
+</head>
+
+<body>
+    <div id="container">
+        <div id="bounds"></div>
+        <div class="spacer1"></div>
+        <img src="../../assets/img/finsembleDarkBG_Solo@1.5x.png" id="finsembleLogo" height="100">
+        <div class="spacer2"></div>
+        <h1>PDF Viewer</h1>
+        <h2>Test Component</h2>
+        <div class="spacer3"></div>
+
+        <h3>Programmatic launch</h3>
+        <div class="spacer3"></div>
+        <button class="button" onclick="launchPDFJs('https://csa-iot.org/wp-content/uploads/2023/05/22-27349-002_matter-1-1-core-specification.pdf')">
+            Launch PDF.js
+        </button>
+
+        <div class="spacer2"></div>
+			<span class="center">(n.b. Select a linker channel first to setup FDC3 broadcasting)</span>
+        <h3>FDC3 Broadcast</h3>
+        <button class="button" onclick="fdc3BroadcastPdf('https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf')">
+            Charting datasheet
+        </button>
+
+        <div class="spacer2"></div>
+        <h3>Custom native override</h3>
+        <a onclick="window.open('https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf')" href="#">Charting datasheet</a>
+        (always opens in a new viewer)
+        <a onclick="window.open('https:news.bbc.co.uk')" href="#">Not a PDF</a>
+    </div>
+</body>
+
+</html>

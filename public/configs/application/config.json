@@ -1,0 +1,118 @@
+{
+	"$schema": "../../../node_modules/@finsemble/finsemble-core/configs/schemas/fileBasedSchemas/applicationConfigFile.schema.json",
+	"servicesConfig": {
+		"distributedStore": {
+			"initialStores": [
+				{
+					"name": "Finsemble-AppLauncher-Store",
+					"preferPreviousState": true,
+					"foundation": {
+						"appFolders": {
+							"list": ["Advanced App Launcher", "Favorites"],
+							"folders": {
+								"Advanced App Launcher": {
+									"icon": "ff-component",
+									"type": "folder",
+									"canDelete": false,
+									"apps": [
+										{
+											"name": "Welcome Component",
+											"appID": "welcome-comp"
+										},
+										{
+											"name": "Getting Started Tutorial",
+											"appID": "2"
+										},
+										{
+											"name": "ProcessMonitor",
+											"appID": "pm"
+										},
+										{
+											"name": "Notepad",
+											"appID": "note"
+										}
+									]
+								},
+								"Favorites": {
+									"icon": "ff-favorite",
+									"type": "folder",
+									"canDelete": false,
+									"apps": []
+								}
+							}
+						},
+						"appDefinitions": {}
+					},
+					"default": {
+						"activeLauncherTags": [],
+						"filterText": "",
+						"activeTags": [],
+						"filteredApps": [],
+						"filterTags": [],
+						"activeFolder": "Advanced App Launcher",
+						"sortBy": "Alphabetical"
+					}
+				}
+			]
+		},
+		"launcher": {
+			"staggerPixels": 40,
+			"unknownComponent": "NonConfiguredComponent"
+		},
+		"assimilation": {
+			"useFeaSpawn": false,
+			"enabled": true,
+			"blacklist": [],
+			"whitelist": [],
+			"onlySpawned": true,
+			"throttle": 10,
+			"focusDelay": 30,
+			"eventIgnore": 50,
+			"hideTitleBars": false
+		},
+		"docking": {
+			"enabled": true,
+			"groupTileBuffer": 30,
+			"headerHeight": 32,
+			"MINIMUM_WIDTH": 175,
+			"requireRectangularityForGroupResize": true,
+			"undockDisbandsEntireGroup": true,
+			"fillHolesOnUndock": true,
+			"tabbing": {
+				"enabled": true
+			},
+			"tiling": {
+				"enabled": true
+			}
+		},
+		"linker": {
+			"enabled": false
+		},
+		"logger": {
+			"hotkeyShowCentralLogger": ["ctrl", "shift", "L"]
+		},
+		"storage": {
+			"defaultStorage": "IndexedDBAdapter",
+			"topicToDataStoreAdapters": {
+				"finsemble": "IndexedDBAdapter",
+				"finsemble.workspace": "IndexedDBAdapter",
+				"finsemble.workspace.cache": "IndexedDBAdapter"
+			},
+			"dataStoreAdapters": {
+				"LocalStorageAdapter": "$moduleRoot/adapters/localStorageAdapter.js",
+				"IndexedDBAdapter": "$moduleRoot/adapters/indexedDBAdapter.js"
+			}
+		},
+		"workspace": {
+			"promptUserOnDirtyWorkspace": true
+		}
+	},
+	"systemTrayComponent": "SystemTrayComponent",
+	"Window Manager": {
+		"alwaysOnTopIcon": false,
+		"floatingTitlebarComponent": "Floating Titlebar"
+	},
+	"globalHotkeys": {},
+	"importConfig": ["$configRoot/application/appd.json", "$configRoot/application/apps.json"],
+	"toolbarMenus": {}
+}
