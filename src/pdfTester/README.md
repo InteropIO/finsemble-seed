@@ -12,8 +12,8 @@ Please review [pdfTester.html](./pdfTester.html) and [pdfTester.js](./pdfTester.
 {
   ...
 	{
-		"filename": "pdfTester/pdfTester.js",
-		"import": "./src/pdfTester/pdfTester.js"
+		"import": "./src/pdfTester/pdfTester.js",
+		"filename": "pdfTester/pdfTester.js"
 	}
   ...
 }

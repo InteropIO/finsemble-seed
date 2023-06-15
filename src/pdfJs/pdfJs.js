@@ -27,15 +27,13 @@ const loadURL = function (url) {
 const contextHandler = function (context) {
 	//Support linker messages on the url and pdf channels
 	if (context && (context.url)) {
-		FSBL.Clients.Logger.log("Got linker data URL: " + context.url);
 		loadURL(context.url);
 	} else {
-		FSBL.Clients.Logger.error("No PDF URL to load from linker");
+		FSBL.Clients.Logger.error("No PDF URL to load");
 	}
 };
 
 const setupContextSharing = function () {
-	//register linker topics
 	fdc3.addContextListener("custom.pdf", contextHandler)
 };
 

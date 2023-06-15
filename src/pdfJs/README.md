@@ -1,81 +1,69 @@
 ## PDF.js PDF Viewer Component ##
-This component adds support for viewing PDF files inside a Finsemble PDF viewer, based on [PDF.js](https://github.com/mozilla/pdf.js).
+These files add support for viewing PDF files inside a Finsemble using [PDF.js](https://github.com/mozilla/pdf.js).
 
 ![](./screenshot.png)
 
-The viewer can be launched for a specified PDF, preserves its state in workspaces and supports context linking on color channels or drag and drop, via topic names `url` and `pdf`. The payload can either be string or an object with key `url`, indicating which PDF URL to load.
+The viewer can be launched for a specified PDF, preserves its state in workspaces and supports FDC3 broadcasts on user channels, and raising a `ViewPdf` intent and a `{"type":"custom.pdf", "url": "url-to.pdf"}` context.
+
+**NOTE**: This uses the [prebuilt PFD.js viewer](https://mozilla.github.io/pdf.js/getting_started/#download) which can be [downloaded here](https://mozilla.github.io/pdf.js/getting_started/#download). It's been added directly to the document root to avoid the Finsemble build process. If you need to customise this you may need to build this outside of Finsemble.
 
 ### Installation ###
-1. Add the `pdfJS` component folder to your _/src/components_ directory.
-2. Add the component to your webpack build at _/build/webpack/webpack.components.entries.json_:
+1. Add the `pdfJS` folder to your _/src/_ directory.
+2. Add the pdfJs.js preload to your webpack build at _/webpack/entries.json_:
 ```
-{
-    ...
-    "pdfJs": {
-        "output": "components/pdfJs/pdfJs",
-        "entry": "./src/components/pdfJs/pdfJs.js"
-    },
-    ...
-}
-```
-3. Add the optional PDF-aware native preload top your build (so that `window.open` calls in components using the preload automatically open in the viewer), by adding the following to your _/build/webpack/webpack.preloads.entries.json_ file:
-```
-{
+[
+	{
+		"import": "./src/pdfJs/pdfJs.js",
+		"filename": "pdfJs/pdfJs.js"
+	},
 	...
-	"pdfJsNativeOverrides": {
-		"output": "preloads/pdfJsNativeOverrides",
-		"entry": "./src/components/pdfJs/pdfJsNativeOverrides.js"
-	}
-}
+]
 ```
-4. Add the following configuration to your _/configs/application/components.json_ file:
+3. Add the optional PDF-aware native preload top your build (so that `window.open` calls in components using the preload automatically open in the viewer), by adding the following to your _/webpack/entries.json_ file:
+```
+[
+	{
+		"import": "./src/pdfJs/pdfJsNativeOverrides.js",
+		"filename": "pdfJs/pdfJsNativeOverrides.js"
+	},
+	...
+]
+```
+4. Add the configuration for the PDF.js viewer app and its preload to your _/public/configs/apps.json_ file. Note that the url for this is referencing the prebuilt PDF.js viewer.
+
 ```
 {
-    "components": {
-        ...
-        "pdfJs": {
-            "window": {
-                "url": "$applicationRoot/components/pdfJs/web/viewer.html?file=",
-                "frame": false,
-                "resizable": true,
-                "autoShow": true,
-                "top": "center",
-                "left": "center",
-                "width": 800,
-                "height": 600,
-                "addToWorkspace": true
-            },
-            "component": {
-                "preload": false
-            },
-            "foreign": {
-                "services": {
-                    "dockingService": {
-                        "canGroup": true,
-                        "isArrangable": true
-                    }
-                },
-                "components": {
-                    "App Launcher": {
-                        "launchableByUser": true
-                    },
-                    "Window Manager": {
-                        "title": "pdfJs",
-                        "FSBLHeader": {
-                            "bodyMarginTop": "0px"
-                        },
-                        "hackScrollbar": true,
-                        "persistWindowState": true,
-                        "showLinker": true,
-                        "alwaysOnTopIcon": true
-                    },
-                    "Toolbar": {
-                        "iconClass": "ff-document-2"
-                    }
-                }
-            }
-        },
-        ...
+	"apps": [
+		{
+			"appId": "pdfJs",
+			"type": "web",
+			"details": {
+				"url": "$documentRoot/preBuiltPdfJs/web/viewer.html?file="
+			},
+			"hostManifests": {
+				"Finsemble": {
+					"window": {
+						"width": 800,
+						"height": 600
+					},
+					"component": {
+						"preload": "$applicationRoot/pdfJs/pdfjs.js"
+					}
+				}
+			},
+			"interop": {
+				"intents": {
+					"listensFor": {
+						"ViewPdf": {
+							"displayName": "View PDF",
+							"contexts": ["custom.pdf"]
+						}
+					}
+				}
+			}
+		},
+		...
+	]
 ```
 
 
@@ -84,50 +72,23 @@ To launch the viewer programmatically:
 
 ```
 window.launchPDFJs = function(url){
-	//Spawn the PDF viewer component
-	FSBL.Clients.LauncherClient.spawn("pdfJs", {
-		position: 'relative', //position the window relative to this window
-		left: 'adjacent',     //  to the right
-		data: {
-			url: url          //PDF URL to load
-		}
-	}, function(err, w) {
-		if(err) { FSBL.Clients.Logger.error("Error launching PDF viewer!", err); }
-	});
-}
-```
-or if you want to make use of the Finsemble Linker channels to reuse an existing viewer, try:
-```
-let linkedComps = FSBL.Clients.LinkerClient.getLinkedComponents({componentTypes: ["pdfJs"]});
-let useLinker = linkedComps && linkedComps.length > 0;
-if (useLinker && (!name || name !="_blank")) {
-	FSBL.Clients.Logger.log("Publishing PDF URL to linked PDF viewer component: " + urlToOpen);
-	FSBL.Clients.LinkerClient.publish({dataType: "url", data: urlToOpen});
-} else {
-	//else spawn a new viewer
-	FSBL.Clients.Logger.log("Spawning new PDF viewer component: " + urlToOpen);
-
-	FSBL.Clients.LauncherClient.spawn("pdfJs", {
-		position: 'relative',
-		left: 'adjacent',
-		data: {
-			url: urlToOpen
-		}
-	}, function (err, response) {
-		if (err) {
-			console.error("Error launching PDF viewer!", err);
-		} else {
-			//link new window to parent if any channel is set
-			let channels = FSBL.Clients.LinkerClient.getState().channels;
-			for (let c=0; c<channels.length; c++) {
-				FSBL.Clients.LinkerClient.linkToChannel(channels[c].name, response.windowIdentifier);
-			}
-		}
-	});
+	fdc3.raiseIntent("ViewPdf", {
+		type: "custom.pdf", url
+	})
 }
 ```
 
-Alternatively, use the provide PDF-viewer aware native overrides file in other components to have them automatically open PDFs in the viewer (with support for linking). See the installation section above for how to add the preload to your build.
+or if you want to make use of the FDC3 channels to reuse an existing viewer, try:
+```
+window.fdc3BroadcastPdf = function(url){
+	fdc3.broadcast({
+		type: "custom.pdf",
+		url
+	})
+}
+```
+
+Alternatively, use the provided PDF-viewer aware native overrides file in other components to have them automatically open PDFs in the viewer (with support for linking). See the installation section above for how to add the preload to your build.
 
 Specify the preload in the configuration of other components:
 ```

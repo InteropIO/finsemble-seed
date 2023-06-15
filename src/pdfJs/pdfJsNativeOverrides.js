@@ -43,7 +43,6 @@ window.open = function (urlToOpen, name, specs, replace) {
 
 const handlePdfUrl = async function (urlToOpen, name, specs, replace) {
 	FSBL.Clients.Logger.log("Handling PDF URL via PDF.js: " + urlToOpen);
-	//check if we're linked to a PDF viewer - if so just send a linker share (if target != _blank)
 	fdc3.raiseIntent("ViewPdf", {
 		type: "custom.pdf",
 		url: urlToOpen
