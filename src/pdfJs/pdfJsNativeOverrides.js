@@ -25,7 +25,7 @@
  * This ensures that the Finsemble workspace manager is aware of newly opened windows, that they can participate in
  * the on screen workspace management, and that they can be restored with workspaces.
  *
- * This version attempts to detect URLs pointing to PDF files and automatically opens them in the PDF viewer component.
+ * This attempts to detect URLs pointing to PDF files and automatically opens them in the PDF viewer component.
  */
 
 var originalWindowOpen = window.open;
@@ -41,42 +41,13 @@ window.open = function (urlToOpen, name, specs, replace) {
 	}
 }
 
-const handlePdfUrl = function (urlToOpen, name, specs, replace) {
+const handlePdfUrl = async function (urlToOpen, name, specs, replace) {
 	FSBL.Clients.Logger.log("Handling PDF URL via PDF.js: " + urlToOpen);
 	//check if we're linked to a PDF viewer - if so just send a linker share (if target != _blank)
-	let linkedComps = FSBL.Clients.LinkerClient.getLinkedComponents({componentTypes: ["pdfJs", "viewerJs"]});
-	let useLinker = linkedComps && linkedComps.length > 0;
-	if (useLinker && (!name || name !== "_blank")) {
-		FSBL.Clients.Logger.log("Publishing PDF URL to linked PDF viewer component: " + urlToOpen);
-		FSBL.Clients.LinkerClient.publish({dataType: "url", data: urlToOpen});
-	} else {
-		//else spawn one
-		FSBL.Clients.Logger.log("Spawning new PDF viewer component: " + urlToOpen);
-
-		//set same linker channels as parent
-		let myChannels = FSBL.Clients.LinkerClient.getState().channels;
-		let channels = [];
-		myChannels.forEach(channel => {
-			channels.push(channel.name);
-		});
-		let data = {
-			url: urlToOpen,          	    //PDF URL to load
-			linker: {
-				channels: channels  //Set same linker channels as parent
-			}
-		};
-		var w;
-		FSBL.Clients.LauncherClient.spawn("pdfJs", {
-			position: 'relative',
-			left: 'adjacent',
-			data: data
-		}, function (err, response) {
-			if (err) {
-				console.error("pdfJsNativeOverrides.js window.open patch error: " + err);
-			}
-		});
-		return w;
-	}
+	fdc3.raiseIntent("ViewPdf", {
+		type: "custom.pdf",
+		url: urlToOpen
+	})
 }
 
 const handleOtherUrl = function (urlToOpen, name, specs, replace) {

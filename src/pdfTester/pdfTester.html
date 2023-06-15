@@ -22,21 +22,21 @@
         <div class="spacer3"></div>
 
         <h3>Programmatic launch</h3>
-        <span class="center">(n.b. select a linker channel first to setup linker sharing automatically)</span>
         <div class="spacer3"></div>
         <button class="button" onclick="launchPDFJs('https://csa-iot.org/wp-content/uploads/2023/05/22-27349-002_matter-1-1-core-specification.pdf')">
             Launch PDF.js
         </button>
 
         <div class="spacer2"></div>
+			<span class="center">(n.b. Select a linker channel first to setup linker sharing)</span>
         <h3>FDC3 Broadcast</h3>
-        <button class="button" onclick="linkerShare('https://cdn2.hubspot.net/hubfs/2246990/_ChartingLibrary/Library_DataSheet_7_26_17.pdf')">
+        <button class="button" onclick="fdc3BroadcastPdf('https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf')">
             Charting datasheet
         </button>
 
         <div class="spacer2"></div>
         <h3>Custom native override</h3>
-        <a onclick="window.open('https://csa-iot.org/wp-content/uploads/2023/05/22-27349-002_matter-1-1-core-specification.pdf')" href="#">Charting datasheet</a>
+        <a onclick="window.open('https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf')" href="#">Charting datasheet</a>
         (always opens in a new viewer)
         <a onclick="window.open('https:news.bbc.co.uk')" href="#">Not a PDF</a>
     </div>

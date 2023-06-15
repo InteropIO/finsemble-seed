@@ -10,8 +10,22 @@
 			},
 			"hostManifests": {
 				"Finsemble": {
+					"window": {
+						"width": 800,
+						"height": 600
+					},
 					"component": {
 						"preload": "$applicationRoot/pdfJs/pdfjs.js"
+					}
+				}
+			},
+			"interop": {
+				"intents": {
+					"listensFor": {
+						"ViewPdf": {
+							"displayName": "View PDF",
+							"contexts": ["custom.pdf"]
+						}
 					}
 				}
 			}

@@ -1,7 +1,14 @@
 /**
- * Preload for PDF Js
- * @type {string}
+ * Preload for PDF Js app.
+ *
+ * Fetches spawn data opens the pdf url contained in the spawn data
+ * Adds an FDC3 context listener for "custom.pdf" allowing components linked to same channel to share pdf files
+ * Stores opened urls in component state allowing users who persist the pdfjs viewer to keep the same pdf open in the
+ * next session
+ *
  */
+
+
 const STATE_TOPIC_URL = 'pdfUrl';
 let currrentUrl = null;
 
@@ -11,19 +18,17 @@ const loadURL = function (url) {
 	} else {
 		FSBL.Clients.Logger.log("Loading URL: " + url);
 		currrentUrl = url;
-		PDFViewerApplication.open(url);
+		PDFViewerApplication.open({url});
 		FSBL.Clients.WindowClient.setComponentState({field: STATE_TOPIC_URL, value: url});
 	}
-	FSBL.Clients.WindowClient.bringWindowToFront();
+	FSBL.Clients.WindowClient.bringToFront();
 };
 
-const incomingContextHandler = function (linkerData) {
+const contextHandler = function (context) {
 	//Support linker messages on the url and pdf channels
-	if (linkerData && (typeof linkerData == "string" || linkerData.url || linkerData.pdf)) {
-		let linkerUrl = typeof linkerData == "string" ? linkerData :
-			linkerData.url ? linkerData.url : linkerData.pdf;
-		FSBL.Clients.Logger.log("Got linker data URL: " + linkerUrl);
-		loadURL(linkerUrl);
+	if (context && (context.url)) {
+		FSBL.Clients.Logger.log("Got linker data URL: " + context.url);
+		loadURL(context.url);
 	} else {
 		FSBL.Clients.Logger.error("No PDF URL to load from linker");
 	}
@@ -31,16 +36,15 @@ const incomingContextHandler = function (linkerData) {
 
 const setupContextSharing = function () {
 	//register linker topics
-	FSBL.Clients.LinkerClient.subscribe("url", incomingContextHandler);
-	FSBL.Clients.LinkerClient.subscribe("pdf", incomingContextHandler);
+	fdc3.addContextListener("custom.pdf", contextHandler)
 };
 
 const init = function () {
+	fdc3.addIntentListener("ViewPdf", contextHandler)
 	//Check for existing component state
-	let state =
-		FSBL.Clients.WindowClient.getComponentState({
-			field: STATE_TOPIC_URL,
-		}, function (err, state) {
+	let state = FSBL.Clients.WindowClient.getComponentState(
+		{ field: STATE_TOPIC_URL	},
+		function (err, state) {
 			if (err || !state) {
 				//Check for a URL to load in spawn data
 				let spawndata = FSBL.Clients.WindowClient.getSpawnData();
@@ -58,7 +62,7 @@ const init = function () {
 		});
 }
 
-const FSBLReady = () => {
+const fdc3Action = () => {
 	try {
 		init();
 		setupContextSharing();
@@ -68,7 +72,7 @@ const FSBLReady = () => {
 }
 
 if (window.FSBL && FSBL.addEventListener) {
-	FSBL.addEventListener("onReady", FSBLReady)
+	FSBL.addEventListener("fdc3Ready", fdc3Action)
 } else {
-	window.addEventListener("FSBLReady", FSBLReady)
+	window.addEventListener("FSBLReady", fdc3Action)
 }
