@@ -16,3 +16,7 @@ pkg/
 pkg-development/
 pkg-production/
 .yarn/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

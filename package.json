@@ -1,28 +1,32 @@
 {
-	"name": "finsemble-seed",
-	"version": "8.10.2",
-	"scripts": {
-		"adapter": "finsemble adapter",
-		"build": "finsemble build --watch=false",
-		"clean": "finsemble clean",
-		"create-app": "finsemble create-app",
-		"create-preload": "finsemble create-preload",
-		"dev": "finsemble build --start=true",
-		"launch": "finsemble launch",
-		"makeInstaller": "finsemble makeInstaller",
-		"prod": "finsemble build --mode=production --watch=false --prepare=true",
-		"server": "finsemble server",
-		"sdd": "finsemble sdd",
-		"start": "finsemble start",
-		"template": "finsemble template"
-	},
-	"author": "Finsemble",
-	"license": "SEE LICENSE IN LICENSE",
-	"dependencies": {
-		"@finsemble/finsemble-core": "8.10.2",
-		"@types/react": "18.2.29",
-		"@types/react-dom": "18.2.15",
-		"react": "18.2.0",
-		"react-dom": "18.2.0"
-	}
+  "name": "finsemble-seed",
+  "version": "8.10.2",
+  "scripts": {
+    "adapter": "finsemble adapter",
+    "build": "finsemble build --watch=false",
+    "clean": "finsemble clean",
+    "create-app": "finsemble create-app",
+    "create-preload": "finsemble create-preload",
+    "dev": "finsemble build --start=true",
+    "launch": "finsemble launch",
+    "makeInstaller": "finsemble makeInstaller",
+    "prod": "finsemble build --mode=production --watch=false --prepare=true",
+    "server": "finsemble server",
+    "sdd": "finsemble sdd",
+    "start": "finsemble start",
+    "template": "finsemble template"
+  },
+  "author": "Finsemble",
+  "license": "SEE LICENSE IN LICENSE",
+  "dependencies": {
+    "@finsemble/finsemble-core": "8.10.2",
+    "@types/react": "18.2.29",
+    "@types/react-dom": "18.2.15",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.1",
+    "@types/node": "^20.10.3"
+  }
 }
