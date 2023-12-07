@@ -10,7 +10,7 @@ import { test as base, Page, ElectronApplication } from "@playwright/test";
 // TODO: Change these values to suit requirements
 //
 // The root directory of Electron storage for Finsemble; should be changed on MacOS
-const ELECTRON_STORAGE_ROOT_DIR = path.resolve(`${process.env.HOME}/AppData/Roaming/Electron`);
+const ELECTRON_STORAGE_ROOT_DIR = ("darwin" === process.platform) ? path.resolve(`${process.env.HOME}/Library/Application Support/Electron`) : path.resolve(`${process.env.HOME}/AppData/Roaming/Electron`);
 // The directories in root storage to clean before each test
 const ELECTRON_STORAGE_DIRS_TO_CLEAN = [path.resolve(`${ELECTRON_STORAGE_ROOT_DIR}/e2o`), path.resolve(`${ELECTRON_STORAGE_ROOT_DIR}/userdata`)];
 //
@@ -29,6 +29,9 @@ const APP_NAME = "Finsemble";
 const APP_SCRIPT_PATH = path.resolve("./node_modules/@finsemble/finsemble-electron-adapter/dist/app.js");
 const CLI_SCRIPT_PATH = path.resolve("./node_modules/@finsemble/finsemble-core/bin/cli.cjs");
 const NODE_PATH = process.execPath;
+
+// Ensure that the ELECTRON_DEV environment variable is set to "true" (required on MacOS to avoid SmartDesktop error messages)
+process.env.ELECTRON_DEV = "true"
 
 // Logging helpers
 const formatMessage = (level, ...args: any[]) => {
