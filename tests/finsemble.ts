@@ -201,7 +201,7 @@ export class FinsembleApp {
 
 
         // Terminate Electron fully, timing out after a set time
-        await Promise.race([this.#electronApp.close(), sleepFor(5000)]);
+        await Promise.race([this.#electronApp.close().catch(() => {/* Do nothing */ }), sleepFor(5000)]);
 
 
         // See if Finsemble has exited
