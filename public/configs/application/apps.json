@@ -23,34 +23,12 @@
 						"components": {
 							"App Launcher": {
 								"launchableByUser": false
-							},
-							"Toolbar": {
-								"iconClass": "ff-chart-advanced"
-							},
-							"Window Manager": {
-								"FSBLHeader": true,
-								"persistWindowState": true
 							}
 						}
 					}
 				}
 			},
-			"version": "1.0.0",
-			"tooltip": "",
-			"icons": [
-				{
-					"src": "https://i.imgur.com/10C3LdH.png"
-				}
-			],
-			"categories": [
-				"analytics",
-				"charts",
-				"market data",
-				"visualisation"
-			],
-			"contactEmail": "support@finsemble.com",
-			"supportEmail": "support@finsemble.com",
-			"publisher": "Finsemble"
+			"version": "1.0.0"
 		},
 		{
 			"appId": "Getting Started Tutorial",
