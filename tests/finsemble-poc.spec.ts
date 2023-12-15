@@ -23,6 +23,14 @@ test.beforeEach(async ({ finsemble }) => {
 
     // Start Finsemble
     await finsemble.start();
+
+    // Wait for the authentication app (by URL)
+    const authenticationPage = await finsemble.waitForPageByURL("Authentication/index.html");
+    // Fill in the username and password
+    await authenticationPage.locator("#username").fill("myUsername");
+    await authenticationPage.locator("#password").fill("myp@ssw0rd");
+    // Click the "Login" button
+    await authenticationPage.locator('button:text("Login")').click();
 });
 
 test.afterEach(async ({ finsemble }) => {
