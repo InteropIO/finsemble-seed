@@ -1,4 +1,4 @@
-import { test, expect, Page, FinsembleApp } from "./finsemble";
+import { test, expect, Page, FinsembleApp, waitFor, sleepFor } from "./finsemble";
 
 
 // TODO: Change these values to suit requirements
@@ -77,6 +77,35 @@ test.describe("Launch the \"Tour\" app", () => {
 
         // Validate that the Tour component has opened
         expect(await validateTourComponentIsOpened(finsemble));
+    });
+
+    test("Navigate the \"Tour\" component", async ({ finsemble }) => {
+        // Execute code to open the Tour
+        await finsemble.execute("FSBL.Clients.AppsClient.spawn(\"Tour\")");
+
+        // Validate that the Tour component has opened
+        expect(await validateTourComponentIsOpened(finsemble));
+        const tourPage = await finsemble.waitForPageByURL(finsemble.PAGE_TOUR_URL);
+        const nextButton = tourPage.locator('button:text("Next")');
+
+
+
+        // Click the "Next" button 5 times
+        await sleepFor(1000); // TODO: REMOVE THIS! This sleep exists for demonstration purposes only!
+        nextButton.click();
+        await sleepFor(1000); // TODO: REMOVE THIS! This sleep exists for demonstration purposes only!
+        nextButton.click();
+        await sleepFor(1000); // TODO: REMOVE THIS! This sleep exists for demonstration purposes only!
+        nextButton.click();
+        await sleepFor(1000); // TODO: REMOVE THIS! This sleep exists for demonstration purposes only!
+        nextButton.click();
+        await sleepFor(1000); // TODO: REMOVE THIS! This sleep exists for demonstration purposes only!
+        nextButton.click();
+        await sleepFor(1000); // TODO: REMOVE THIS! This sleep exists for demonstration purposes only!
+
+
+        // Validate that we are at the last slide (look for "Want to Learn More?")
+        expect(!!tourPage.getByText("Want to Learn More?")).toBeTruthy();
     });
 
 });
