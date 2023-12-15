@@ -3,6 +3,128 @@
 	"$schema": "../../../node_modules/@finsemble/finsemble-core/configs/schemas/fileBasedSchemas/appsConfigFile.schema.json",
 	"apps": [
 		{
+			"appId": "SimpleAuthentication",
+			"name": "SimpleAuthentication",
+			"type": "web",
+			"details": {
+				"url": "$applicationRoot/Authentication/index.html"
+			},
+			"description": "Simple authentication",
+			"hostManifests": {
+				"Finsemble": {
+					"window": {
+						"width": 250,
+						"height": 125,
+						"options": {
+							"minWidth": 175
+						}
+					},
+					"foreign": {
+						"components": {
+							"App Launcher": {
+								"launchableByUser": false
+							},
+							"Toolbar": {
+								"iconClass": "ff-chart-advanced"
+							},
+							"Window Manager": {
+								"FSBLHeader": true,
+								"persistWindowState": true
+							}
+						}
+					}
+				}
+			},
+			"version": "1.0.0",
+			"tooltip": "",
+			"icons": [
+				{
+					"src": "https://i.imgur.com/10C3LdH.png"
+				}
+			],
+			"categories": [
+				"analytics",
+				"charts",
+				"market data",
+				"visualisation"
+			],
+			"contactEmail": "support@finsemble.com",
+			"supportEmail": "support@finsemble.com",
+			"publisher": "Finsemble"
+		},
+		{
+			"appId": "Getting Started Tutorial",
+			"name": "Getting Started Tutorial",
+			"type": "web",
+			"details": {
+				"url": "https://documentation.finsemble.com/tutorial-gettingStarted.html"
+			},
+			"hostManifests": {
+				"Finsemble": {
+					"window": {
+						"height": 800,
+						"width": 1000
+					},
+					"component": {
+						"spawnOnStartup": false
+					},
+					"foreign": {
+						"services": {
+							"workspaceService": {
+								"persistURL": true
+							}
+						},
+						"components": {
+							"App Launcher": {
+								"launchableByUser": false
+							},
+							"Window Manager": {
+								"FSBLHeader": true,
+								"persistWindowState": true,
+								"title": "Finsemble Getting Started Tutorial"
+							}
+						}
+					}
+				}
+			}
+		},
+		{
+			"appId": "Finsemble Documentation",
+			"name": "Finsemble Documentation",
+			"type": "web",
+			"details": {
+				"url": "http://documentation.finsemble.com"
+			},
+			"hostManifests": {
+				"Finsemble": {
+					"window": {
+						"left": "center",
+						"top": "center",
+						"height": 800,
+						"width": 1000
+					},
+					"component": {},
+					"foreign": {
+						"services": {
+							"workspaceService": {
+								"persistURL": true
+							}
+						},
+						"components": {
+							"App Launcher": {
+								"launchableByUser": false
+							},
+							"Window Manager": {
+								"FSBLHeader": true,
+								"persistWindowState": true,
+								"title": "Finsemble Documentation"
+							}
+						}
+					}
+				}
+			}
+		},
+		{
 			"appId": "ChartIQ Example App",
 			"name": "ChartIQ Example App",
 			"type": "web",

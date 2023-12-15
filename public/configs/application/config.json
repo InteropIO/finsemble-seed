@@ -1,5 +1,11 @@
 {
 	"$schema": "../../../node_modules/@finsemble/finsemble-core/configs/schemas/fileBasedSchemas/applicationConfigFile.schema.json",
+	"authentication": {
+		"startup": {
+			"component": "SimpleAuthentication",
+			"adapter": "PASSWORD"
+		}
+	},
 	"servicesConfig": {
 		"distributedStore": {
 			"initialStores": [
