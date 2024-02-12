@@ -11,7 +11,10 @@ This version of the Finsemble Seed project is compatible with IO.Connect Desktop
 
 > _To evaluate additional iocd features please request a full demo version._
 
-2) Update your package.json `@finsemble/finsemble-core` entry to match the version in this branch. Then run `yarn install`.
+2) Update your package.json:
+    a) Change `@finsemble/finsemble-core` entry to match the version in this branch.
+    b) Copy the `iocd` and `dev-iocd` scripts from this branch.
+    c) Run `yarn install`.
 
 ## Running
 
@@ -29,7 +32,7 @@ Or, `yarn dev-iocd` vs `yarn dev`, which will build your project and launch the 
 
 ## Beta Details
 
-The purpose of this beta is so that you can get a sense for how your project will perform when running under iocd. Please provide us with notes on anything that doesn't function correctly or any other general feedback.
+The purpose of this beta is so that you can get a sense for how your project will perform when running under iocd. Please provide us with notes on anything that doesn't function correctly or any other general feedback by sending an email to support@finsemble.com.
 
 > Note: You can launch io.Connect Desktop from the start menu, but _it will only run your seed project when you launch using `yarn iocd` or `yarn dev-iocd`._
 
