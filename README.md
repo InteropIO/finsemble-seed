@@ -293,6 +293,8 @@ The installer directory contains all the files necessary for generating installe
 
 ## Data Migration (Work in Progress: this information may change)
 
+**_Workspace events are working! Importing workspaces from storage adapters is working! Everything else in this section is coming soon._**
+
 End user data can be migrated from existing Finsemble implementations to the new implementation running on io.CD. Following are the goals for data migration:
 
 1) Finsemble data will be converted at runtime to formats compatible with the new platform
@@ -375,10 +377,17 @@ Persistent distributed stores are no longer supported. Similar functionality can
 # Fixes
 
 FIN-1970 - sso-application didn't recognize `apps` (only `components`) in apps.json (only config.json)
+
 FIN-1970 - publishCredentials not actually publishing except from sso-application itself
+
 FIN-1970 - Added FSBL.System.hideSplashScreen()
+
 FIN-1970 - Enabled allowNTLMCredentialsForDomains: "*" by default. This can be overridden in system.json.
+
 FIN-1973 - Added fin.desktop.system.getCommandLineArguments()
+
 FIN-1972 - io-connect/gilding/gilding.json file can now be customized (it will not be overwritten if it already exists)
+
 FIN-1972 - Initial remoteConfig fetch now supports system proxy. Please delete io-connect/gilding/gilding.json and re-run `yarn iocd` to enable this feature.
+
 Finsemble's system hotkeys are now enabled by default (central logger, toolbar, spawnOnHotkey app configs)
