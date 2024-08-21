@@ -1,7 +1,3 @@
-/*!
- * Copyright 2017 by ChartIQ, Inc.
- * All rights reserved.
- */
 import React, { useEffect, useState, useRef } from "react";
 import ReactDOM from "react-dom";
 

@@ -49,6 +49,7 @@ export const LinkerGroups: React.FunctionComponent = () => {
 	let distribStoreObj: StoreModel  | null = null;
 	const channelStateHandler: ListenerFunction<Record<string,Direction>> = (err, response) => {
 		setChannelDirections(response.value);
+		debug("CustomLinkerGroups: Received channel directions:", response.value);
 	};
 
 	/** Retrieve the distributed store used for state communication. */
@@ -67,7 +68,7 @@ export const LinkerGroups: React.FunctionComponent = () => {
 				
 				//now retrieve this window's state
 				const {err: err2, data: data2} = await distribStoreObj.get<Record<string, Direction>>([STATE_DISTRIBUTED_STORE_STATE_FIELD, myWindowName]);
-				if (err2 || !data2) { debug("Failed to retrieve all channels! It may not have been setup yet, deferring to listener."); }
+				if (err2 || !data2) { debug("Failed to retrieve channel directions state for this window! It may not have been setup yet, deferring to listener."); }
 				else {
 					setChannelDirections(data2);
 					debug("CustomLinkerGroups: Received channel directions:", data2);

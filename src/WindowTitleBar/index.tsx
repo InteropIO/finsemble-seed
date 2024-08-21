@@ -59,7 +59,7 @@ const getConfiguration = async (): Promise<ComponentDescriptor | null> => {
 	
 };
 
-/** Util funciton to determine if the customFDC3 Linker should be shown. It achieves this 
+/** Util function to determine if the customFDC3 Linker should be shown. It achieves this 
  * by looking for the customFDC3 preload in the config. An alternative would be to look 
  * for a custom config setting.
 */
@@ -103,7 +103,7 @@ const shouldShowCustomLinker = async (): Promise<boolean> => {
  * "foreign.components.Window Manager.showLinker" property
  * to false will hide the <LinkerButton/>. Generally, the controls
  * will determine internally whether they are shown or hidden, however,
- * custo logic can also be handled here.
+ * custom logic can also be handled here.
  *
  * Other buttons are dynamic, such as <GroupingButton> which will only
  * appear when windows are docked or can be docked.

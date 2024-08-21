@@ -78,7 +78,7 @@ const CustomFDC3Example: React.FunctionComponent<{ title?: string }> = ({
 const main = () => {
 	ReactDOM.render(
 		<CustomFDC3Example />,
-		document.getElementsByTagName("body")[0]
+		document.getElementById("root")
 	);
 };
 if (window.FSBL && FSBL.addEventListener) {

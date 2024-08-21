@@ -7,7 +7,7 @@ import { debug } from "../customFDC3/utils";
 const main = () => {	
 	const initialState = {};
 	initialState[STATE_DISTRIBUTED_STORE_STATE_FIELD] = {};
-	//This data is hardcoded currently, but will be retrievable from Finsemble in future (app serice config will need to be moved to finsemble.apps at that time).
+	//This data is hardcoded currently, but will be retrievable from Finsemble in future.
 	//Please note that the channel ids MUST match those used in the Finsemble Interop service
 	initialState[STATE_DISTRIBUTED_STORE_ALLCHANNELS_FIELD] = {
 		"Channel 1": { "name": "Channel 1", "color": "#8781BD", "glyph": "1" },
@@ -33,8 +33,11 @@ const main = () => {
 			//fail over to retrieval - should not be needed, but defensive anyway
 			debug(`DistributedStore ${STATE_DISTRIBUTED_STORE_NAME} could not be created!`, err);
 		} else {
+			//Let the SystemManager know we are ready
+			FSBL.publishReady();
 			//Not needed anymore so might as well close
-			window.close();
+			//yeild to allow SystemManagerClient to log startup properly
+			setTimeout(()=> { window.close(); }, 10000);
 		}
 	});	
 };
