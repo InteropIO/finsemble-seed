@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import ReactDOM from "react-dom";
 
-import { FinsembleProvider, FinsembleCSS, FEAGlobals, useTitle, StoreModel, ListenerFunction, DisplayMetadata, StandardError } from "@finsemble/finsemble-core";
+import { FinsembleProvider, FinsembleCSS, FEAGlobals, useTitle, StoreModel, ListenerFunction, StandardError } from "@finsemble/finsemble-core";
+import { DisplayMetadata } from "@finos/fdc3";
 import { getRouterTopicName, log, debug, errorLog } from "../customFDC3/utils";
 import { STATE_DISTRIBUTED_STORE_STATE_FIELD, STATE_DISTRIBUTED_STORE_NAME, STATE_DISTRIBUTED_STORE_ALLCHANNELS_FIELD, STATE_DISTRIBUTED_STORE_CHECKTIME_FIELD, STATE_DISTRIBUTED_STORE_ACTIVEWINDOWNAME_FIELD } from "../customFDC3/constants";
 import { Direction } from "../customFDC3/types";

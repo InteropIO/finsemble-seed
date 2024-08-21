@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
-import { Context, Listener, useTitle } from "@finsemble/finsemble-core";
+import { Context, Listener } from "@finos/fdc3";
+import { useTitle } from "@finsemble/finsemble-core";
 import "./customFDC3Example.css"
 import { ICustomFdc3 } from "../customFDC3/types";
 
@@ -24,14 +25,14 @@ const CustomFDC3Example: React.FunctionComponent<{ title?: string }> = ({
 	const [channelListenerSummary, setChannelListenerSummary] = useState<string | null>(null);
 	let contextListener: Listener | null = null;
 	let channelListener: Listener | null = null;
-	
+
 	useTitle(title ?? "CustomFDC3Example");
 
 	useEffect(() => {
 		(fdc3 as ICustomFdc3).addContextListener(null, (context)=>{
 			setContextListenerSummary(JSON.stringify(context, null, 2));
 		}).then((listener) => { contextListener = listener });
-	
+
 		channelListener = (fdc3 as ICustomFdc3).addChannelListener(null, (context)=>{
 			setChannelListenerSummary(JSON.stringify(context, null, 2));
 		});
@@ -41,21 +42,21 @@ const CustomFDC3Example: React.FunctionComponent<{ title?: string }> = ({
 			if (channelListener) { channelListener.unsubscribe() }
 		};
 	}, []);
-	
+
 	return (
 		<div id="container">
 			<h2>Custom FDC3 Example app</h2>
-			<button 
+			<button
 				id="broadcastButton"
 				onClick={broadcastExample}
 			>Broadcast instrument</button>
-			<button 
+			<button
 				id="publishButton"
 				onClick={publishExample}
 			>Publish instrument</button>
 			<hr />
 			<label>Received via <code>addContextListener</code>
-				<textarea 
+				<textarea
 					id="addContextListenerArea"
 					placeholder="nothing yet"
 					value={contextListenerSummary ?? undefined}
@@ -63,7 +64,7 @@ const CustomFDC3Example: React.FunctionComponent<{ title?: string }> = ({
 				</textarea>
 			</label>
 			<label>Received via <code>addChannelListener</code>
-				<textarea 
+				<textarea
 					id="addChannelListenerArea"
 					placeholder="nothing yet"
 					value={channelListenerSummary ?? undefined}

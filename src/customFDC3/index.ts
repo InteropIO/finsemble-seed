@@ -1,15 +1,16 @@
-import { AppIdentifier, AppIntent, AppMetadata, Channel, Context, ContextHandler, DesktopAgent, ImplementationMetadata, IntentHandler, IntentResolution, joinUserChannel, Listener, PrivateChannel, StoreModel, System } from "@finsemble/finsemble-core";
+import { AppIdentifier, AppIntent, AppMetadata, Channel, Context, ContextHandler, DesktopAgent, ImplementationMetadata, IntentHandler, IntentResolution, joinUserChannel, Listener, PrivateChannel } from "@finos/fdc3";
+import { StoreModel, System } from "@finsemble/finsemble-core";
 import { STATE_DISTRIBUTED_STORE_NAME, STATE_DISTRIBUTED_STORE_CHECKTIME_FIELD, STATE_DISTRIBUTED_STORE_STATE_FIELD, WORKSPACE_STATE_FIELD_NAME, GLOBAL_CHANNEL_NAME, STATE_CLEAN_CHECK_FREQUENCY, STATE_CLEAN_CHECK_VARIANCE, CONTEXT_MESSAGE_DEBOUNCE_MS } from "./constants";
 import { errorLog, debug, log, objectHash, getRouterTopicName, warn } from "./utils";
 import { Direction, ChannelListenerHandler, LinkState, ChannelSource, LinkParams, ICustomFdc3 } from "./types";
 
 /** Custom GSP FDC3 API implementation, intended to allow GSP apps to migrate to a later Finsemble
- *  version and to communicate/interoperate with applications working with the default FDC3 
+ *  version and to communicate/interoperate with applications working with the default FDC3
  *  implementation.
- * 
+ *
  *  Note that fdc3.broadcast and fdc3.addContextListener work as per FDC3 1.0: via a single global channel only.
  *  Whereas the custom functions fdc3.publishToChannel and fdc3.addChannelListener work with channels
- *  that are selected via a custom linker menu, which can join each channel in both directions, or 
+ *  that are selected via a custom linker menu, which can join each channel in both directions, or
  *  just a single direction (listen or broadcast). These custom functions use FDC3 user channels
  *  and will integrate with other applications using the default Finsemble FDC3 implementation.
  */
@@ -20,7 +21,7 @@ class CustomFdc3 implements ICustomFdc3 {
 	/** This window's name. */
 	private myWindowName: string;
 	/** This window's componentType - used to link components of the same type - fine to retrieve async */
-	private myComponentType: string; 
+	private myComponentType: string;
 	/** Local cache of user channels used for sync responses. */
 	private allChannels: Channel[];
 	/** Local map of user channels used for sync responses. */
@@ -88,7 +89,7 @@ class CustomFdc3 implements ICustomFdc3 {
 				this.myComponentType = options?.customData.component.type;
 				log(`Got componentType ${this.myComponentType} for window name ${this.myWindowName}`);
 			});
-			
+
 			//used with broadcast/addContextListner FDC3 1.0 style
 			this.globalChannel = await this.defaultFdc3.getOrCreateChannel(GLOBAL_CHANNEL_NAME);
 			//as theres only one to lsitener to, we can add our general purpose context listener here
@@ -132,14 +133,14 @@ class CustomFdc3 implements ICustomFdc3 {
 
 				//retrieve initial state values as well
 				this.distributedStateStore.get([STATE_DISTRIBUTED_STORE_STATE_FIELD], stateUpdateHandler);
-				
+
 				debug(`DistributedStore ${STATE_DISTRIBUTED_STORE_NAME} connected`);
 			}
-			
+
 
 			//-------------------------------------------------------------------------
 			//Setup Router listeners for remote API calls
-			//Note we don't use responders as we might go away and come back again with a workspace reload 
+			//Note we don't use responders as we might go away and come back again with a workspace reload
 			//  and we don't want to handle removing them on workspace switches
 			FSBL.Clients.RouterClient.addListener(getRouterTopicName("linkToChannel"), (error, response) => {
 				if (error) {
@@ -161,21 +162,21 @@ class CustomFdc3 implements ICustomFdc3 {
 
 			//-------------------------------------------------------------------------
 			//Check for workspace state for adapter (we take over saving channel membership as it has directions)
-			
+
 			//Use workspace state to set up inital channels with calls to linkToChannel(name,direction)
 			await this.loadStateFromWorkspace()
 
 		} else {
 			errorLog("CustomFDC3 is already initialized!");
 		}
-		
+
 	}
-	
+
 	//-------------------------------------------------------------------------
 	// Util functions
 	/** Util fn to make and log out calls to the default FDC3 implementation for testing purposes. */
-	private logAndCall<ReturnType>(fn: Function, args: any[]): ReturnType { 
-		log(`Calling default FDC3 implementation for '${fn.name}' with args ${JSON.stringify(args)}`); 
+	private logAndCall<ReturnType>(fn: Function, args: any[]): ReturnType {
+		log(`Calling default FDC3 implementation for '${fn.name}' with args ${JSON.stringify(args)}`);
 		return fn.apply(this.defaultFdc3, args);
 	}
 
@@ -183,9 +184,9 @@ class CustomFdc3 implements ICustomFdc3 {
 		return Object.keys(this.currentChannelDirections).length !== 0;
 	}
 
-	/** 
+	/**
 	 * Reads and restores state of channel memberships from a workspace.
-	 * This function should only be called on start-up to restore state from a workspace load (if present). 
+	 * This function should only be called on start-up to restore state from a workspace load (if present).
 	 */
 	private async loadStateFromWorkspace() {
 		debug("Loading channel state from workspace...");
@@ -209,7 +210,7 @@ class CustomFdc3 implements ICustomFdc3 {
 
 			log("Restored channel state from workspace", this.currentChannelDirections);
 			this.restoringStateFromWorkspace = false;
-			
+
 			//now publish the loaded state
 			this.publishState();
 			if(this.stateChangeHandler) { this.stateChangeHandler(null,this.getLinkState()); }
@@ -238,17 +239,17 @@ class CustomFdc3 implements ICustomFdc3 {
 			}
 		});
 		//store listener will update our local state cache, but we might not want to wait if updating it in checkAndCleanState
-		this.remoteStateCache[this.myWindowName] = this.currentChannelDirections; 
+		this.remoteStateCache[this.myWindowName] = this.currentChannelDirections;
 	}
 
 	/**
-	 * Periodically check for dead state in the DistributedStore and clear it out (so that we don't have to have either 
+	 * Periodically check for dead state in the DistributedStore and clear it out (so that we don't have to have either
 	 * a separate service that does so or ensure that every window close is caught and cleaned up in the store.
-	 * 
-	 * The store is only used for shared state tracking in linkToChannel and a menu UI, hence, this is just clean-up as 
+	 *
+	 * The store is only used for shared state tracking in linkToChannel and a menu UI, hence, this is just clean-up as
 	 * dead state won't cause any harm until it hits thousands of dead records in a session.
-	 * 
-	 * Store creation was moved to a service, clean-up could also be moved there if preferred, however it is possible to do 
+	 *
+	 * Store creation was moved to a service, clean-up could also be moved there if preferred, however it is possible to do
 	 * without as shown.
 	 */
 	private checkAndCleanState() {
@@ -296,20 +297,20 @@ class CustomFdc3 implements ICustomFdc3 {
 		if (context.type) { //ignored malformed context with no type field!
 			if (this.currentContextHandlers["null"]) { this.currentContextHandlers["null"].map((handler) => {handler.apply(this.defaultFdc3, [context]);}) }
 			if (this.currentContextHandlers[context.type]) { this.currentContextHandlers[context.type].map((handler) => {handler.apply(this.defaultFdc3, [context]);}) }
-		} 
+		}
 	}
-	
-	/** Handler used to receive context messages and then route them based on channel direction, subscribed listeners etc. 
-	 *  
-	 *  Handles multiple channel membership; Finsemble will normally ensure that, if send and receiver are on more than one 
-	 *  of the same user channels, messages are only received once, through `fdc3.addContextListener`. However, we are 
+
+	/** Handler used to receive context messages and then route them based on channel direction, subscribed listeners etc.
+	 *
+	 *  Handles multiple channel membership; Finsemble will normally ensure that, if send and receiver are on more than one
+	 *  of the same user channels, messages are only received once, through `fdc3.addContextListener`. However, we are
 	 *  retrieving the Channels and connecting to them individually and hence will receive a separate copy through each.
 	*/
 	private defaultContextHandler(channelId: string, context: Context) {
 		if (context.type) { //ignored malformed context with no type field!
 			//debounce messages that might arrive from multiple channels in a short space of time (usually sub 1ms, but might grow under load)
 			let messageHash = objectHash(context);
-			
+
 			if (this.recentContextMessages[messageHash]){ //we've seen this before, additional channel
 				this.recentContextMessages[messageHash][2].push(channelId);
 			} else { //new message
@@ -322,7 +323,7 @@ class CustomFdc3 implements ICustomFdc3 {
 				}, CONTEXT_MESSAGE_DEBOUNCE_MS);
 			}
 			debug(`received message ${messageHash} on channel ${channelId} `,this.recentContextMessages[messageHash]);
-		} 
+		}
 	}
 
 	/** Routes context messages to their handlers, after checking the direction of channel membership.  */
@@ -333,14 +334,14 @@ class CustomFdc3 implements ICustomFdc3 {
 			//Route onwards to ChannelListeners, after filtering by direction
 			//debounce should have collected up multiple channels if it arrived on multiple here
 			const filteredChannels: string[] = [];
-			channels.map((channelId) => { 
+			channels.map((channelId) => {
 				if (this.currentChannelDirections[channelId] == Direction.Both ||
 						this.currentChannelDirections[channelId] == Direction.Listen){
 					filteredChannels.push(channelId);
 				}
 			});
 
-			if (filteredChannels.length > 0){	
+			if (filteredChannels.length > 0){
 				const source: ChannelSource = { channels: filteredChannels, allChannels: this.allChannels };
 				if (this.currentChannelHandlers["null"]) { this.currentChannelHandlers["null"].map((handler) => {handler.apply(this.defaultFdc3, [context, source]);}) }
 				if (this.currentChannelHandlers[context.type]) { this.currentChannelHandlers[context.type].map((handler) => {handler.apply(this.defaultFdc3, [context, source]);}) }
@@ -378,7 +379,7 @@ class CustomFdc3 implements ICustomFdc3 {
 
 			if (otherInstances) {
 				log("Showing dialog to ask user if they wish to link other chaannels...");
-				
+
 				//show dialog and handle requests to link other instances of the same app
 				//dialog will persist after this function returns!
 				FSBL.Clients.DialogManager.open(
@@ -405,14 +406,14 @@ class CustomFdc3 implements ICustomFdc3 {
 											applyChange(windowName);
 										}
 									}
-									
+
 								}
 							});
 						} else {
 							debug("User rejected adding other apps to same channel.");
 						}
 					}
-				);	
+				);
 			} else {
 				log(`Skipping dialog to ask user if they wish to link other channels as this is the only instance of ${this.myComponentType}`);
 			}
@@ -424,13 +425,13 @@ class CustomFdc3 implements ICustomFdc3 {
 
 	/**
 	 * Link an app to a specified channel, with a specified direction. Can be used on a local or remote component.
-	 * 
+	 *
 	 * //original docs:
 	 * The default direction is "Both"
 	 * The method is executed either on the supplied windowName or on the current Finsemble window name.
-	 * If more than one instance of the same application is launched, displays a prompt asking the user 
+	 * If more than one instance of the same application is launched, displays a prompt asking the user
 	 * if they would like to link all instances of the application to the target channel.
-	 * 
+	 *
 	 * @param channelName The channel name to link to.
 	 * @param direction The direction to link in, valid values include "Both", "Listen", "Broadcast" and control whether messages are sent or received by `publishToChannel` and `addChannelListener`.
 	 * @param windowName The windowName to apply the change to, will target local window if falsey.
@@ -446,16 +447,16 @@ class CustomFdc3 implements ICustomFdc3 {
 		} else {
 			if (windowName && this.myWindowName !== windowName) {
 				log(`linkToChannel setting channel state for remote window '${windowName}', channel '${channelName}', direction '${direction}', doNotApplyAgain '${doNotApplyAgain}'`);
-				
+
 				//Use a router transmit to tell the named window to make this call then return
 				FSBL.Clients.RouterClient.transmit(
 					getRouterTopicName("linkToChannel",windowName),
 					{channelName, direction, doNotApplyAgain}
 				);
-				
+
 				//to return remote link state synchronously is difficult
 				//  to do so, a pubsub or distributed store is needed that syncs all known window's state
-				//  to a local variable, take the current state for the remote window apply this change to 
+				//  to a local variable, take the current state for the remote window apply this change to
 				//  it and return
 				if(this.remoteStateCache[windowName]){
 					this.remoteStateCache[windowName][channelName] = direction;
@@ -463,7 +464,7 @@ class CustomFdc3 implements ICustomFdc3 {
 				} else {
 					warn(`Cached channel state was not available for ${windowName}, returning local LinkState instead`);
 					return this.getLinkState();
-				} 
+				}
 			} else {
 
 				//set membership direction
@@ -503,16 +504,16 @@ class CustomFdc3 implements ICustomFdc3 {
 
 	/** Standard FDC3 function, adapted to work with preload. */
 	joinChannel (channelId: string) : Promise<void> { return this.joinUserChannel(channelId); }
-	
+
 	/**
 	 * Unlink an app from a specified channel. Can be used on a local or remote component.
 	 * Changed signature to match behavior (so code compiles in TS, will make no difference to use in JS)
-	 * 
+	 *
 	 * //original docs:
 	 * contrary to its signature, this method always returns undefined.
 	 * The method is executed either on the supplied windowName or on the current Finsemble window name.
 	 * If more than one instance of the same application is launched, displays a prompt asking the user if they would like to unlink all instances of the application from the target channel.
-	 * 
+	 *
 	 * @param channelName The channel name to unlink from.
 	 * @param windowName The windowName to apply the change to, will target local window if falsey.
 	 * @param doNotApplyAgain If false, prompt the user to add other apps of teh same type to the channel
@@ -524,7 +525,7 @@ class CustomFdc3 implements ICustomFdc3 {
 				getRouterTopicName("unlinkFromChannel",windowName),
 				{channelName, doNotApplyAgain}
 			);
-			
+
 		} else {
 			//clear membership direction
 			if(this.currentChannelDirections[channelName]) {
@@ -546,7 +547,7 @@ class CustomFdc3 implements ICustomFdc3 {
 					log(`Unlinking ${windowName} from channel '${channelName}''`);
 					FSBL.Clients.RouterClient.transmit(
 						getRouterTopicName("unlinkFromChannel",windowName),
-						linkParams 
+						linkParams
 					);
 				};
 				this.maybeDisplayLinkOtherAppsDialog(applyChange);
@@ -567,14 +568,14 @@ class CustomFdc3 implements ICustomFdc3 {
 		this.unlinkFromChannel(channelId, null, true);
 		return Promise.resolve();
 	}
-	
+
 	/**
 	 * Non standard name/return type version of getCurrentChannels(), which is itself non-standard.
 	 */
 	getLinkedChannels(): Array<string> {
 		return Object.keys(this.currentChannelDirections);
 	}
-	
+
 	/** Standard FDC3 function, adapted to work with preload. Returns the first channel it sees. */
 	getCurrentChannel() : Promise<Channel | null>  {
 		const linkedChannels = this.getLinkedChannels();
@@ -594,19 +595,19 @@ class CustomFdc3 implements ICustomFdc3 {
 			return Promise.all(linkedChannels.map((channelId)=>this.defaultFdc3.getOrCreateChannel(channelId)));
 		}
 	}
-	
+
 	/**
 	 * Register a callback for when the channels change. Works using internal state tracking rather than a link to Finsemble's state.
-	 * 
-	 * When an application is started, a listener is created on the window name. When the listener is invoked (by joining, leaving 
-	 * channels, channel direction change, LinkerClient.onStateChange is called), the callback supplied to the method is called with 
+	 *
+	 * When an application is started, a listener is created on the window name. When the listener is invoked (by joining, leaving
+	 * channels, channel direction change, LinkerClient.onStateChange is called), the callback supplied to the method is called with
 	 * the current LinkerClient state and channel directions.
-	 * @param cb 
+	 * @param cb
 	 */
 	onStateChange (cb: (err: any, state: LinkState) => void): void {
 		this.stateChangeHandler = cb;
 	}
-	
+
 	/**
 	 * Returns the window's linked channels and their directions.
 	 */
@@ -616,12 +617,12 @@ class CustomFdc3 implements ICustomFdc3 {
 
 	addContextListener(handler: ContextHandler): Promise<Listener>;
 	addContextListener(contextType: string | null, handler: ContextHandler): Promise<Listener>;
-	
+
 	/**
 	 * If not channel is joined, the context listener is added to a global default channel
 	 * When a channel is joined, the context listener is switched to the joined channel/channels
 	 * @param contextTypeOrHandler
-	 * @param handler 
+	 * @param handler
 	 */
 	addContextListener (...args: any[]): Promise<Listener> {
 		//We're internally subscribing to all the channel's context and routing internally to context listeners
@@ -645,21 +646,21 @@ class CustomFdc3 implements ICustomFdc3 {
 			this.currentContextHandlers[_contextType] = [];
 		}
 		this.currentContextHandlers[_contextType].push(_handler);
-		
+
 		//Create a Listener (unsubscribe function) to remove this again
 		return Promise.resolve({ unsubscribe: () => {
 			this.currentContextHandlers[_contextType].splice(this.currentContextHandlers[_contextType].indexOf(_handler),1);
-		}}); 
+		}});
 	}
-	
+
 	/**
-	 * Creates a subscriber for messages matching the sent context type. The consumed message is passed 
+	 * Creates a subscriber for messages matching the sent context type. The consumed message is passed
 	 * to the handler only if the current window has channels that have either "Both" or "Listen" direction.
 	 * The handler takes a context and a source object containing
 	 *  - a list of linked channels and that have a direction of either ‘Both’ or ‘Listen’.
 	 *  - a list of all channels
-	 * @param contextType 
-	 * @param handler 
+	 * @param contextType
+	 * @param handler
 	 */
 	addChannelListener (contextType: string | null, handler: ChannelListenerHandler): Listener {
 		//We're internally subscribing to all the channel's context and routing internally to context listeners
@@ -673,14 +674,14 @@ class CustomFdc3 implements ICustomFdc3 {
 		//Create a Listener (unsubscribe function) to remove this again
 		return { unsubscribe: () => {
 			this.currentChannelHandlers[_contextType].splice(this.currentChannelHandlers[_contextType].indexOf(handler),1);
-		}}; 
+		}};
 	}
-	
+
 	/**
 	 * Context broadcast function. Sends to the currently joined channels or the global channel
 	 * if none have been joined. Ignores directionality of listening.
-	 * @param context 
-	 * @returns 
+	 * @param context
+	 * @returns
 	 */
 	broadcast (context: Context): Promise<void> {
 		if (!this.globalChannel) { return Promise.reject("Used before initialization!"); }
@@ -688,11 +689,11 @@ class CustomFdc3 implements ICustomFdc3 {
 		this.globalChannel.broadcast(context);
 		return Promise.resolve();
 	}
-	
+
 	/**
 	 * The message is broadcasted only if the current window has channels that have either "Both" or "Broadcast" direction.
 
-	* @param context 
+	* @param context
 	*/
 	publishToChannel (context?: Context): void {
 		if (context) {
@@ -727,15 +728,15 @@ class CustomFdc3 implements ICustomFdc3 {
 	// intents
 	findIntent (intent: string, context?: Context, resultType?: string): Promise<AppIntent> { return this.logAndCall<Promise<AppIntent>>(this.defaultFdc3.findIntent,[intent, context, resultType]) }
 	findIntentsByContext (context: Context, resultType?: string): Promise<Array<AppIntent>> { return this.logAndCall<Promise<Array<AppIntent>>>(this.defaultFdc3.findIntentsByContext,[context, resultType]) }
-	
+
 	raiseIntent(intent: string, context: Context, name?: String): Promise<IntentResolution>;
 	raiseIntent(intent: string, context: Context, app?: AppIdentifier): Promise<IntentResolution>;
 	raiseIntent (intent: string, context: Context, app?: unknown): Promise<IntentResolution> { return this.logAndCall<Promise<IntentResolution>>(this.defaultFdc3.raiseIntent,[intent, context, app]) }
-	
+
 	raiseIntentForContext(context: Context, name?: String): Promise<IntentResolution>;
 	raiseIntentForContext(context: Context, app?: AppIdentifier): Promise<IntentResolution>;
 	raiseIntentForContext (context: Context, app?: unknown): Promise<IntentResolution> { return this.logAndCall<Promise<IntentResolution>>(this.defaultFdc3.raiseIntentForContext,[context, app]) }
-	
+
 	addIntentListener (intent: string, handler: IntentHandler): Promise<Listener> { return this.logAndCall<Promise<Listener>>(this.defaultFdc3.addIntentListener,[intent, handler]) }
 
 	// channels
@@ -758,13 +759,13 @@ const main = async () => {
 	const isBrowserView = window.fin.isBrowserView();
 	const isTitlebarWindow = window.fin.isTitlebarWindow();
 	const isTitleBar = !isBrowserView && isTitlebarWindow;
-	
+
 	//Don't run in the titlebar of BrowserView windows
 	//  whilst this is possible, it will require some small additional finesse, for example to ensure
 	//  that only one copy of the preload sets up the router listeners to hand linkToChannel and
 	//  unlinkFromChannel API calls.
-	//  Hence, if customFDC3 functionality needs to be provided for titlebars, that should be addressed 
-	//  directly in a customisation to the titlebar. 
+	//  Hence, if customFDC3 functionality needs to be provided for titlebars, that should be addressed
+	//  directly in a customisation to the titlebar.
 	if (isTitleBar) {
 		log("NOT running customFdc3 preload in titlebar window.");
 	} else {

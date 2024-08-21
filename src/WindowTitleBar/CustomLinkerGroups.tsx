@@ -2,7 +2,8 @@
  * Copyright 2017 by ChartIQ, Inc.
  * All rights reserved.
  */
-import { DisplayMetadata, FEAGlobals, ListenerFunction, StandardError, StoreModel, System } from "@finsemble/finsemble-core";
+import { FEAGlobals, ListenerFunction, StandardError, StoreModel, System } from "@finsemble/finsemble-core";
+import { DisplayMetadata } from "@finos/fdc3";
 import React, { useEffect, useState } from "react";
 import { STATE_DISTRIBUTED_STORE_ALLCHANNELS_FIELD, STATE_DISTRIBUTED_STORE_NAME, STATE_DISTRIBUTED_STORE_STATE_FIELD } from "../customFDC3/constants";
 import { Direction } from "../customFDC3/types";
