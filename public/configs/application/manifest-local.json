@@ -5,7 +5,7 @@
 	},
 	"appAssets": [
 		{
-			"src": "https://assets.finsemble.com/releases/8.15.2/assimilation/assimilation.zip",
+			"src": "https://assets.finsemble.com/releases/9.8.0-iocd.9/assimilation/assimilation.zip",
 			"alias": "assimilation",
 			"target": "AssimilationMain.exe"
 		}
