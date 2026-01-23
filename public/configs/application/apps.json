@@ -3,6 +3,13 @@
 	"$schema": "../../../node_modules/@finsemble/finsemble-core/configs/schemas/fileBasedSchemas/appsConfigFile.schema.json",
 	"apps": [
 		{
+			"appId": "blah",
+			"type": "web",
+			"details": {
+				"url": "https://github.com/InteropIO/finsemble-seed"
+			}
+		},
+		{
 			"appId": "ChartIQ Example App",
 			"name": "ChartIQ Example App",
 			"type": "web",
@@ -193,8 +200,13 @@
 					},
 					"foreign": {
 						"components": {
-							"App Launcher": { "launchableByUser": true },
-							"Window Manager": { "FSBLHeader": true, "persistWindowState": true }
+							"App Launcher": {
+								"launchableByUser": true
+							},
+							"Window Manager": {
+								"FSBLHeader": true,
+								"persistWindowState": true
+							}
 						}
 					},
 					"interop": {}
