@@ -10,9 +10,8 @@ Webdriver.io is the recommended test framework for io.CD, finsemble-seed uses it
 
 From the root of finsemble-seed:
 1. Run `yarn setup-iocd` and `yarn iocd` at least once to have io.CD available, refer to the main [README](../README.md#installing) for more details.
-2. Set environment variable `BINARY_PATH` to the iocd directory, it should look like "./components/iocd".
-3. Run `yarn server` to serve your local assets.
-4. Run `yarn test-iocd` to launch tests.
+2. Run `yarn server` to serve your local assets.
+3. Run `yarn test-iocd` to launch tests.
 
 ### To run Playwright tests
 In the root [package.json](../package.json) of finsemble-seed, change the script to:
@@ -20,9 +19,8 @@ In the root [package.json](../package.json) of finsemble-seed, change the script
 "setup-iocd": "finsemble setup-iocd --tests-directory tests/playwright"
 ```
 1. Run `yarn setup-iocd` and `yarn iocd` at least once to have io.CD available, refer to the main [README](../README.md#installing) for more details.
-2. Set environment variable `BINARY_PATH` to the iocd directory, it should look like "./components/iocd".
-3. Run `yarn server` to serve your local assets.
-4. Run `yarn test-iocd` to launch tests.
+2. Run `yarn server` to serve your local assets.
+3. Run `yarn test-iocd` to launch tests.
 
 ## Write your own tests
 
@@ -38,6 +36,7 @@ Unlike wdio, playwright testing requires handling the desktop lifecycle and clea
 In [playwright/tests/common/iocdSession.ts](playwright/tests/common/iocdSession.ts), you can find how lifecycle is managed for each spec file. If io.CD is not started properly during your tests, be sure to check these functions: `waitForPlatform`, `initIODesktop` and `shutdown`.  
 In  [playwright/tests/package.json](playwright/package.json), you can see how cleanup is done via the `pretest` and `posttest` hooks, this is necessary if you do not want your tests to be affected by previous desktop sessions.  
 > Note that if you kill the command while test is running, `posttest` hook will therefore be skipped. You can run `yarn iocd` again to revert the test environment overrides.
+
 
 
 
