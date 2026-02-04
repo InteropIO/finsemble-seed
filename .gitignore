@@ -17,4 +17,10 @@ pkg-development/
 pkg-production/
 .yarn/
 .env
-io-connect/**/*.json
+.iocd-cli/
+assets/
+config/
+temp/
+dist/
+components/
+modifications/
