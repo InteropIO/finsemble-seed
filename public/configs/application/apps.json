@@ -193,8 +193,13 @@
 					},
 					"foreign": {
 						"components": {
-							"App Launcher": { "launchableByUser": true },
-							"Window Manager": { "FSBLHeader": true, "persistWindowState": true }
+							"App Launcher": {
+								"launchableByUser": true
+							},
+							"Window Manager": {
+								"FSBLHeader": true,
+								"persistWindowState": true
+							}
 						}
 					},
 					"interop": {}
