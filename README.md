@@ -102,6 +102,29 @@ The `makeInstaller` command generates a build in the output directory, which by 
 > Note: Running makeInstaller-iocd will automatically trigger `setup-iocd`, this is to ensure that the build uses the latest project.json.  
 > In case you wish to skip some setup, this command also supports arguments `--skip-install`, `--skip-config` and `--skip-assets`.
 
+### Specify your installer types
+
+By default Finsemble cli uses below makers, so iocd build will generate several kinds of bundle:
+```
+makers: [
+    {
+        name: '@electron-forge/maker-squirrel',
+        config: { loadingGif: "assets/install.gif" }
+    },
+    { name: '@electron-forge/maker-zip' },
+    { name: '@electron-forge/maker-dmg' },
+]
+```
+If you encounter problems when making installer in CI, specify the one that you need in project.json:
+```
+"installer": {
+	"iocdBuildMakers": [
+        { "name": "@electron-forge/maker-zip" }
+    ],
+    ...
+}
+```
+
 ## Documentation
 
 [io.Connect Desktop Documentation](https://docs.interop.io/)
