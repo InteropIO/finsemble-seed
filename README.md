@@ -1,33 +1,129 @@
 # Finsemble Seed for io.Connect Desktop 🌱
 
-This version of the Finsemble Seed project is compatible with IO.Connect Desktop (iocd) version [**9.9.4.0**](https://interop.io/download/?path=/install/enterprise/finsemble-9.9.4/stable-offline/9.9.4.0/ioConnectDesktopInstaller&type=b). To generate installers use this equivalent [zip bundle](https://interop.io/download/?path=/install/enterprise/pictet-9.9.4/stable/9.9.4.0/ioConnectDesktopBundle&type=a).
-
 The polyfill continues to support the legacy Finsemble container (FEA). With this seed version you can run your Finsemble project against either container.
 
 > _Customers wishing to work directly with iocd instead of finsemble-seed should read [IOCD quickstart](./docs/iocd-quickstart.md)_
 
+## io.CD Version
+
+The current seed and finsemble-core package are compatible with io.Connect Desktop version 10.
+
+The current recommended version is [v10.0.3 release](https://github.com/InteropIO/iocd-components/releases?q=v10.0.3&expanded=true).
+
 ## Installing
 
-1) In order to run the polyfill you must first install io.Connect Desktop from the above link. This is different than the desktop installer that you will eventually deliver to your end users, which will be the zip bundle of iocd + your finsemble project + any new iocd customizations that you implement.
+1) If upgrading from existing Finsemble seed, follow these steps, otherwise simply clone this repository
 
-2) Update your package.json:
-    a) Change `@finsemble/finsemble-core` entry to match the version in this branch.
-    b) Copy the `iocd`, `dev-iocd` and `start-iocd` scripts from this branch.
-    c) Run `yarn install`.
+    a. Delete your yarn.lock or package-lock.json file (important!)
 
-## Upgrading from a previous polyfill version
+    b. Change `@finsemble/finsemble-core` entry to match the version in this branch.
+    
+    c. Copy the `setup-iocd`, `iocd` and `dev-iocd` package.json scripts from this branch.
 
-1) Delete your yarn.lock or package-lock.json file (important!)
-2) Update the `@finsemble/finsemble-core` version in package.json
-3) Run `yarn install`
+	d. Add below entries to your package.json as dev dependencies:
+    ```
+		"devDependencies": {
+			"@electron-forge/core": "latest",
+			"@electron-forge/maker-dmg": "latest",
+			"@electron-forge/maker-squirrel": "latest",
+			"@electron-forge/maker-zip": "latest"
+		}
+    ```
 
-## Running
+    e. If you override system.json via project.json, see the updated schema in [Overriding iocd](#overriding-iocd).
 
-`yarn iocd`, `yarn start-iocd`, or `yarn start --iocd` - Launch your project using the io.Connect Desktop (iocd) container.
+    f. In previous versions there are various keys to set iocd overrides in finsemble configuration: `io-connect`, `io.Connect`, `iocd`. They are now unified to `iocd`, please make the change if you see deprecated warnings in your project.
 
-`yarn start` - Launch your project using the legacy FEA container.
+2) Run `yarn install`  
 
-Or, `yarn dev-iocd`/`yarn dev --iocd` vs `yarn dev`, which will build your project and launch the container in a single command.
+3) Add the license key which we provided to you:
+    > This can be set in `installer.clientKey` in project.json.
+    >
+    > Alternatively, you can set the environment variable `IOCD_LICENSE_KEY` to your license key text. This can be accomplished by creating a `.env` file at the seed's root which contains `IOCD_LICENSE_KEY="<your license>"`.
+
+4) Run `yarn setup-iocd`, it creates (or updates) the iocd seed config for your project and downloads iocd executable components:  
+    > During the config creation (or update), fields from your project.json will be read and applied to the /configs and /assets folders.
+    > 
+    > **If you get an error about downloading components**, your corporate security may be preventing downloads from github. Proceed to section [Using custom iocd store](#using-custom-iocd-store) instead.
+    >
+    > This command supports arguments `--skip-install`, `--skip-config` and `--skip-assets`. For instance, run `yarn setup-iocd --skip-install` to update configs without re-downloading iocd component.  
+    > This command also supports argument `--version {iocd_version}`. By default the setup uses a recommended iocd version, use this argument in case you need a different version.
+
+### Usage Caveats
+
+1) The setup generates these folders in your project: ".iocd-cli", "assets", "components", "config", "modifications", "temp". They only serve your local runs, be sure to add them to .gitignore.
+
+2) Set `components-> usePrereleases: true` in `<project>/config/iocd.cli.config.json` for the system to install early releases. _These pre-releases are not official! Only use this when you are sure you need an early release._
+
+### Using custom iocd store
+
+By default, running `yarn setup-iocd` attempts to download the iocd component from the interop.io CDN.  
+If it is blocked in your organization, you need to maintain your own copy.
+
+1) Manually download the iocd-v{version}.win32-x64.zip specified in section [io.CD Version](#iocd-version).
+
+2) Add a field `installer.iocdInstaller` in your project.json file.
+    > Alternatively, you can set the environment variable `IOCD_INSTALLER` to your url or path. This can be accomplished by creating a `.env` file at project root which contains `IOCD_INSTALLER="xxx"`.
+
+    a. if your zip is in local file system:
+    ```
+    "installer": {
+        // Set the path relative to your project root, or use absolute path
+		"iocdInstaller": "./iocd-v10.0.3.win32-x64.zip"
+	}
+    ```
+
+    b. if your zip is hosted on remote url:
+    ```
+    "installer": {
+        // For HTTP basic auth, you can set "https://username:token@yours/iocd-v10.0.3.win32-x64.zip"
+		"iocdInstaller": "https://yours/iocd-v10.0.3.win32-x64.zip"
+	}
+    ```
+
+3) Run `yarn setup-iocd` to finish setup. It will now pick your zip and generate the corresponding iocd.cli.config.
+
+## Running your project
+
+Use `yarn iocd`, `yarn start-iocd`, or `yarn start --iocd` to launch your project using the io.Connect Desktop (iocd) container.
+
+...or...
+
+Use `yarn dev-iocd` or `yarn dev --iocd` to build and launch your project.
+
+> Note: You can continue to use the legacy commands `yarn start` and `yarn dev` to launch or build your project using the legacy FEA container.
+
+## Building deployable installers for your end users
+
+Run `yarn makeInstaller-iocd`
+
+The `makeInstaller` command generates a build in the output directory, which by default is `<project>/pkg`. For example, the Windows zip bundle will be generated in `<project>/pkg/zip/win32/x64`.
+
+> Note: Running makeInstaller-iocd will automatically trigger `setup-iocd`, this is to ensure that the build uses the latest project.json.  
+> In case you wish to skip some setup, this command also supports arguments `--skip-install`, `--skip-config` and `--skip-assets`.
+
+### Specify your installer types
+
+By default Finsemble cli uses below makers, so iocd build will generate several kinds of bundle:
+```
+makers: [
+    {
+        name: '@electron-forge/maker-squirrel',
+        config: { loadingGif: "assets/install.gif" }
+    },
+    { name: '@electron-forge/maker-zip' },
+    { name: '@electron-forge/maker-dmg' },
+]
+```
+If you encounter problems when making installer in CI, specify the one that you need in project.json:
+```
+"installer": {
+	"iocdBuildMakers": [
+        { "name": "@electron-forge/maker-zip" }
+    ],
+    ...
+}
+```
 
 ## Documentation
 
@@ -48,7 +144,7 @@ Or, `yarn dev-iocd`/`yarn dev --iocd` vs `yarn dev`, which will build your proje
 - FDC3 is fully functional (`window.fdc3` object).
 - Toolbar, dialogs, and system tray are fully functional. If you've customized these components then your customizations should be functional (WindowTitleBar is not compatible. See below.)
 - Window operations such as tabbing and grouping operate slightly differently (better) than Finsemble
-- Apps specified in apps.json or loaded using any FSBL API will work as expected. iocd config values may be used by placing an "io.Connect" hostManifest in the entries.
+- Apps specified in apps.json or loaded using any FSBL API will work as expected. iocd config values may be used by placing an "iocd" hostManifest in the entries.
 - Authentication (SSO) should be fully functional, including "dynamic config" (loading apps based on user login)
 - Your theming/CSS customization should be fully functional.
 - Generating installers is fully functional.
@@ -78,8 +174,11 @@ This is a list of Java methods available for use in an IOCD environment.
 
 ### What will you need to change?
 
-- Finsemble's NotificationsCenter and NotificationsToasts components will no longer be supported under iocd. To customize notifications, enable the single component "Notifications" (`yarn template Notifications`) which will enable a single app that renders both toasts and panel. You can then re-implement any customizations using iocd's ["extending notifications"](https://docs.interop.io/desktop/capabilities/notifications/overview/index.html#extending_notifications) capabilities.
+- Finsemble's NotificationsCenter and NotificationsToasts components will no longer be supported under iocd. To customize notifications, enable the single component "IOCDNotifications" (`yarn template IOCDNotifications`) which will enable a single app that renders both toasts and panel. You can then re-implement any customizations using iocd's ["extending notifications"](https://docs.interop.io/desktop/capabilities/notifications/overview/index.html#extending_notifications) capabilities.
 - The WindowTitleBar component will no longer be supported under iocd (which uses a different windowing paradigm than Finsemble). If you've customized the WindowTitleBar then you will need to re-implement those changes using the new DecoratorWindow template (`yarn template DecoratorWindow`). This uses iocd's ["extensible web groups"](https://docs.interop.io/desktop/capabilities/windows/window-management/overview/index.html#extending_web_groups).
+- If you customized Finsemble Intents Resolver UI, it is not compatible with io.CD. It needs to be reimplemented using the Resolver template (`yarn template IOCDIntentsResolver`). The template inherits the default io.CD resolver, details can be found in [Data Sharing - Intents](https://docs.interop.io/desktop/capabilities/data-sharing/intents/overview/index.html).
+- If you wish to customize the io.CD Download Manager UI, use the Download Manager template (`yarn template IOCDDownloadManager`). The template uses the `IODownloadManager` components from `@interopio/components-react`, allowing you to override individual sub-components such as Header, Item, Settings, etc. See [Rebranding io.Connect UI](https://docs.interop.io/desktop/getting-started/how-to/rebrand-io-connect/user-interface/index.html) for details.
+- If you wish to customize the io.CD Channel Selector UI, use the Channel Selector template (`yarn template IOCDChannelSelector`). The template uses the `IOChannelSelector` components from `@interopio/components-react`. The channel selector supports multiple variant modes including single, multi, and directional. See [Channels Overview](https://docs.interop.io/desktop/capabilities/data-sharing/channels/overview/index.html) for details.
 - The advanced app launcher is functional but if you've customized any of the underlying code then it may need to be re-implemented. Please check and let us know if you find anything not functioning.
 - Your splash screen image may be smaller on io.CD than it was on Finsemble. This is due to how the two systems interpret screen resolution. You'll need to create a larger image if this is a concern. Please note that io.CD now supports [_interactive_](https://docs.interop.io/desktop/getting-started/how-to/rebrand-io-connect/user-interface/index.html#splash_screen) splash screens. You can see an example of this behavior when you run the copy of io.CD that we provided. [see installer section below](#creating-installers-for-your-end-users)
 - Your installed icon may be rendered smaller than expected. To solve this problem you can create a 128x128 icon and save it as io-connect/installer/assets/icon.ico. [see installer section below](#creating-installers-for-your-end-users)
@@ -154,15 +253,13 @@ There is no FDC3 API implemented in Java within an IOCD environment. As well, si
 
 ### What is different?
 
-- Mac is not currently supported (this will be available in iocd 10)
-
 - Windowing behavior is different in iocd than on legacy Finsemble. When windows are snapped together they now form a group which can be maximized and which responds to Microsoft Window snapping and aero commands. These groups contain an extra titlebar (which can optionally be disabled but which provides more intuitive maximization.)
 
 - iocd is located in `AppData/local/interop.io/io.Connect Desktop`. The `UserData` subdirectory contains log files and other information. The `Cache` directory contains Chromium cache. The `Desktop\config` and `Desktop\assets` folders contain system information.
 
-- An "io-connect" subdirectory in your project will contain configurations specific to io.Connect Desktop. After running `yarn iocd` several subdirectories will be created under io-connect. This contains iocd config files `system.json` and `stickywindows.json`. These files are auto-generated, and are then served to iocd to override its default. Do not make changes directly because they will be overwritten.
+- An "modifications" subdirectory in your project will contain configurations and assets specific to io.Connect Desktop. Each run of `yarn iocd` or `yarn makeInstaller-iocd` updates the modifications. These files are auto-generated, and are then served to iocd to override its default. Do not make changes directly because they will be overwritten.
 
-    To make manual overrides, add an "io.Connect" entry in your _project.json_ file under an installer or launcher profile. See [Overriding system.json](#overriding-system.json)
+    To make manual overrides, see [Overriding iocd](#overriding-iocd)
 
     See [these schemas](https://docs.interop.io/desktop/developers/configuration/overview/index.html) for more information on available switches.
 
@@ -170,9 +267,9 @@ There is no FDC3 API implemented in Java within an IOCD environment. As well, si
 
 - Some additional CSS styles have been added to theme.css to customized new window elements. These all begin with --t42 or --g42.
 
-- The central logger is functional and has an improved UI. The central logger will no longer contain system logs. System logs are available in application.log on the filesystem in AppData/io.Connect folder.
+- The central logger is functional and has an improved UI. The central logger will no longer contain system logs. System logs are available in application.log on the filesystem in %localappdata%/interop.io folder.
 
-- Your FDC3/Finsemble app configs will be automatically converted to [io.CD's format](https://docs.interop.io/desktop/assets/configuration/application.json). You can now optionally add a `hostManifests.[io.Connect]` entry in addition to your `hostManifests.Finsemble` entry. The values from this entry will override any converted values. You may also use this additional host manifest to configure any io.CD feature. Finally, if you want to bypass all conversion, create this new entry and remove the `hostManifests.Finsemble` entry. (Please note that this will also bypass all of the FDC3 conversion as well - so you would need a complete and correct io.CD app config entry.)
+- Your FDC3/Finsemble app configs will be automatically converted to [io.CD's format](https://docs.interop.io/desktop/assets/configuration/application.json). You can now optionally add a `hostManifests.iocd` entry in addition to your `hostManifests.Finsemble` entry. The values from this entry will override any converted values. You may also use this additional host manifest to configure any io.CD feature. Finally, if you want to bypass all conversion, create this new entry and remove the `hostManifests.Finsemble` entry. (Please note that this will also bypass all of the FDC3 conversion as well - so you would need a complete and correct io.CD app config entry.)
 
 - Taskbar icon behavior is different in io.CD than Finsemble. In io.CD, multiple instances of the same app appear as sub-icons to a single taskbar icon. This mimics MS Windows behavior. Grouped and tabbed collections of windows have unique icons that are indicative of groups and tabs, and the thumbnail image associated with the taskbar displays the entire group.
 
@@ -226,70 +323,6 @@ There is no FDC3 API implemented in Java within an IOCD environment. As well, si
 
 - Unsaved changes to workspaces (dirty workspaces) will not be saved during automatic (unattended/overnight) system restarts/shutdowns. This is only the case when using Finsemble storage adapters. Once fully migrated to iocd layout stores then this ability will return.
 
-### Coming soon
-
-- Mac Support - Available in 10.0
-
-- Auto Update - Available in 10.0
-
-## Creating installers or folder packages for your end users
-
-As with Finsemble, you can choose to deliver your SmartDesktop to end users as either (a) an installer executable that they run on their desktop, or (b) a folder package that you can copy to your end users' desktops.
-
-### Choice #1: Executable installers (Available in 10.0)
-
-The io-connect/installers folder contains a copy of the IO Connect Desktop's "extensible installer" configuration. This provides very [extensive customization capabilities](https://docs.interop.io/desktop/getting-started/how-to/rebrand-io-connect/installer/index.html). Installers for your end users are _modified versions of the installer that we provided to you._.
-
-If you have io.Connect Desktop installed on your machine then this process will be automatic.
-
-    Run `yarn makeInstaller-iocd.
-
-If you are building in a CI environment then you will need to provide the location of your original iocd installer that we provided to you. You may provide either a file path or a url. makeInstaller-iocd will generate an actual installer than your end users can run. Set the location of your installer in the `iocdInstaller` field in project.json _or_ set an environment variable called IOCDINSTALLER _or_ set IOCDINSTALLER in a .env file at your project's root.
-
-> Please see [io-connect/installer/README.md](./io-connect/installer/README.md) for more details on generating installers
-
-Running `yarn makeInstaller-iocd` will read your project.json installer settings, processing those values into the various templates in io-connect/installer/templates. It will also copy image files, modifying config files and all other steps required to generate an installer. The installer will be generated in the `pkg` folder of your project's root.
-
-Please note that io.CD's default install directory is %LocalAppData%/"your product name". This is different from Finsemble's default install location. When generating an installer executable, the installation folder can be changed in io-connect/installer/templates/extensibility.json. _Please note that io.CD is a large install and we do not recommend installing it in AppData/Roaming._
-
-If you've configured certificate files and passwords in your project.json then your installer will be signed. You can also use the new `windowsSign` field which accepts all parameters supported by `@electron/windows-sign`. This gives you access to modern signing technology supported by Microsoft.
-
-Installer configs that are no longer available:
-`download` - The electron binary is no longer involved in installer generation
-`electronPackagerOptions` - Electron packager is no longer used to generate installers.
-`electronWinstallerOptions` - Electron Winstaller is no longer used to generate installers.
-`buildTimeout` - The installer generation process is now very quick.
-`deleteUserDataOnUninstall` - UserData is now automatically deleted when io.CD is uninstalled.
-`logging` - Logging is automatically to the console.
-
-> If you install your generated installer on your development machine, please note that your installer will replace your installed io.cd in the Windows program registry. You can continue to use both, so long as you don't remove the app from add/remove programs or by uninstalling. If you do remove, then you will need to reinstall io.cd. (Your custom installer version will be in `AppData/Local/yourProductName` while your developer version of io.cd will be in `AppData/Local/interop.io`).
-
-#### Delivering to your end users
-
-You can provide the generated installer directly to your end users. It will install your customized and branded version of iocd. If they are upgrading, then their AppData/.../UserData folder will remain untouched and their Chromium cache (AppData/.../Cache) will be migrated forward so they do not lose any data.
-
-Alternatively, you can deliver the `AppData/local/io.connect/io.Connect Desktop` folder yourself. This contains the executable and all required support files. (iocd does not require any registry entries.) The easiest way to do this is to generate an installer per the above instructions, then install that installer on a local development box, and finally zip up the resulting AppData/.../io.Connect Desktop folder, being careful to exclude the UserData and Cache folders. You can then copy that folder to your end user's desktops (e.g. using group policy.) and create a shortcut to AppData/.../Desktop/io-connect-desktop.exe.
-
-> Note that the `io-connect-desktop.exe` and `io-connect-desktop-inner.exe` executables are signed via authenticode as interop.io.
-
-### Choice #2: Folder packages
-
-You must provide the location of your original zip bundle that we provided to you. You may provide either a file path, a url, or an electron mirror url (https://user:password@domain/path). Set the location of your zip bundle in the `iocdInstaller` field in project.json _or_ set an environment variable called IOCDINSTALLER (or "iocd_mirror") _or_ set IOCDINSTALLER in a .env file at your project's root.
-
-    Run `yarn makeInstaller-iocd.
-
-
-Running `yarn makeInstaller-iocd` will download and extract your zip bundle into your seed project's `pkg/distributable` folder. it will then read your project.json installer settings, processing those values, and make changes to the zip bundle. For instance, it will change the name of the folder, executable name, set the icon, properties etc.
-
-If you've configured certificate files and passwords in your project.json then your executable will be signed. You can also use the new `windowsSign` field which accepts all parameters supported by `@electron/windows-sign`. This gives you access to modern signing technology supported by Microsoft. If you do not sign the executable then Microsoft may prevent it from being launched by your end users.
-
-You may then copy the generated directory to your end users' desktops. You do not need to make any registry changes. _Please note that io.CD is a large install and we do not recommend installing it in AppData/Roaming._ When copying, you should follow iocd's conventions for upgrades:
-
-* The AppData/.../UserData folder should not be overwritten (this allows user data to be retained after the upgrade)
-* The AppData/.../Cache folder should not be overwritten (this allows Chrome cache to be retained after the upgrade)
-
-> Note that the `io-connect-desktop-inner.exe` executable will still be used by the system. This is signed via authenticode as interop.io.
-
 ## Additional Configurations
 
 Finsemble's manifest now accepts a new `iocd` root level config. This contains the following options:
@@ -302,7 +335,7 @@ Finsemble's manifest now accepts a new `iocd` root level config. This contains t
 
 `apiToLogFile` - When set to true, log messages from IOCD .net client will be redirected to the Finsemble.dll log file. This is helpful for diagnostic purpose.
 
-apps.json supports a `hostManifests.["io.Connect]` entry. You can put any valid iocd app config in this section and it will read by iocd, and will override any relevant conversions.
+apps.json supports a `hostManifests.iocd` entry. You can put any valid iocd app config in this section and it will read by iocd, and will override any relevant conversions.
 
 ## Troubleshooting
 
@@ -310,9 +343,9 @@ Chrome Devtools for apps is enabled by clicking F12. (You can click shift-F12 to
 
 `yarn iocd` opens a debugging port 9222. You can open http://localhost:9222 in your browser similar to how Finsemble supports http://localhost:9090, or open chrome://inspect/#devices and add localhost:9222 to your configuration for node debugging. This can be useful for debugging startup problems.
 
-If you encounter any problems please provide a copy of `application.log`. This can be found in AppData/io.Connect/io.Connect Desktop/User Data/ENV-REGION/logs. You can search this log for `[Error]` or `[warn]` and sometimes find the issue, or send to us for debugging.
+If you encounter any problems please provide full logs including `application.log`. They can be found in %localappdata%/interop.io/io.Connect Desktop/User Data/ENV-REGION/logs. In application.log, you can search this log for `[Error]` or `[warn]` and sometimes find the issue, or send to us for debugging.
 
-Please also send us `fsbl-service.log` which can be found in the "logs/applications" subdirectory. The entry `Apps added by config service` reveals the converted io.CD app configs which can reveal config conversion issues.
+The `fsbl-service.log` can be found in the "logs/applications" subdirectory. The entry `Apps added by config service` reveals the converted io.CD app configs which can reveal config conversion issues.
 
 If you're having a problem with a specific app, please also provide us with the application config.
 
@@ -322,13 +355,13 @@ If your toolbar isn't rendering properly then check F12 on the toolbar for any c
 
 io.CD will boot slowly if it cannot access Finsemble resources such as fsbl-service or the polyfill preload. You may see the error "Failed to refresh preload scripts" in your application.log when this happens. Be sure that you've deployed the seed's `public` folder and that it is being served. To test an installer against local seed files, you can set the manifest url to "http://localhost:3375/configs/application/manifest-local.json" and then run `yarn iocd --serve`.
 
-If io.CD doesn't launch, first check system.json to make sure it isn't blank or missing. Next, check %LOCALAPPDATA%/interop.io/io.Connect Desktop/UserData/ENV-REGION/logs/gilding.log check for any errors. Next check application.log for `[ERROR]` and `[WARN]` - you may see unhandled exceptions here that will point to the problem. Next check logs/applications/fsbl-service.log for errors. Finally, open http://localhost:9222 and look for console errors in any of the apps that are running. If none of this reveals an issue then please send all these logs and your finsemble config to our support.
+If io.CD doesn't launch, first check system.json to make sure it isn't blank or missing. Next check application.log for `[ERROR]` and `[WARN]` - you may see unhandled exceptions here that will point to the problem. Next check logs/applications/fsbl-service.log for errors. Finally, open http://localhost:9222 and look for console errors in any of the apps that are running. If none of this reveals an issue then please send all these logs and your finsemble config to our support.
 
 To diagnose app slowness we recommend adding additional levels of logging and then sending us a console log for that app (hit F12 when the app is in focus). This is done by adding the following to the app's app config (in apps.json):
 
 ```json
 			"hostManifests": {
-				"io.Connect": {
+				"iocd": {
 					"details": {
 						"consoleLogLevel": "debug"
 					}
@@ -337,46 +370,54 @@ To diagnose app slowness we recommend adding additional levels of logging and th
 
 The debug level is recommended for this purpose.
 
-#### Diagnosing slow or hanging desktop (main process)
+### Diagnosing slow or hanging desktop (main process)
 
 In Chrome, open "chrome://inspect". From that screen, click on "config" and make sure that localhost:9222 and localhost:9229 exist. You can then run iocd as normal. Once the app is hung, press "Open dedicated devtools for Node" in Chrome. It should attach to the main Electron process. You can then pause the debugger and check the call stack. If the stack doesn't look useful, then you might also want to start the profiler, let the system run for a few seconds, and then save the profiler.
 
 If you can't connect this way (because the computer is too slow) then the other way is to run yarn iocd --inspect-brk=9229. Iocd will start and then immediately stop until you "Open dedicated devtools for Node". You can then unpause the app and wait for it to hang, then pause and again look at the call stack or run the profiler.
 
-### The "io-connect" folder
-
-Your seed project auto-generates files in the io-connect folder. For instance, the Finsemble manifest and config.json are converted into a very small system.json file that includes all of the override configurations that are necessary to make iocd run Finsemble (plus any custom fields from project.json). stickywindows.json is another small file that is generated. (The main versions of these files are at `AppData/local/interop.io/io.Connect Desktop/Desktop/config`.) See [IOCD quickstart](./docs/iocd-quickstart.md) for more information.
-
-`gilding.json` tells iocd how to find these override configs. For Finsemble seed, it points to a REST endpoint that is started by Finsemble's CLI. In production, you probably will not use the gilding feature.
-
-`systemAppStore` contains app configs for a few system apps that are required by Finsemble, such as the fsbl-service app. This file is modified by the CLI. You should avoid making changes to this file because they could be overwritten. Let us know if you find it necessary to modify these app configs.
-
-`configOverrides` contains _another_ override of system.json. This is used only to set the ENV and REGION variables (because these variables are not supported in remote configs). You don't have to worry about these files because they are only necessary to support launching in multiple environments while developing.
-
-`installer` contains all the files necessary for generating installers. See [Creating Installers For Your End Users](#creating-installers-for-your-end-users) for more information.
+### Overriding iocd
 
 #### Overriding system.json
 
-You can override any value in system.json by creating a section in your project.json file called "io-connect". Set these in an _installer_ section that targets your desired environment.
+**Option 1. (recommended)** you can override any value in system.json by creating an "iocd" section in your project.json file. Set these in an _installer_ section that targets your desired environment.
 
-Example, set iocd's download location (overriding Finsemble's manifest)
+Example, set iocd download location in project.json
 ```json
 {
-    "installer" : {
-        "io-connect" : {
-            "remoteConfigs": {
-                "system.json": { // system.json, stickywindows.json, etc
-                    "downloadSettings": {
-                        "path": "C:/temp"
-                    }
-                }
-            }
-        }
-    }
+	"installer": {
+		"iocd": {
+			"system.json": {
+				"downloadSettings": {
+					"path": "C:/temp"
+				}
+			}
+		}
+	}
 }
 ```
 
-When launching iocd from the seed folder, these entries in your project.json will be merged into the system.json (or other file) in the io-connect folder so that they can be picked up by iocd. When running makeInstaller-iocd, these changes will be merged with the default system.json so that the resulting binary (or folder) contains a complete, modified system.json with your fields as well as the original defaults.
+**Option 2.** alternatively, the same override can be achieved by creating an "iocd" section in your manifest.json. The manifest.json can be a local file or a remote url, you must run the dev or build command with argument `--manifest <url_or_path>`.  
+If `--manifest` is specified but does not contain an iocd entry, the dev or build command fallbacks to the iocd entry in your project.json.
+
+Example, set iocd download location in manifest.json and specify its url
+```json
+{
+	"iocd": {
+        "system.json": {
+            "downloadSettings": {
+                "path": "C:/temp"
+            }
+        }
+	},
+    "finsemble": {}
+}
+```
+```
+yarn makeInstaller-iocd --manifest "http://localhost:3375/configs/application/manifest-local.json"
+```
+
+When launching iocd from the seed folder, the configured `iocd["system.json"]` entry will be merged into _components/iocd/config/system.json_ so that iocd picks them up. When running makeInstaller-iocd, these changes will be merged with the default system.json so that the resulting binary (or folder) contains a complete, modified system.json with your fields as well as the original defaults.
 
 
 ## Data Migration
@@ -410,13 +451,11 @@ This entry will cause the cache to be copied _one time_. After the cache is copi
 ```json
 	"iocd": {
 		"io-connect": {
-			"remoteConfigs": {
-				"system.json": {
-					"folders": {
-						"cache": {
-							"copy": {
-								"path": "%AppData%/Finsemble/userdata"
-							}
+			"system.json": {
+				"folders": {
+					"cache": {
+						"copy": {
+							"path": "%AppData%/Finsemble/userdata"
 						}
 					}
 				}
@@ -472,7 +511,7 @@ Your Finsemble polyfill will now be exclusively using iocd's layouts as its back
 
 Like Finsemble, the polyfill automatically persists FDC3 contexts in layouts. Whenever an app broadcasts or receives a context, or receives an intent with a context, then that context is saved with the layout. When the app instance is later restored (by switching layouts or restarting the desktop), it will receive that context when it adds a context listener. This mechanism allows app state to automatically persist, simply by using FDC3.
 
-You may optionally disable this behavior by setting `persistFDC3Context` to false. This can be set in the manifest's "iocd" section (to disable the behavior globally), or it can be set in the "customProperties" section of the app's "io.Connect" hostManifest (e.g. in your app's apps.json entry `hostManifests.["io.Connect"].customProperties.persistFDC3Context: false`)
+You may optionally disable this behavior by setting `persistFDC3Context` to false. This can be set in the manifest's "iocd" section (to disable the behavior globally), or it can be set in the "customProperties" section of the app's "iocd" hostManifest (e.g. in your app's apps.json entry `hostManifests.iocd.customProperties.persistFDC3Context: false`)
 
 ### Favorites
 
