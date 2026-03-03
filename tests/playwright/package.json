@@ -1,0 +1,15 @@
+{
+    "name": "finsemble-seed-tests-playwright",
+    "description": "A set of Playwright tests to run against finsemble-seed in io.Connect Desktop.",
+    "author": "Finsemble",
+    "scripts": {
+        "pretest": "node test-hooks/override-iocd-env.js",
+        "test": "playwright test",
+        "posttest": "node test-hooks/restore-iocd-env.js"
+    },
+    "devDependencies": {
+        "@interopio/desktop": "6.16.0",
+        "@playwright/test": "^1.57.0",
+        "playwright": "^1.57.0"
+    }
+}

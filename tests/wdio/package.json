@@ -1,0 +1,22 @@
+{
+	"name": "finsemble-seed-tests-wdio",
+	"description": "A set of WebdriverIO tests to run against finsemble-seed in io.Connect Desktop.",
+    "author": "Finsemble",
+	"scripts": {
+		"test": "wdio run ./wdio.config.ts"
+	},
+	"devDependencies": {
+		"@interopio/wdio-iocd-service": "^0.1.1",
+        "@types/node": "^24.10.0",
+        "@wdio/cli": "^8.46.0",
+        "@wdio/local-runner": "^8.46.0",
+        "@wdio/mocha-framework": "^8.46.0",
+        "@wdio/spec-reporter": "^8.43.0",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.9.3",
+        "webdriverio": "^8.46.0"
+	},
+	"overrides": {
+		"@interopio/desktop": "6.16.0"
+	}
+}
