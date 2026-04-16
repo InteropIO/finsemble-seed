@@ -58,7 +58,8 @@ and group headers will correspond to the selected theme
 :root {
 	--t42-tab-bar-background: var(--core-primary);
 	--t42-body-color: var(--font-color);
-	--t42-tab-group-caption-background: var(--core-primary-1);
+	--t42-group-caption-background: var(--core-primary);
+	--t42-tab-group-caption-background: var(--core-primary);
 	--t42-tab-bar-tab-background: var(--core-primary-1);
 	--t42-tab-bar-selected-tab-background: var(--core-primary-3);
 	--t42-standard-button-color: var(--font-color-1);
