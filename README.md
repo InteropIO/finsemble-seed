@@ -341,7 +341,13 @@ There is no FDC3 API implemented in Java within an IOCD environment. As well, si
 
 Finsemble's manifest now accepts a new `iocd` root level config. This contains the following options:
 
-`enableLegacyLoggerRecipe` - When set to true, logger.service.logMessages will be enabled. This is necessary if you're using Finsemble's logger recipe.
+`enableLegacyLoggerRecipe` - When set to true, logger.service.logMessages will be enabled for "Error" and "Warn" levels. This is necessary if you're using Finsemble's logger recipe.
+
+`legacyLogger.truncateBytes` - The number of bytes to truncate messages to; a non-positive number will not truncate messages.
+
+`legacyLogger.enabledLevels` - The enabled logger levels to send to the recipe; note that the Central Logger must be allowing messages of the enabled levels in order for messages to be sent to the logger recipe.
+
+`legacyLogger.excludeRegexes` - An array of regular expressions used to exclude log messages.
 
 `iocdDialogs` - By default, the existing Finsemble dialogs are used wherever possible. If you have not overridden YesNoDialog or SingleInputDialog then you can set this to false so that io.CD's default dialogs will be used.
 

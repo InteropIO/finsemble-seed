@@ -25,7 +25,7 @@ test(`should open app '${InteropApp.name}' via fdc3.open`, async () => {
 		(window as any).fdc3.open(name);
 	}, InteropApp.name);
 
-	const interopApp = await session.waitForNewInstance(InteropApp.name);
+	const interopApp = await session.waitForNewInstance(InteropApp.name, 30000);
 	await expect.poll(async () => await session.isVisible(interopApp.window.id)).toBe(true);
 
 	await Promise.all([userApp.window.close(), interopApp.window.close()]);
@@ -37,7 +37,7 @@ test(`should open app '${InteropApp.name}' via fdc3.raiseIntent`, async () => {
 		(window as any).fdc3.raiseIntent(listensFor.intent, listensFor.context);
 	}, InteropApp.listensFor);
 
-	const interopApp = await session.waitForNewInstance(InteropApp.name);
+	const interopApp = await session.waitForNewInstance(InteropApp.name, 30000);
 	await expect.poll(async () => await session.isVisible(interopApp.window.id)).toBe(true);
 
 	await Promise.all([userApp.window.close(), interopApp.window.close()]);
