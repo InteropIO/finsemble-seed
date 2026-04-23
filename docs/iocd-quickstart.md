@@ -129,20 +129,17 @@ Use the [appManager API](https://docs.interop.io/desktop/reference/javascript/ap
 _Launch an app_
 ```javascript
 
-const instance = await iop.apps.instances.start({ name: "my-app" });
-// Get window reference for the new app
-const window = iop.windows.findById(instance.id);
+const result = await iop.appManager.application("my-app")?.start();
 
+// `result?.window` contains a reference to the window for the new app
 ```
 
 _Pass data to an app when launching it_
 ```javascript
 
-const instance = await iop.apps.instances.start({ 
-    name: "my-app", 
-    context: { data : "data", moreData: "moreData" } 
-});
+const result = await iop.appManager.application("my-app")?.start({ data : "data", moreData: "moreData" });
 
+// `result?.window` contains a reference to the window for the new app
 ```
 
 _Receive that data in the launched app_

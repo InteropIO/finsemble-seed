@@ -1,9 +1,5 @@
 {
 	"$schema": "./node_modules/@finsemble/finsemble-core/configs/schemas/fileBasedSchemas/project.schema.json",
-	"launch": {
-		"icon": "./public/assets/img/installer_icon.ico",
-		"macIcon": "./public/assets/img/installer_icon.icns"
-	},
 	"environments": [
 		{
 			"environment": "UAT",
@@ -14,19 +10,10 @@
 		}
 	],
 	"installer": {
-		"iocd": {
-			"system.json": {
-				"windows": {
-					"channelSelector": {
-						"type": "directionalMulti"
-					}
-				}
-			}
-		},
-		"manifestUrl": "http://localhost:3375/configs/application/manifest-local.json",
+		"manifestUrl": "http://mysite.com/configs/application/manifest-local.json",
 		"updateUrl": "http://mysite.com/configs/application/updatesLocation",
 		"icon": "./public/assets/img/installer_icon.ico",
-		"version": "10.2.0",
+		"version": "9.10.15",
 		"name": "Finsemble",
 		"authors": "Finsemble",
 		"description": "Finsemble",
