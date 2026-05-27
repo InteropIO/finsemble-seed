@@ -8,6 +8,12 @@ export interface IOCDWindowHandle {
 	page?: Page;
 }
 
+// Groups are special kind of windows. For instance, each decorator window is practically a group.
+export interface IOCDGroupHandle {
+	window: IOCD.Windows.Group;
+	page?: Page;
+}
+
 export class IOCDSession {
 	public toolbar: Page;
 
@@ -23,6 +29,11 @@ export class IOCDSession {
 
 	static async startSession(): Promise<IOCDSession> {
 		const binaryPath = process.env.BINARY_PATH; // follows the convention of `iocd test`
+
+		// current iocd-cli has some race condition between running tests and modifying exe.
+		// TODO fix iocd-cli test command and remove this 10s sleep.
+		await new Promise((r) => setTimeout(r, 10000));
+
 		console.log("Starting io.CD session with binary:", binaryPath);
 
 		const electronApp = await electron.launch({
@@ -55,6 +66,11 @@ export class IOCDSession {
 		return window ? { window, page: await this.findPage(window.id) } : undefined;
 	}
 
+	async findGroupByWindow(windowId: string): Promise<IOCDGroupHandle | undefined> {
+		const group = this.io.windows.groups.findGroupByWindow(windowId);
+		return group ? { window: group, page: await this.findPage(group.id) } : undefined;
+	}
+
 	async isVisible(id: string): Promise<boolean> {
 		return this.io.windows.findById(id)?.isVisible ?? false;
 	}
@@ -71,7 +87,7 @@ export class IOCDSession {
 		console.log(`Waiting for ${appName} to be loaded...`);
 
 		return new Promise((resolve, reject) => {
-			const handler = async (page) => {
+			const handler = async (page: Page) => {
 				try {
 					const iodesktop: any = await page.evaluate("window.iodesktop");
 
@@ -116,7 +132,7 @@ export class IOCDSession {
 		const IODesktop = require("@interopio/desktop").default;
 
 		const gwToken: string = await existingPage.evaluate("iodesktop.getGWToken()");
-		const io = await IODesktop({ auth: { gatewayToken: gwToken } });
+		const io = await IODesktop({ auth: { gatewayToken: gwToken }, channels: true });
 		console.log("Initialized IODesktop instance.");
 		return io;
 	}
