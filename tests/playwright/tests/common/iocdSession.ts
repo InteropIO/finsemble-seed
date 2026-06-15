@@ -8,6 +8,12 @@ export interface IOCDWindowHandle {
 	page?: Page;
 }
 
+// Groups are special kind of windows. For instance, each decorator window is practically a group.
+export interface IOCDGroupHandle {
+	window: IOCD.Windows.Group;
+	page?: Page;
+}
+
 export class IOCDSession {
 	public toolbar: Page;
 
@@ -31,7 +37,7 @@ export class IOCDSession {
 		});
 		const toolbar = await this.waitForPageToLoad(Toolbar.name, electronApp);
 		const io = await this.initIODesktop(toolbar);
-		await this.waitForPlatform(io);
+		await this.waitForFinsembleUserStage(io);
 		return new IOCDSession(electronApp, toolbar, io);
 	}
 
@@ -55,6 +61,11 @@ export class IOCDSession {
 		return window ? { window, page: await this.findPage(window.id) } : undefined;
 	}
 
+	async findGroupByWindow(windowId: string): Promise<IOCDGroupHandle | undefined> {
+		const group = this.io.windows.groups.findGroupByWindow(windowId);
+		return group ? { window: group, page: await this.findPage(group.id) } : undefined;
+	}
+
 	async isVisible(id: string): Promise<boolean> {
 		return this.io.windows.findById(id)?.isVisible ?? false;
 	}
@@ -71,7 +82,7 @@ export class IOCDSession {
 		console.log(`Waiting for ${appName} to be loaded...`);
 
 		return new Promise((resolve, reject) => {
-			const handler = async (page) => {
+			const handler = async (page: Page) => {
 				try {
 					const iodesktop: any = await page.evaluate("window.iodesktop");
 
@@ -91,19 +102,14 @@ export class IOCDSession {
 		});
 	}
 
-	private static waitForPlatform(io: IOCD.API): Promise<void> {
+	private static waitForFinsembleUserStage(io: IOCD.API): Promise<void> {
 		return new Promise(async (resolve) => {
-			// A more accurate way is to have fsbl-service respond its readiness on demand, to be reviewed if it can be added.
-			const timer = setTimeout(() => {
-				console.warn("io.CD has not signaled 'platform-started' in 20s after toolbar loaded, continue anyway.");
-				resolve();
-			}, 20000);
-			await io.interop.register("T42.Platform.Events", ({ eventType }) => {
-				if (eventType === "platform-started") {
-					console.log("io.CD signaled 'platform-started'.");
-					io.interop.unregister("T42.Platform.Events");
-					clearTimeout(timer);
-					setTimeout(() => resolve(), 5000); // wait for extra 5s to ensure polyfill is ready.
+			const unsubscribe = await io.contexts.subscribe("finsemble-pubsub-topic-systemManager.boot.stage", (ctx) => {
+				console.log("finsemble-pubsub-topic-systemManager.boot.stage ", ctx?.envelope?.stage);
+
+				if (ctx?.envelope?.stage === "user") {
+					unsubscribe();
+					resolve();
 				}
 			});
 		});
@@ -116,7 +122,7 @@ export class IOCDSession {
 		const IODesktop = require("@interopio/desktop").default;
 
 		const gwToken: string = await existingPage.evaluate("iodesktop.getGWToken()");
-		const io = await IODesktop({ auth: { gatewayToken: gwToken } });
+		const io = await IODesktop({ auth: { gatewayToken: gwToken }, channels: true });
 		console.log("Initialized IODesktop instance.");
 		return io;
 	}

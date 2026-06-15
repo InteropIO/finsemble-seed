@@ -60,6 +60,14 @@ export const NotificationsPanel: TestApp = {
 	},
 };
 
+export const ChannelSelector: TestApp = {
+	name: "glue42-channel-selector",
+	selectors: {
+		channelItem: (name: string) =>
+			`[data-testid="channel-selector-channel-${name}"] [data-testid="channel-selector-label"]`,
+	},
+};
+
 export const UserApp: TestApp = {
 	name: "Tour",
 	selectors: { container: () => "#slides" },
