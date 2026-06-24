@@ -16,6 +16,11 @@ In the root [package.json](../package.json) of finsemble-seed, change the script
 2. Run `yarn server` to serve your local assets.
 3. Run `yarn test-iocd` to launch tests.
 
+> Playwright tests can also run against a built installer, run:  
+> `cd tests/playwright`  
+> `BINARY_PATH="<PATH_TO_EXE>" IOCD_TEST_ENV="<YOUR_ENV>" IOCD_TEST_REGION="<YOUR_REGION>" npm test`  
+> Note that `IOCD_TEST_ENV` and `IOCD_TEST_REGION` are optional, `BINARY_PATH` is required.
+
 ### To run Wdio tests
 In the root [package.json](../package.json) of finsemble-seed, change the script to:
 ```
