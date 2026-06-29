@@ -3,7 +3,7 @@
     "description": "A set of Playwright tests to run against finsemble-seed in io.Connect Desktop.",
     "author": "Finsemble",
     "scripts": {
-        "pretest": "node test-hooks/clear-iocd-user-data.js",
+        "pretest": "node test-scripts/clear-iocd-user-data.js",
         "test": "playwright test"
     },
     "devDependencies": {
