@@ -1,22 +1,21 @@
 {
 	"name": "finsemble-seed",
-	"version": "10.2.3",
+	"version": "9.10.25",
 	"scripts": {
 		"adapter": "finsemble adapter",
 		"build": "finsemble build --watch=false",
 		"clean": "finsemble clean",
 		"create-app": "finsemble create-app",
 		"create-preload": "finsemble create-preload",
-		"setup-iocd": "finsemble setup-iocd --tests-directory tests/playwright",
 		"dev": "finsemble build --start=true",
 		"dev-iocd": "finsemble build --start=true --iocd=true",
 		"iocd": "finsemble start --iocd=true",
-		"test-iocd": "finsemble test-iocd --environment TEST",
 		"launch": "finsemble launch",
 		"makeInstaller": "finsemble makeInstaller",
 		"makeInstaller-iocd": "finsemble makeInstaller --iocd=true",
 		"prod": "finsemble build --mode=production --watch=false --prepare=true",
 		"server": "finsemble server",
+		"sdd": "finsemble sdd",
 		"start": "finsemble start",
 		"start-iocd": "finsemble start --iocd=true",
 		"template": "finsemble template"
@@ -24,19 +23,10 @@
 	"author": "Finsemble",
 	"license": "SEE LICENSE IN LICENSE",
 	"dependencies": {
-		"@finsemble/finsemble-core": "10.2.3",
+		"@finsemble/finsemble-core": "9.10.25",
 		"@types/react": "18.3.12",
 		"@types/react-dom": "18.3.1",
 		"react": "18.2.0",
 		"react-dom": "18.2.0"
-	},
-	"devDependencies": {
-		"@electron-forge/core": "^7.10.2",
-		"@electron-forge/maker-dmg": "^7.10.2",
-		"@electron-forge/maker-squirrel": "^7.10.2",
-		"@electron-forge/maker-zip": "^7.10.2"
-	},
-	"resolutions": {
-		"@electron/node-gyp": "npm:empty-npm-package@1.0.0"
 	}
 }
