@@ -16,6 +16,7 @@ export const Toolbar: TestApp = {
 		appMenuButton: () => "#AppLauncherMenu-menu-toggle-button",
 		workspaceMenuButton: () => "#WorkspaceMenu-menu-toggle-button",
 		notificationsButton: () => ".finsemble-toolbar-button.icon-only[title^='Notification']",
+		downloadsButton: () => ".finsemble-toolbar-button.icon-only[title^='Download Manager']",
 	},
 };
 
@@ -56,7 +57,33 @@ export const NotificationsPanel: TestApp = {
 	name: "io-connect-notifications-panel-application",
 	selectors: {
 		container: () => ".io-notifications-panel",
+		closeButton: () => ".io-panel-header button.io-btn-icon .icon-close",
+	},
+};
+
+export const NotificationsApp: TestApp = {
+	name: "io-connect-notifications-application",
+	selectors: {
+		title: () => ".io-notification-body-content h1",
+		closeButton: () => ".io-notification-header button.io-btn-icon",
+		actionButton: (text: string) => `.io-notification-footer button:has-text("${text}")`,
+	},
+};
+
+export const DownloadManager: TestApp = {
+	name: "io-connect-download-manager",
+	selectors: {
+		container: () => ".io-panel.io-dm",
 		closeButton: () => "button.io-btn-icon .icon-close",
+	},
+};
+
+export const IntentResolver: TestApp = {
+	name: "intentsResolver",
+	selectors: {
+		instanceTarget: (appName: string) => `[data-testid="io-intent-resolver-instance-${appName}"]`,
+		appTarget: (appName: string) => `[data-testid="io-intent-resolver-app-${appName}"]`,
+		confirmButton: () => `[data-testid="io-intent-resolver-confirm-button"]`,
 	},
 };
 
