@@ -16,8 +16,9 @@ export class UITestSteps {
 		if (!appMenu.window.isVisible) {
 			await this.session.toolbar.locator(Toolbar.selectors.appMenuButton()).click();
 		}
+		const userAppPromise = this.session.waitForNewInstance(UserApp.name);
 		await appMenu.page.locator(ToolbarAppMenu.selectors.userApp()).click();
-		const userApp = await this.session.waitForNewInstance(UserApp.name);
+		const userApp = await userAppPromise;
 		expect(userApp.window).toBeDefined();
 		expect(userApp.page).toBeDefined();
 		await expect.poll(async () => await this.session.isVisible(userApp.window.id)).toBe(true);
@@ -34,6 +35,13 @@ export class UITestSteps {
 		return workspaceMenu;
 	}
 
+	async clickTitlebarButton(target: IOCDWindowHandle, buttonSelector: string): Promise<void> {
+		const group = await this.session.findGroupByWindow(target.window.id);
+		if (!group?.page) throw new Error(`Group page not found for window '${target.window.id}'`);
+
+		await group.page.locator(buttonSelector).click();
+	}
+
 	async toggleChannelFromTitlebar(target: IOCDWindowHandle, channelName: string): Promise<void> {
 		const channelSelector = await this.openChannelSelector(target);
 		await channelSelector.page.locator(ChannelSelector.selectors.channelItem(channelName)).click();
@@ -45,7 +53,7 @@ export class UITestSteps {
 
 		if (!channelSelector.window.isVisible) {
 			const group = await this.session.findGroupByWindow(target.window.id);
-			expect(group?.page).toBeDefined();
+			if (!group?.page) throw new Error(`Group page not found for window '${target.window.id}'`);
 
 			const tab = group.page.locator(`[id^="t42-frame-tab-bar-tab-${target.window.id}-"]`);
 			await tab.locator(".t42-tab-channel-selector").click();
