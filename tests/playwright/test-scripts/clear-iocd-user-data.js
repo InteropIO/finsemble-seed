@@ -15,13 +15,13 @@ const localDataDir =
 	process.env.IOCD_LOCAL_DATA_PATH || path.join(process.env.LOCALAPPDATA, "interop.io", "io.Connect Desktop");
 
 if (!fs.existsSync(localDataDir)) {
-	throw new Error(`IOCD directory does not exist: ${localDataDir}, make sure IOCD_LOCAL_DATA_PATH is set correctly.`);
+	console.warn(`IOCD directory does not exist: "${localDataDir}". Skip user data clearing.`);
+} else {
+	const cacheDir = path.join(localDataDir, "Cache", `${env}-${region}`);
+	console.log(`Clearing cache in ${cacheDir}`);
+	fs.rmSync(cacheDir, { recursive: true, force: true });
+
+	const userDataDir = path.join(localDataDir, "UserData", `${env}-${region}`);
+	console.log(`Clearing user data in ${userDataDir}`);
+	fs.rmSync(userDataDir, { recursive: true, force: true });
 }
-
-const cacheDir = path.join(localDataDir, "Cache", `${env}-${region}`);
-console.log(`Clearing cache in ${cacheDir}`);
-fs.rmSync(cacheDir, { recursive: true, force: true });
-
-const userDataDir = path.join(localDataDir, "UserData", `${env}-${region}`);
-console.log(`Clearing user data in ${userDataDir}`);
-fs.rmSync(userDataDir, { recursive: true, force: true });

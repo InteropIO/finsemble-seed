@@ -19,15 +19,45 @@ test.afterAll(async () => {
 	await session?.shutdown();
 });
 
-test(`should toggle 1st channel from window titlebar`, async () => {
-	const userApp = await steps.openUserAppFromMenu();
-	await userApp.page.waitForSelector(UserApp.selectors.container());
+test.describe("Window titlebar", { tag: "@ui-template" }, () => {
+	test("should render window titlebar without console errors", async () => {
+		const userApp = await steps.openUserAppFromMenu();
+		await userApp.page.waitForSelector(UserApp.selectors.container());
 
-	await steps.toggleChannelFromTitlebar(userApp, "Channel 1"); // selects Channel 1
-	expect(await userApp.window.getChannels()).toEqual(["Channel 1"]);
+		const group = await session.findGroupByWindow(userApp.window.id);
+		expect(group?.page).toBeDefined();
+		expect(session.getConsoleErrors(group.page)).toEqual([]);
 
-	await steps.toggleChannelFromTitlebar(userApp, "Channel 1"); // unselects Channel 1
-	expect(await userApp.window.getChannels()).toEqual([]);
+		await userApp.window.close();
+	});
 
-	await userApp.window.close();
+	test("should minimize, maximize and close window", async () => {
+		const userApp = await steps.openUserAppFromMenu();
+		await userApp.page.waitForSelector(UserApp.selectors.container());
+
+		await steps.clickTitlebarButton(userApp, "[id^='t42-frame-tab-bar-standard-buttons-minimize-']");
+		await expect.poll(() => userApp.window.state).toBe("minimized");
+
+		await userApp.window.restore();
+		await expect.poll(() => userApp.window.state).toBe("normal");
+
+		await steps.clickTitlebarButton(userApp, "[id^='t42-frame-tab-bar-standard-buttons-maximize-']");
+		await expect.poll(() => userApp.window.state).toBe("maximized");
+
+		await steps.clickTitlebarButton(userApp, "[id^='t42-frame-tab-bar-standard-buttons-close-']");
+		await session.waitForWindowClose(userApp.window.id);
+	});
+
+	test("should toggle 'Channel 1' from window titlebar", async () => {
+		const userApp = await steps.openUserAppFromMenu();
+		await userApp.page.waitForSelector(UserApp.selectors.container());
+
+		await steps.toggleChannelFromTitlebar(userApp, "Channel 1"); // selects Channel 1
+		expect(await userApp.window.getChannels()).toEqual(["Channel 1"]);
+
+		await steps.toggleChannelFromTitlebar(userApp, "Channel 1"); // unselects Channel 1
+		expect(await userApp.window.getChannels()).toEqual([]);
+
+		await userApp.window.close();
+	});
 });
