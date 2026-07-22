@@ -3,7 +3,6 @@ import { expect } from "@playwright/test";
 import { exec } from "child_process";
 import path from "path";
 import { ElectronApplication, Page, _electron as electron } from "playwright";
-import { Toolbar } from "../../../apps";
 
 export interface IOCDWindowHandle {
 	window: IOCD.Windows.IOConnectWindow;
@@ -36,20 +35,62 @@ export class IOCDSession {
 		this.binaryName = binaryName;
 	}
 
-	static async startSession(): Promise<IOCDSession> {
+	/**
+	 * @param onAppWindow - Optional callback invoked for each app window that opens, active until startup completes.
+	 */
+	static async startSession(onAppWindow?: (appName: string, page: Page) => void): Promise<IOCDSession> {
 		const binaryPath = process.env.BINARY_PATH; // follows the convention of `iocd test`
-		console.log("Starting io.CD session with binary:", binaryPath);
+		const args = process.env.BINARY_EXTRA_ARGS?.split(/\s+/).filter(Boolean) ?? []; // e.g. "--foo --bar=baz"
+		console.log("Starting io.CD session with binary:", binaryPath, "args:", args);
 
 		const electronApp = await electron.launch({
 			executablePath: binaryPath,
 			cwd: path.resolve(path.dirname(binaryPath)),
+			args,
 		});
-		const toolbar = await this.waitForPageToLoad(Toolbar.name, electronApp);
+		const onWindow = async (page: Page) => {
+			try {
+				await page.waitForLoadState("load").catch(() => {});
+				if (page.isClosed()) return;
+				const iodesktop: IOCD.IODesktopObject = await page.evaluate("window.iodesktop");
+				if (iodesktop?.appName) onAppWindow(iodesktop.appName, page);
+			} catch {}
+		};
+
+		if (onAppWindow) {
+			electronApp.on("window", onWindow);
+			console.log("Attached onAppWindow event listener");
+		}
+		const toolbar = await this.waitForPageToLoad("Toolbar", electronApp);
 		const io = await this.initIODesktop(toolbar);
 		await this.waitForFinsembleUserStage(io);
+
+		if (onAppWindow) {
+			electronApp.off("window", onWindow);
+			console.log("Detached onAppWindow event listener");
+		}
 		const session = new IOCDSession(electronApp, toolbar, io, path.basename(binaryPath));
 		session.trackConsoleErrors();
 		return session;
+	}
+
+	static isProcessRunning(processName: string): Promise<boolean> {
+		return new Promise((resolve) => {
+			// Windows matches by image name (with the ".exe"); /FO CSV avoids the default table format
+			// truncating image names to 25 chars, which would break the substring check below.
+			// MacOS/Linux match the full command line via `pgrep -f`;
+			const command =
+				process.platform === "win32"
+					? `tasklist /FI "IMAGENAME eq ${processName}" /FO CSV /NH`
+					: `pgrep -f "${processName}"`;
+			exec(command, (error, stdout) => {
+				if (process.platform === "win32") {
+					resolve(stdout.toLowerCase().includes(processName.toLowerCase()));
+				} else {
+					resolve(!error && stdout.trim().length > 0);
+				}
+			});
+		});
 	}
 
 	// Returns the console errors / uncaught exceptions recorded for a given page.
@@ -162,18 +203,26 @@ export class IOCDSession {
 		return new Promise((resolve) => {
 			const handler = async (page: Page) => {
 				try {
-					const iodesktop: any = await page.evaluate("window.iodesktop");
+					let lastError: unknown;
 
-					if (iodesktop && iodesktop.applicationName === appName && !page.isClosed()) {
-						console.log(`${appName} page is found, waiting for it to load...`);
-						electronApp.off("window", handler);
-						// waitForLoadState resolves immediately if the page is already loaded.
-						await page.waitForLoadState("load").catch(() => {});
-						console.log(`${appName} page is loaded.`);
-						resolve(page);
+					for (let attempt = 0; attempt < 3 && !page.isClosed(); attempt++) {
+						try {
+							const iodesktop: IOCD.IODesktopObject = await page.evaluate("window.iodesktop");
+
+							if (iodesktop?.appName === appName) {
+								await page.waitForLoadState("load").catch(() => {});
+								console.log(`${appName} page is loaded.`);
+								electronApp.off("window", handler);
+								resolve(page);
+							}
+							return;
+						} catch (err) {
+							lastError = err; // evaluate error can happen if the page is navigating or closing
+						}
+						await new Promise((r) => setTimeout(r, 1000));
 					}
+					if (lastError) throw lastError; // retries exhausted, throw the failure.
 				} catch (err) {
-					// The handler fires for every window; probing one that is mid-navigation or closing can throw.
 					console.warn(`Error while evaluating page: ${err instanceof Error ? err.message : err}`);
 				}
 			};
@@ -194,22 +243,6 @@ export class IOCDSession {
 		}
 	}
 
-	private static isProcessRunning(processName: string): Promise<boolean> {
-		return new Promise((resolve) => {
-			// Windows matches by image name (with the ".exe");
-			// MacOS/Linux match the full command line via `pgrep -f`;
-			const command =
-				process.platform === "win32" ? `tasklist /FI "IMAGENAME eq ${processName}" /NH` : `pgrep -f "${processName}"`;
-			exec(command, (error, stdout) => {
-				if (process.platform === "win32") {
-					resolve(stdout.toLowerCase().includes(processName.toLowerCase()));
-				} else {
-					resolve(!error && stdout.trim().length > 0);
-				}
-			});
-		});
-	}
-
 	private static killProcess(processName: string): Promise<void> {
 		return new Promise((resolve) => {
 			const command =
@@ -220,14 +253,21 @@ export class IOCDSession {
 
 	private static waitForFinsembleUserStage(io: IOCD.API): Promise<void> {
 		return new Promise(async (resolve) => {
-			const unsubscribe = await io.contexts.subscribe("finsemble-pubsub-topic-systemManager.boot.stage", (ctx) => {
+			// subscribe() replays the current context, so the callback can fire before `unsubscribe` is assigned.
+			// Guards with optional chaining, then unsubscribe after the fact if it already fired.
+			let unsubscribe: (() => void) | undefined;
+			let reachedUserStage = false;
+
+			unsubscribe = await io.contexts.subscribe("finsemble-pubsub-topic-systemManager.boot.stage", (ctx) => {
 				console.log("finsemble-pubsub-topic-systemManager.boot.stage ", ctx?.envelope?.stage);
 
 				if (ctx?.envelope?.stage === "user") {
-					unsubscribe();
+					reachedUserStage = true;
+					unsubscribe?.();
 					resolve();
 				}
 			});
+			if (reachedUserStage) unsubscribe?.();
 		});
 	}
 
@@ -251,7 +291,7 @@ export class IOCDSession {
 		do {
 			for (const page of this.electronApp.windows()) {
 				try {
-					const iodesktop: any = await page.evaluate("window.iodesktop");
+					const iodesktop: IOCD.IODesktopObject = await page.evaluate("window.iodesktop");
 					if (iodesktop && iodesktop.windowId === windowId) return page;
 				} catch {} // Possible error: "page.evaluate: Target page, context or browser has been closed"
 			}
