@@ -8,7 +8,7 @@ The polyfill continues to support the legacy Finsemble container (FEA). With thi
 
 The current seed and finsemble-core package are compatible with io.Connect Desktop version 10.
 
-The current recommended version is [v10.3.0 release](https://github.com/InteropIO/iocd-components/releases?q=v10.3.0&expanded=true).
+The current recommended version is [v10.4.0 release](https://github.com/InteropIO/iocd-components/releases?q=v10.4.0&expanded=true).
 
 ## Installing
 
@@ -79,6 +79,7 @@ If it is blocked in your organization, you need to maintain your own copy.
 		"iocdInstaller": "https://yours/iocd-v10.0.4.win32-x64.zip"
 	}
     ```
+> If your URL requires a Bearer token instead (e.g. a private artifact store), set the environment variable `IOCD_INSTALLER_DOWNLOAD_TOKEN` rather than embedding the token in project.json. It is sent as an `Authorization: Bearer <token>` header on the download request. If you configure multiple components (see below), they're assumed to be hosted on the same origin and the same token is sent for all of them.
 
     c. if you need to install multiple components:
     ```
