@@ -8,7 +8,7 @@ The polyfill continues to support the legacy Finsemble container (FEA). With thi
 
 The current seed and finsemble-core package are compatible with io.Connect Desktop version 10.
 
-The current recommended version is [v10.3.0 release](https://github.com/InteropIO/iocd-components/releases?q=v10.3.0&expanded=true).
+The current recommended version is [v10.4.0 release](https://github.com/InteropIO/iocd-components/releases?q=v10.4.0&expanded=true).
 
 ## Installing
 
@@ -44,7 +44,7 @@ The current recommended version is [v10.3.0 release](https://github.com/InteropI
 4) Run `yarn setup-iocd`, it creates (or updates) the iocd seed config for your project and downloads iocd executable components:  
     > During the config creation (or update), fields from your project.json will be read and applied to the /configs and /assets folders.
     > 
-    > **If you get an error about downloading components**, your corporate security may be preventing downloads from github. Proceed to section [Using custom iocd store](#using-custom-iocd-store) instead.
+    > **If you get an error about downloading components**, your corporate security may be preventing downloads from github. Proceed to section [Using custom iocd store](#using-custom-iocd-store-mirroring) instead.
     >
     > This command supports arguments `--skip-install`, `--skip-config` and `--skip-assets`. For instance, run `yarn setup-iocd --skip-install` to update configs without re-downloading iocd component.
 
@@ -79,6 +79,7 @@ If it is blocked in your organization, you need to maintain your own copy.
 		"iocdInstaller": "https://yours/iocd-v10.0.4.win32-x64.zip"
 	}
     ```
+> If your URL requires a Bearer token instead (e.g. a private artifact store), set the environment variable `IOCD_INSTALLER_DOWNLOAD_TOKEN` rather than embedding the token in project.json. It is sent as an `Authorization: Bearer <token>` header on the download request. If you configure multiple components (see below), they're assumed to be hosted on the same origin and the same token is sent for all of them.
 
     c. if you need to install multiple components:
     ```
