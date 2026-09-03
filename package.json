@@ -1,6 +1,6 @@
 {
 	"name": "finsemble-seed",
-	"version": "10.4.0",
+	"version": "10.4.1-beta.4",
 	"scripts": {
 		"adapter": "finsemble adapter",
 		"build": "finsemble build --watch=false",
@@ -24,7 +24,7 @@
 	"author": "Finsemble",
 	"license": "SEE LICENSE IN LICENSE",
 	"dependencies": {
-		"@finsemble/finsemble-core": "10.4.0",
+		"@finsemble/finsemble-core": "10.4.1-beta.4",
 		"@types/react": "18.3.12",
 		"@types/react-dom": "18.3.1",
 		"react": "18.2.0",
