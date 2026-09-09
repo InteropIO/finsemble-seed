@@ -8,7 +8,7 @@ The polyfill continues to support the legacy Finsemble container (FEA). With thi
 
 The current seed and finsemble-core package are compatible with io.Connect Desktop version 10.
 
-The current recommended version is [v10.4.0 release](https://github.com/InteropIO/iocd-components/releases?q=v10.4.0&expanded=true).
+The current recommended version is [v10.4.1 release](https://github.com/InteropIO/iocd-components/releases?q=v10.4.1&expanded=true).
 
 ## Installing
 
