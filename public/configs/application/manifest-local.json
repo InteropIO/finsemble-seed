@@ -5,7 +5,7 @@
 	},
 	"appAssets": [
 		{
-			"src": "https://assets.finsemble.com/releases/10.4.1/assimilation/assimilation.zip",
+			"src": "https://assets.finsemble.com/releases/9.10.40/assimilation/assimilation.zip",
 			"alias": "assimilation",
 			"target": "AssimilationMain.exe"
 		}
@@ -44,8 +44,6 @@
 		],
 		"logger": {
 			"logToDiskLevels": [
-				"log",
-				"warn",
 				"error"
 			]
 		}
