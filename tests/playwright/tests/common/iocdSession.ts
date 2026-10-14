@@ -43,6 +43,15 @@ export class IOCDSession {
 		const args = process.env.BINARY_EXTRA_ARGS?.split(/\s+/).filter(Boolean) ?? []; // e.g. "--foo --bar=baz"
 		console.log("Starting io.CD session with binary:", binaryPath, "args:", args);
 
+		// A running desktop holds the single-instance lock and makes the launch exit with code 1. It isn't killed here, as
+		// it may be the developer's own session; a previous spec's desktop is killed by that spec's shutdown().
+		const binaryName = path.basename(binaryPath);
+		const deadline = Date.now() + 30000;
+		while (await this.isProcessRunning(binaryName)) {
+			if (Date.now() >= deadline) throw new Error(`'${binaryName}' is already running; close it before running the tests.`);
+			await new Promise((r) => setTimeout(r, 1000));
+		}
+
 		const electronApp = await electron.launch({
 			executablePath: binaryPath,
 			cwd: path.resolve(path.dirname(binaryPath)),
@@ -179,7 +188,11 @@ export class IOCDSession {
 
 	async shutdown(): Promise<void> {
 		try {
-			await this.io?.platform.shutdown({ autoSave: false, showDialog: false });
+			// platform.shutdown can hang; without a bound it outlives the afterAll timeout and leaves io.CD running.
+			await Promise.race([
+				this.io?.platform.shutdown({ autoSave: false, showDialog: false }),
+				new Promise((r) => setTimeout(r, 15000)),
+			]);
 			this.io?.connection.logout();
 		} catch (error) {
 			console.warn("Error during io.CD platform shutdown:", error);
@@ -188,7 +201,7 @@ export class IOCDSession {
 
 		// Closes the Playwright-launched Electron app so its process tree starts terminating.
 		try {
-			await this.electronApp.close();
+			await Promise.race([this.electronApp.close(), new Promise((r) => setTimeout(r, 15000))]);
 		} catch (error) {
 			console.warn("Error closing Electron application:", error);
 		}
