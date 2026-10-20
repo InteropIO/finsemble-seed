@@ -3,6 +3,71 @@
 	"$schema": "../../../node_modules/@finsemble/finsemble-core/configs/schemas/fileBasedSchemas/appsConfigFile.schema.json",
 	"apps": [
 		{
+			"appId": "WPFExample",
+			"name": "WPFExample",
+			"type": "native",
+			"details": {},
+			"hostManifests": {
+				"Finsemble": {
+					"signatureKey": {
+						"e": "AQAB",
+						"ext": true,
+						"key_ops": [
+							"verify"
+						],
+						"kty": "RSA",
+						"n": "zPOxYfLiAd3rM7KOLDBIeLl0kjQ7fk43mTTc1Nm9BDaSNVWqvOshSMCHmqOrKZX_WwA67Y6CQxWI5rZ6WNzoLHQU3PyqOvAdB7RgXCHlSeVYZ2haTcbWRjAXQ89H1WfnW96VwAbZn5nccxQGYlZIl3AMcwNRqV4hmiKtJVq4-2OzA-zs9Yg4Pfs6TbKR1XbNKz6EAPHDev0-7Xdnb6x1-qr4uL2Bq0ZwgfnyKQIRLc3zhD5kwqiJ5N7uZAZomLRkMFMXwy1UftD6fQUlFT2yoISn403RwN7YHEL8KoA9X7Jgs-dtlBh8c38QzQ1vbdMBzPuyRb07GMMKb6bdjdBV1w"
+					},
+					"window": {
+						"id": "WPFExample",
+						"windowType": "native",
+						"alias": "FinsembleWPFDemo",
+						"path": "",
+						"url": "",
+						"arguments": "",
+						"autoShow": true,
+						"resizable": true,
+						"showTaskbarIcon": false,
+						"contextMenu": true,
+						"addToWorkspace": true,
+						"options": {
+							"alwaysOnTop": false
+						}
+					},
+					"component": {
+						"mode": "native",
+						"category": "system"
+					},
+					"foreign": {
+						"components": {
+							"App Launcher": {
+								"launchableByUser": true
+							},
+							"Window Manager": {
+								"persistWindowState": false,
+								"FSBLHeader": true
+							},
+							"Toolbar": {
+								"iconURL": "$applicationRoot/assets/img/Finsemble_Taskbar_Icon.png"
+							}
+						}
+					}
+				}
+			},
+			"interop": {
+				"intents": {
+					"listensFor": {
+						"ViewChart": {
+							"displayName": "View Chart",
+							"contexts": [
+								"fdc3.instrument"
+							]
+						}
+					}
+				}
+			}
+		},
+		{
 			"appId": "ChartIQ Example App",
 			"name": "ChartIQ Example App",
 			"type": "web",
@@ -235,7 +300,7 @@
 					},
 					"component": {
 						"displayName": "Take a Tour",
-						"preload": "$moduleRoot/preloads/zoom.js"
+						"preload": ["$moduleRoot/preloads/zoom.js", "$applicationRoot/bringToFront/index.js"]
 					},
 					"foreign": {
 						"services": {

@@ -8,6 +8,11 @@
 			"src": "https://assets.finsemble.com/releases/9.10.40/assimilation/assimilation.zip",
 			"alias": "assimilation",
 			"target": "AssimilationMain.exe"
+		},
+		{
+			"src": "https://assets.finsemble.com/releases/9.10.40/dotnet/examples/WPFExample.zip",
+			"alias": "FinsembleWPFDemo",
+			"target": "WPFExample.exe"
 		}
 	],
 	"finsemble": {
