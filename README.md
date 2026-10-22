@@ -8,7 +8,7 @@ The polyfill continues to support the legacy Finsemble container (FEA). With thi
 
 The current seed and finsemble-core package are compatible with io.Connect Desktop version 10.
 
-The current recommended version is [v10.5.0 release](https://github.com/InteropIO/iocd-components/releases?q=v10.5.0&expanded=true).
+The current recommended version is [v10.5.1 release](https://github.com/InteropIO/iocd-components/releases?q=v10.5.1&expanded=true).
 
 ## Installing
 
@@ -337,6 +337,52 @@ There is no FDC3 API implemented in Java within an IOCD environment. As well, si
 - The notifications preferences panel has been eliminated. Notification settings can now be controlled directly from the notifications panel itself. Note that some default behaviors are now different, such as dismissing notifications. These behaviors can be controlled by the end user through the notifications panel settings.
 
 - Unsaved changes to workspaces (dirty workspaces) will not be saved during automatic (unattended/overnight) system restarts/shutdowns. This is only the case when using Finsemble storage adapters. Once fully migrated to iocd layout stores then this ability will return.
+
+#### External Window Tracking for Native Apps
+
+io.CD can track a native app's window by its process instead of having the app register it ([io.CD docs](https://docs.interop.io/desktop/developers/configuration/application/index.html#tracking_native_app_windows)). The polyfill supports this for Finsemble native apps, including .NET apps using Finsemble.dll.
+
+##### Configuration
+
+Add an `iocd` host manifest to the app's config. Everything under `details` is passed to io.CD as is:
+
+```json
+{
+	"appId": "WinformExample",
+	"type": "native",
+	"details": { "path": "C:\\path\\to\\WinformExample.exe" },
+	"hostManifests": {
+		"iocd": {
+			"details": {
+				"trackingType": "Process",
+				"externalWindowTracking": {
+					"enabled": true,
+					"title": { "exclude": ["^$", "^GDI\\+ Window$", "^Default IME$", "^MSCTFIME UI$"] },
+                    "windowSpawnTimeout": 60000
+				}
+			}
+		},
+		"Finsemble": { "window": { "windowType": "native" } }
+	}
+}
+```
+
+- The `title.exclude` list above stops io.CD from picking an untitled helper window of the process (e.g. the WinForms `GDI+ Window` or Windows IME windows) instead of the app's main window.
+- The polyfill appends `enableIOCDExternalWindowTracking=true` and `ensureIOCDExternalWindow=true` to the app's arguments, which switch Finsemble.dll to this mode. Set `enableIOCDExternalWindowTracking=` in the app's own arguments to override it.
+- External tracking can only be enabled in the app config, not when spawning.
+
+##### Expected behavior
+
+- The window is identified by its io.CD instance id (e.g. `12345_exe_0`) everywhere in the Finsemble API: `AppsClient.spawn()`, `getActiveDescriptors()`, `WorkspaceClient` and so on. A custom window name passed to `spawn()` is not used, and the id changes every time the app is restored.
+- `AppsClient.getActiveDescriptors()` lists the window without bounds.
+- `AppsClient.spawn()` returns `finWindow: null`, and `FinsembleWindow.getInstance()` rejects with an error saying the window is externally tracked.
+- The app is saved and restored with workspaces. Finsemble.dll persists its spawn data and component state through the workspace.
+
+##### Known limitations
+
+- io.CD doesn't expose these windows as windows, so other apps can't operate on them (e.g. move, resize, show / hide, focus, tab or group them) or read their component state. Such calls return or log an error.
+- The app can't start hidden: io.CD only discovers a visible window, so Finsemble.dll shows it before connecting.
+- In .NET, Finsemble.dll has no window object (`FSBL.window` / `FSBL.form` are `null`), and FDC3 supports one user channel at a time.
 
 ## Additional Configurations
 
