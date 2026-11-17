@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
-import { UserApp } from "../../apps";
-import { IOCDSession, UITestSteps } from "./common";
+import { AlwaysOnTopApp, DecoratorWindow, UserApp } from "../../apps";
+import { IOCDSession, IOCDWindowHandle, UITestSteps } from "./common";
 
 let session: IOCDSession;
 let steps: UITestSteps;
@@ -59,5 +59,50 @@ test.describe("Window titlebar", { tag: "@ui-template" }, () => {
 		expect(await userApp.window.getChannels()).toEqual([]);
 
 		await userApp.window.close();
+	});
+
+	// Relies on the CI step that wires AlwaysOnTopButton into the template (.github/scripts/wire-decorator-aot-button.js)
+	test("should toggle always on top from window titlebar", async () => {
+		// The button only shows for apps with alwaysOnTopIcon enabled, which no seed app has, so add one
+		await session.toolbar.evaluate(async (app) => {
+			const { err } = await (window as any).FSBL.Clients.AppsClient.addApps([app]);
+			if (err) throw new Error(`addApps failed: ${err}`);
+		}, AlwaysOnTopApp.definition);
+
+		let aotApp: IOCDWindowHandle | undefined;
+		try {
+			const aotAppPromise = session.waitForNewInstance(AlwaysOnTopApp.name, 30000);
+			await session.toolbar.evaluate(
+				(name) => (window as any).FSBL.Clients.AppsClient.spawn(name),
+				AlwaysOnTopApp.name
+			);
+			aotApp = await aotAppPromise;
+
+			const group = await session.findGroupByWindow(aotApp.window.id);
+			const button = group.page.locator(DecoratorWindow.selectors.alwaysOnTopButton());
+			const isAlwaysOnTop = async () =>
+				Boolean((await aotApp.window.getContext())?.["#finsemble-componentState"]?.isAlwaysOnTop);
+			const isHighlighted = async () =>
+				((await button.locator("svg").getAttribute("style")) ?? "").includes("--accent-primary");
+
+			await expect(button).toBeVisible();
+			expect(await isAlwaysOnTop()).toBe(false);
+			expect(await isHighlighted()).toBe(false);
+
+			await button.click();
+			await expect.poll(isAlwaysOnTop).toBe(true);
+			await expect.poll(isHighlighted).toBe(true);
+
+			await button.click();
+			await expect.poll(isAlwaysOnTop).toBe(false);
+			await expect.poll(isHighlighted).toBe(false);
+		} finally {
+			// Clean up even when an assertion fails, so the added app doesn't leak into later tests
+			await aotApp?.window.close().catch(() => {});
+			await session.toolbar.evaluate(
+				(name) => (window as any).FSBL.Clients.AppsClient.removeApps([name]),
+				AlwaysOnTopApp.name
+			);
+		}
 	});
 });

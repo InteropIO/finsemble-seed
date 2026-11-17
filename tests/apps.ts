@@ -95,6 +95,27 @@ export const ChannelSelector: TestApp = {
 	},
 };
 
+export const DecoratorWindow: TestApp = {
+	name: "web-group-application",
+	selectors: {
+		alwaysOnTopButton: () => 'li[title="Always On Top"]',
+	},
+};
+
+// Added at runtime by the test (AppsClient.addApps); reuses the Tour page so it loads from the local seed
+export const AlwaysOnTopApp = {
+	name: "AlwaysOnTopTestApp",
+	definition: {
+		appId: "AlwaysOnTopTestApp",
+		name: "AlwaysOnTopTestApp",
+		type: "web",
+		details: { url: "$moduleRoot/ui-components/Tour/tour.html" },
+		hostManifests: {
+			Finsemble: { foreign: { components: { "Window Manager": { alwaysOnTopIcon: true } } } },
+		},
+	},
+};
+
 export const UserApp: TestApp = {
 	name: "Tour",
 	selectors: { container: () => "#slides" },
