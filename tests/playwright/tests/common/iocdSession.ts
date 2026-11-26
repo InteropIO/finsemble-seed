@@ -186,6 +186,12 @@ export class IOCDSession {
 		return this.io.windows.findById(id)?.isVisible ?? false;
 	}
 
+	// The io.CD API can't report on-top state, so ask Electron for the page's native window
+	async isAlwaysOnTop(page: Page): Promise<boolean> {
+		const browserWindow = await this.electronApp.browserWindow(page);
+		return browserWindow.evaluate((win) => win.isAlwaysOnTop());
+	}
+
 	async shutdown(): Promise<void> {
 		try {
 			// platform.shutdown can hang; without a bound it outlives the afterAll timeout and leaves io.CD running.
@@ -193,7 +199,7 @@ export class IOCDSession {
 				this.io?.platform.shutdown({ autoSave: false, showDialog: false }),
 				new Promise((r) => setTimeout(r, 15000)),
 			]);
-			this.io?.connection.logout();
+			await Promise.race([this.io?.done(), new Promise((r) => setTimeout(r, 5000))]);
 		} catch (error) {
 			console.warn("Error during io.CD platform shutdown:", error);
 		}
@@ -201,7 +207,19 @@ export class IOCDSession {
 
 		// Closes the Playwright-launched Electron app so its process tree starts terminating.
 		try {
-			await Promise.race([this.electronApp.close(), new Promise((r) => setTimeout(r, 15000))]);
+			const closed = await Promise.race([
+				this.electronApp.close().then(() => true),
+				new Promise<boolean>((r) => setTimeout(() => r(false), 15000)),
+			]);
+			// Windows can keep Playwright's connection open after io.CD has exited, so close() never settles and
+			// worker teardown times out. Closing our end of the connection releases it.
+			if (!closed) {
+				console.warn("Electron application did not close; closing its connection.");
+				this.electronApp.process().stdio.forEach((stream) => stream?.destroy());
+				((process as any)._getActiveHandles?.() ?? [])
+					.filter((h: any) => h?.constructor?.name === "Socket" && ["127.0.0.1", "::1"].includes(h.remoteAddress))
+					.forEach((socket: any) => socket.destroy());
+			}
 		} catch (error) {
 			console.warn("Error closing Electron application:", error);
 		}
